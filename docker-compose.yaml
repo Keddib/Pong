@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+
+  pong:
+    build:
+      context: ./Dockerfiles
+      dockerfile: Front.Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - ./Front:/usr/src/Front
+    depends_on:
+      - db
+    env_file:
+      - .env
+    links:
+      - "db:database"
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: $DB_DATABASE
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASSWORD: $DB_PASSWORD
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+    driver: local
