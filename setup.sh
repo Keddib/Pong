@@ -17,7 +17,7 @@ then
 		docker compose down;
 		exit 0;
 	elif [[ "$1" == "clear" ]]; then
-		echo "stoping containers ...";
+		echo "stop services and delete containers ...";
 		exit 0;
 	elif [[ "$1" != "up" && "$1" != "build" ]]; then
 		echo "${RED}invalid option${RESET}";
