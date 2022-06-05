@@ -45,25 +45,10 @@ fi
 
 echo 'cloning repos';
 
-if [ ! -d "Front" ]; then
+if [ ! -d "Pong" ]; then
 	echo 'cloning front end';
  	git clone https://github.com/Keddib/example_app.git Front;
- fi
-
-# if [ ! -d "Back" ]; then
-# 	echo 'cloning back end';
-# 	git clone https://github.com/user/respoBack Back;
-# fi
-
-# if [ ! -d "Back" ]; then
-# 	echo 'cloning chat';
-# 	git clone https://github.com/user/respoChat Chat;
-# fi
-
-# if [ ! -d "Back" ]; then
-# 	echo 'cloning game';
-# 	git clone https://github.com/user/respoGame Game;
-# fi
+fi
 
 echo "creating database volume";
 

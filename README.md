@@ -14,22 +14,12 @@ If you have problem runing docker on your mac run init_docker.sh to install dock
 ./init_docker.sh
 ``
 
-### to run service up with --build
+### to run services up
 ``
-./setup.sh build
-``
-
-### to run services up with --d
-``
-./setup.sh up
+docker compose up
 ``
 
-### to run services down
+### to run services up in detach mode
 ``
-./setup.sh down
-``
-
-### to run services down and delete containers
-``
-./setup.sh clear
+docker compose up -d
 ``
