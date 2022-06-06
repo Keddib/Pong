@@ -1,5 +1,9 @@
 version: '3.1'
 
+volumes:
+  db-data:
+    driver: local
+
 services:
 
   front:
@@ -7,59 +11,55 @@ services:
     container_name: Pong-front
     ports:
       - '8000:8000' # expose ports - HOST:CONTAINER
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     volumes:
       - ./Pong/Front:/usr/src/app
 
-  game:
-    build: ./Pong/Game/
-    container_name: Pong-game
-    ports:
-      - '3000:3000' # expose ports - HOST:CONTAINER
-    depends_on:
-      - users
-    volumes:
-      - ./Pong/Game:/usr/src/app
+  # game:
+  #   build: ./Pong/Game/
+  #   container_name: Pong-game
+  #   ports:
+  #     - '3000:3000' # expose ports - HOST:CONTAINER
+  #   depends_on:
+  #     - users
+  #   volumes:
+  #     - ./Pong/Game:/usr/src/app
 
-  users:
-    build: ./Pong/Users/
-    container_name: Pong-users
-    ports:
-      - '4000:4000' # expose ports - HOST:CONTAINER
-    depends_on:
-      - db
-    volumes:
-      - ./Pong/Users:/usr/src/app
+  # users:
+  #   build: ./Pong/Users/
+  #   container_name: Pong-users
+  #   ports:
+  #     - '4000:4000' # expose ports - HOST:CONTAINER
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - ./Pong/Users:/usr/src/app
 
-  db:
-    image: postgres
-    container_name: Pong-db
-    ports:
-      - '5433:5432'
-    restart: always
-    environment:
-      POSTGRES_DB: $DB_DATABASE
-      POSTGRES_USER: $DB_USERNAME
-      POSTGRES_PASSWORD: $DB_PASSWORD
-    volumes:
-      - db-data:/var/lib/postgresql/data
+  # db:
+  #   image: postgres
+  #   container_name: Pong-db
+  #   ports:
+  #     - '5433:5432'
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: $DB_DATABASE
+  #     POSTGRES_USER: $DB_USERNAME
+  #     POSTGRES_PASSWORD: $DB_PASSWORD
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
 
 # phpMyAdmin just for development in case we need a look up to database
 
-  phpmyadmin:
-    container_name: phpmyadmin
-    image: neimheadh/phppgadmin:latest
-    ports:
-      - 8080:80
-    environment:
-      POSTGRES_HOST: $DB_HOST
-      POSTGRES_PORT: $DB_PORT
-      POSTGRES_USER: $DB_USERNAME
-      POSTGRES_PASS: $DB_PASSWORD
-    depends_on:
-      - db
-
-volumes:
-  db-data:
-    driver: local
+  # phpmyadmin:
+  #   container_name: phpmyadmin
+  #   image: neimheadh/phppgadmin:latest
+  #   ports:
+  #     - 8080:80
+  #   environment:
+  #     POSTGRES_HOST: $DB_HOST
+  #     POSTGRES_PORT: $DB_PORT
+  #     POSTGRES_USER: $DB_USERNAME
+  #     POSTGRES_PASS: $DB_PASSWORD
+  #   depends_on:
+  #     - db
