@@ -3,34 +3,34 @@ version: '3.1'
 services:
 
   front:
-    build: ./Pong/Front/
+    build: ./$SERVICES/Front/
     container_name: Pong-front
     ports:
       - '8000:8000' # expose ports - HOST:CONTAINER
     depends_on:
       - db
     volumes:
-      - ./Pong/Front:/usr/src/app
+      - ./$SERVICES/Front:/usr/src/app
 
   game:
-    build: ./Pong/Game/
+    build: ./$SERVICES/Game/
     container_name: Pong-game
     ports:
       - '3000:3000' # expose ports - HOST:CONTAINER
     depends_on:
       - users
     volumes:
-      - ./Pong/Game:/usr/src/app
+      - ./$SERVICES/Game:/usr/src/app
 
   users:
-    build: ./Pong/Users/
+    build: ./$SERVICES/Users/
     container_name: Pong-users
     ports:
       - '4000:4000' # expose ports - HOST:CONTAINER
     depends_on:
       - db
     volumes:
-      - ./Pong/Users:/usr/src/app
+      - ./$SERVICES/Users:/usr/src/app
 
   db:
     image: postgres
