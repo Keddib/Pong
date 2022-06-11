@@ -7,16 +7,19 @@
     "dev": "parcel -p 8000 src/index.html",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "format:c": "prettier -c \"src/**/*.{js,jsx}\"",
-    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
-    "watch": "ts-node-dev --respawn ./index.dev.ts"
+    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tailwindcss/forms": "^0.4.0",
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1",
+    "tailwindcss": "^3.0.22",
     "typescript": "^4.7.3"
   },
   "devDependencies": {
