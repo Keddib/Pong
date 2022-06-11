@@ -16,6 +16,10 @@ module.exports = {
       yonder: 'rgb(var(--color-yonder) / <alpha-value>)',
       red: 'rgb(var(--color-red) / <alpha-value>)',
     },
+    fontFamily: {
+      'beaufort': 'Beaufort , Arial, sans-serif',
+      'spiegel': 'Spiegel , ui-monospace, SFMono-Regular',
+    },
     extend: {},
   },
   variants: {},
