@@ -2,6 +2,20 @@ module.exports = {
   mode: "jit",
   content: ["./src/*.{html,js}"],
   theme: {
+    colors: {
+      // Configure your color palette here
+      transparent: 'transparent',
+      current: 'currentColor',
+      lotion: 'rgb(var(--color-lotion) / <alpha-value>)',
+      spaceCadet: 'rgb(var(--color-spaceCadet) / <alpha-value>)',
+      pictonBlue: 'rgb(var(--color-pictonBlue) / <alpha-value>)',
+      cornFlower: 'rgb(var(--color-cornFlowerBlue) / <alpha-value>)',
+      queenBlue: 'rgb(var(--color-queenBlue) / <alpha-value>)',
+      crayola: 'rgb(var(--color-crayola) / <alpha-value>)',
+      electricGreen: 'rgb(var(--color-electricGreen) / <alpha-value>)',
+      yonder: 'rgb(var(--color-yonder) / <alpha-value>)',
+      red: 'rgb(var(--color-red) / <alpha-value>)',
+    },
     extend: {},
   },
   variants: {},

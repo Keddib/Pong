@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* main colors */
+    --color-lotion: 253 253 249;
+    --color-spaceCadet: 19 41 82;
+    --color-pictonBlue: 45 191 240;
+    --color-cornflowerBlue: 38 71 125;
+    --color-queenBlue: 71 100 158;
+
+    /* secondary colors */
+    --color-crayola: 255 175 39;
+    --color-electricGreen: 0 255 25;
+    --color-yonder: 161 176 203;
+    --color-red: 255 0 0;
+  }
+}
