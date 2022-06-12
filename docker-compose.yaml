@@ -1,12 +1,16 @@
 version: '3.1'
 
+volumes:
+  db-data:
+    driver: local
+
 services:
 
   front:
     build: ./$SERVICES/Front/
     container_name: Pong-front
     ports:
-      - '8000:8000' # expose ports - HOST:CONTAINER
+      - '8000:8000'
     depends_on:
       - db
     volumes:
@@ -16,7 +20,7 @@ services:
     build: ./$SERVICES/Game/
     container_name: Pong-game
     ports:
-      - '3000:3000' # expose ports - HOST:CONTAINER
+      - '3000:3000'
     depends_on:
       - users
     volumes:
@@ -26,11 +30,11 @@ services:
     build: ./$SERVICES/Users/
     container_name: Pong-users
     ports:
-      - '4000:4000' # expose ports - HOST:CONTAINER
+      - '4000:4000'
     depends_on:
       - db
     volumes:
-      - ./$SERVICES/Users:/usr/src/app
+      - ./$SERVICES/Users/:/usr/src/app
 
   db:
     image: postgres
@@ -59,7 +63,3 @@ services:
       POSTGRES_PASS: $DB_PASSWORD
     depends_on:
       - db
-
-volumes:
-  db-data:
-    driver: local
