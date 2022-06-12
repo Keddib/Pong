@@ -1,7 +1,7 @@
 import Signin from "./components/Signin";
 
 const Login = () => {
-	return (<Signin />);
+  return <Signin />;
 };
 
 export default Login;
