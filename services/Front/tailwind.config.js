@@ -27,6 +27,16 @@ module.exports = {
       semibold: 600,
       bold: 700,
       heavy: 800,
+    },
+    container: {
+      center: true,
+    },
+    screens: {
+      'sm': '500px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px'
     }
   },
   variants: {},

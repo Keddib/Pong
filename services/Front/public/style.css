@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* main colors */
+    --color-lotion: 253 253 249;
+    --color-spaceCadet: 19 41 82;
+    --color-pictonBlue: 45 191 240;
+    --color-cornflowerBlue: 38 71 125;
+    --color-queenBlue: 71 100 158;
+
+    /* secondary colors */
+    --color-crayola: 255 175 39;
+    --color-electricGreen: 0 255 25;
+    --color-yonder: 161 176 203;
+    --color-red: 255 0 0;
+  }
+
+  /* FONTS */
+
+  /* Beaufort for LOL Light */
+  @font-face {
+    font-family: "Beaufort";
+    src: url("assets/Fonts/BeaufortforLOL-Light.woff") format("woff");
+    font-weight: 200;
+    font-style: normal;
+  }
+
+  /* Beaufort for LOL Normal */
+
+  @font-face {
+    font-family: "Beaufort";
+    src: url("assets/Fonts/BeaufortforLOL-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Beaufort for LOL Medium */
+
+  @font-face {
+    font-family: "Beaufort";
+    src: url("assets/Fonts/BeaufortforLOL-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  /* Beaufort for LOL Bold */
+  @font-face {
+    font-family: "Beaufort";
+    src: url("assets/Fonts/BeaufortforLOL-Bold.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  /* Beaufort for LOL Heavy */
+
+  @font-face {
+    font-family: "Beaufort";
+    src: url("assets/Fonts/BeaufortforLOL-Heavy.woff") format("woff");
+    font-weight: 800;
+    font-style: normal;
+  }
+
+  /* Spiegel Regular */
+  @font-face {
+    font-family: "Spiegel";
+    src: url("assets/Fonts/Spiegel-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Spiegel SemiBold  */
+  @font-face {
+    font-family: "Spiegel";
+    src: url("assets/Fonts/Spiegel-SemiBold.woff") format("woff");
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* Spiegel Bold */
+
+  @font-face {
+    font-family: "Spiegel";
+    src: url("assets/Fonts/Spiegel-Bold.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
+  }
+}
