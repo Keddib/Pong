@@ -1,0 +1,209 @@
+/* Beaufort for LOL Bold */
+@font-face {
+  font-family: "BeaufortforLOL-Bold";
+  src: url("Fonts/BeaufortforLOL-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BeaufortforLOL-Bold";
+  src: url("Fonts/BeaufortforLOL-Bold.woff") format("woff");
+}
+
+/* Beaufort for LOL Bold Italic */
+
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-BoldItalic.woff") format("woff");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "BeaufortforLOL-BoldItalic";
+  src: url("Fonts/BeaufortforLOL-BoldItalic.woff") format("woff");
+}
+
+/* Beaufort for LOL Heavy */
+
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-Heavy.woff") format("woff");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BeaufortforLOL-Heavy";
+  src: url("Fonts/BeaufortforLOL-Heavy.woff") format("woff");
+}
+
+/* Beaufort for LOL Heavy Italic */
+
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-HeavyItalic.woff") format("woff");
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "BeaufortforLOL-HeavyItalic";
+  src: url("Fonts/BeaufortforLOL-HeavyItalic.woff") format("woff");
+}
+
+/* Beaufort for LOL Italic */
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-Italic.woff") format("woff");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: "BeaufortforLOL-Italic";
+  src: url("Fonts/BeaufortforLOL-Italic.woff") format("woff");
+}
+
+/* Beaufort for LOL Light */
+
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-Light.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BeaufortforLOL-Light";
+  src: url("Fonts/BeaufortforLOL-Light.woff") format("woff");
+}
+
+/* Beaufort for LOL Light Italic */
+
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-LightItalic.woff") format("woff");
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "BeaufortforLOL-LightItalic";
+  src: url("Fonts/BeaufortforLOL-LightItalic.woff") format("woff");
+}
+
+/* Beaufort for LOL Medium */
+
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "BeaufortforLOL-Medium";
+  src: url("Fonts/BeaufortforLOL-Medium.woff") format("woff");
+}
+
+/* Beaufort for LOL Medium Italic */
+
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-MediumItalic.woff") format("woff");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "BeaufortforLOL-MediumItalic";
+  src: url("Fonts/BeaufortforLOL-MediumItalic.woff") format("woff");
+}
+
+/* Beaufort for LOL Regular */
+
+@font-face {
+  font-family: "Beaufort for LOL";
+  src: url("Fonts/BeaufortforLOL-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BeaufortforLOL-Regular";
+  src: url("Fonts/BeaufortforLOL-Regular.woff") format("woff");
+}
+
+/* Spiegel Bold */
+
+@font-face {
+  font-family: "Spiegel";
+  src: url("Fonts/Spiegel-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Spiegel-Bold";
+  src: url("Fonts/Spiegel-Bold.woff") format("woff");
+}
+
+/* Spiegel Bold Italic */
+
+@font-face {
+  font-family: "Spiegel";
+  src: url("Fonts/Spiegel-BoldItalic.woff") format("woff");
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Spiegel-BoldItalic";
+  src: url("Fonts/Spiegel-BoldItalic.woff") format("woff");
+}
+
+/* Spiegel Regular */
+
+@font-face {
+  font-family: "Spiegel";
+  src: url("Fonts/Spiegel-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Spiegel-Regular";
+  src: url("Fonts/Spiegel-Regular.woff") format("woff");
+}
+/* Spiegel Regular Italic */
+@font-face {
+  font-family: "Spiegel";
+  src: url("Fonts/Spiegel-RegularItalic.woff") format("woff");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Spiegel-RegularItalic";
+  src: url("Fonts/Spiegel-RegularItalic.woff") format("woff");
+}
+/* Spiegel SemiBold  */
+@font-face {
+  font-family: "Spiegel";
+  src: url("Fonts/Spiegel-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Spiegel-SemiBold";
+  src: url("Fonts/Spiegel-SemiBold.woff") format("woff");
+}
+/* Spiegel SemiBold Italic  */
+@font-face {
+  font-family: "Spiegel";
+  src: url("Fonts/Spiegel-SemiBoldItalic.woff") format("woff");
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Spiegel-SemiBoldItalic";
+  src: url("Fonts/Spiegel-SemiBoldItalic.woff") format("woff");
+}

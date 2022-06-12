@@ -1,6 +1,6 @@
 module.exports = {
   mode: "jit",
-  content: ["./src/*.{html,js}"],
+  content: ['./src/**/*.{html,js}'],
   theme: {
     colors: {
       // Configure your color palette here
@@ -17,10 +17,17 @@ module.exports = {
       red: 'rgb(var(--color-red) / <alpha-value>)',
     },
     fontFamily: {
-      'beaufort': 'Beaufort , Arial, sans-serif',
-      'spiegel': 'Spiegel , ui-monospace, SFMono-Regular',
+      'beaufort': ["Beaufort", "Georgia", "serif"],
+      'spiegel': ["Spiegel", "Arial", "sans-serif"],
     },
-    extend: {},
+    fontWeight: {
+      light: 300,
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+      heavy: 800,
+    }
   },
   variants: {},
   plugins: [require("@tailwindcss/forms")]
