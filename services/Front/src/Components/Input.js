@@ -13,8 +13,8 @@ const Input = ({ id, type, dark }) => {
         placeholder={id}
         type={type}
         className={`inputElem ${dark
-          ? "text-spadeCadet border-spaceCadet placeholder-spaceCadet/50"
-          : "text-lotion border-lotion placeholder-lotion/50"
+          ? "text-spadeCadet border border-spaceCadet placeholder-spaceCadet/50"
+          : "text-lotion border border-lotion placeholder-lotion/50"
           }`}
       />
     </label>

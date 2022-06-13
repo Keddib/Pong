@@ -6,7 +6,8 @@ const Form = ({ className }) => {
 		<form className={className}>
 			<Input id="username" type="text" dark={true} />
 			<Input id="password" type="password" dark={true} />
-			<Button text="sign in" className="bg-spaceCadet text-lotion hover:bg-pictonBlue" />
+			<Button text="sign in" className="bg-pictonBlue text-lotion hover:bg-spaceCadet hover:border-spaceCadet border-2 border-pictonBlue" />
+			<p className="mt-4 cursor-pointer text-spaceCadet/70 hover:text-spaceCadet">Did you forget your password?</p>
 		</form>
 	);
 }

@@ -15,10 +15,11 @@ const Singin = () => {
             <Logo className="group-hover:animate-bounce" />
             <h2 className="my-4">welcome to <h1 className="inline-block ">pong</h1></h2>
             <h5 className="capitalize mb-10">Welcome back! Please enter your details.</h5>
-            <Form className={"mb-10"} />
+            <Form className={"mb-8"} />
             <Button text="Sign up with intra42" className="button42" >
               <LOGO42 className="fill-spaceCadet" />
             </Button>
+            <p className="text-spaceCadet mt-3" >Don’t have an account? <span className="text-pictonBlue/70 cursor-pointer hover:text-pictonBlue">Sign up fo free!</span></p>
           </div>
         </div>
         <div className="hidden xl:flex w-1/2 h-full justify-center items-center background-singin">

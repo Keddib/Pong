@@ -7,6 +7,9 @@
   .background-singin {
     background-color: #525254;
   }
+  .background-singin2 {
+    background-color: #eadece;
+  }
   .inputElem {
     @apply block bg-transparent text-base  w-full py-[8px] rounded-xl border-2  capitalize font-light mt-2
 				focus:outline-none  focus:ring-0 shadow-md focus:border-pictonBlue
