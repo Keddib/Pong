@@ -3,30 +3,24 @@ import Form from "./components/Form"
 import Button from "../Components/Button"
 import LOGO42 from "../../public/assets/images/42.svg"
 
-import PlayerImg from "../../public/assets/images/signin.png"
+
 
 const Singin = () => {
   return (
-    <div className="w-full h-full bg-lotion text-spaceCadet">
-      <div className=" h-full  xl:flex">
-
-        <div className="w-full h-full p-2 flex justify-center items-center xl:w-1/2">
-          <div className="">
-            <Logo className="group-hover:animate-bounce" />
-            <h2 className="my-4">welcome to <h1 className="inline-block ">pong</h1></h2>
-            <h5 className="capitalize mb-10">Welcome back! Please enter your details.</h5>
-            <Form className={"mb-8"} />
-            <Button text="Sign up with intra42" className="button42" >
-              <LOGO42 className="fill-spaceCadet" />
-            </Button>
-            <p className="text-spaceCadet mt-3" >Don’t have an account? <span className="text-pictonBlue/70 cursor-pointer hover:text-pictonBlue">Sign up fo free!</span></p>
-          </div>
-        </div>
-        <div className="hidden xl:flex w-1/2 h-full justify-center items-center background-singin">
-          <img className="rounded-2xl" alt="player img" src={PlayerImg} />
-        </div>
-
-      </div>
+    <div className="signin">
+      <Logo className="group-hover:animate-bounce" />
+      <h2 className="my-4">welcome to <h1 className="inline-block ">pong</h1></h2>
+      <h5 className="capitalize mb-10">Welcome back! Please enter your details.</h5>
+      <Form className={"mb-8"} />
+      <Button text="Sign up with intra42" className="button42" >
+        <LOGO42 className="fill-spaceCadet" />
+      </Button>
+      <p className="text-spaceCadet mt-3" >
+        Don’t have an account?
+        <span className="text-pictonBlue/70 cursor-pointer hover:text-pictonBlue">
+          Sign up fo free!
+        </span>
+      </p>
     </div>
   );
 };

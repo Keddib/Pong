@@ -1,8 +1,7 @@
 import { render } from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Signup from "./Loging/Signup";
-import Signin from "./Loging/Signin";
+import Login from "./Loging/index"
 
 const App = () => {
   return (
@@ -10,8 +9,8 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         {/* <Route path="/details/:id" element={<Details />} /> */}
-        <Route path="/" element={<Signin />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Login stage={true} />} />
+        <Route path="/signup" element={<Login stage={false} />} />
       </Routes>
     </BrowserRouter>
   );
