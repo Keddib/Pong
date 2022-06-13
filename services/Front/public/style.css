@@ -1,13 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
+  .background-singin {
+    background-color: #525254;
+  }
+  .inputElem {
+    @apply block bg-transparent text-base  w-full py-[8px] rounded-xl border-2  capitalize font-light mt-2
+				focus:outline-none  focus:ring-0 shadow-md focus:border-pictonBlue
+				invalid:border-red/50 invalid:text-red/50 focus:invalid:border-red/50;
+  }
+  .button {
+    @apply capitalize font-spiegel font-bold shadow-md py-2 w-full text-xl rounded-2xl transition ease-in-out delay-75;
+  }
+
+  .button42 {
+    @apply bg-lotion text-spaceCadet hover:border-pictonBlue border-2 border-spaceCadet;
+  }
   /* home icon basic style */
 
-  .button {
-    @apply uppercase font-spiegel font-bold shadow-md py-2 w-full text-xl rounded-2xl;
-  }
   .homeIcon {
     @apply fill-lotion/50 group-hover:fill-pictonBlue;
   }
@@ -27,11 +40,69 @@
   .activeShiningLine {
     @apply bg-pictonBlue;
   }
+
+  .ball {
+    background: radial-gradient(
+      circle at 50% 40%,
+      #fdfdf9,
+      #ffb027 66%,
+      #9b5050 100%
+    );
+  }
+
+  .ballbase {
+    background: radial-gradient(
+      circle at 50% 40%,
+      #fdfdf9,
+      #ffb027 66%,
+      #9b5050 100%
+    );
+  }
 }
 
 @layer base {
   /* FONTS */
 
+  .h1calcmd {
+    font-size: calc(50.82px + 3.03vw);
+  }
+  .h1calc {
+    font-size: calc(22.24px + 4.3vw);
+  }
+
+  .h2calc {
+    font-size: calc(18.24px + 4.3vw);
+  }
+  h1 {
+    @apply font-beaufort font-heavy uppercase h1calc sm:h1calcmd lg:text-6xl;
+  }
+
+  h2 {
+    @apply font-spiegel font-bold uppercase h2calc sm:text-5xl;
+  }
+
+  h3 {
+    @apply font-spiegel font-semibold uppercase text-3xl sm:text-4xl;
+  }
+
+  h4 {
+    @apply font-spiegel capitalize font-bold text-base sm:text-lg md:text-xl lg:text-2xl;
+    letter-spacing: 0.54px;
+    line-height: 20.7px;
+  }
+
+  h5 {
+    @apply font-spiegel uppercase font-semibold text-xs sm:text-sm md:text-base lg:text-lg;
+    letter-spacing: 2px;
+    line-height: 11.5px;
+  }
+
+  p {
+    @apply font-spiegel capitalize;
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+  }
   /* Beaufort for LOL Light */
   @font-face {
     font-family: "Beaufort";
