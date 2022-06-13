@@ -2,22 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    /* main colors */
-    --color-lotion: 253 253 249;
-    --color-spaceCadet: 19 41 82;
-    --color-pictonBlue: 45 191 240;
-    --color-cornflowerBlue: 38 71 125;
-    --color-queenBlue: 71 100 158;
+@layer components {
+  /* home icon basic style */
 
-    /* secondary colors */
-    --color-crayola: 255 175 39;
-    --color-electricGreen: 0 255 25;
-    --color-yonder: 161 176 203;
-    --color-red: 255 0 0;
+  .button {
+    @apply uppercase font-spiegel font-bold shadow-md py-2 w-full text-xl rounded-2xl;
+  }
+  .homeIcon {
+    @apply fill-lotion/50 group-hover:fill-pictonBlue;
   }
 
+  .activeIcon {
+    @apply fill-pictonBlue;
+  }
+
+  /* shining line basic style */
+  .gradientSpaceCadet {
+    @apply bg-gradient-to-b from-spaceCadet/95 via-spaceCadet to-spaceCadet/90 h-full w-[88px];
+  }
+
+  .shiningLine {
+    @apply w-[5px] h-4/6 bg-transparent group-hover:bg-pictonBlue rounded-2xl group-hover:shadow-pictonBlue shadow-sm;
+  }
+  .activeShiningLine {
+    @apply bg-pictonBlue;
+  }
+}
+
+@layer base {
   /* FONTS */
 
   /* Beaufort for LOL Light */

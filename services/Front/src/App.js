@@ -1,19 +1,23 @@
-
 import { render } from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-// import Login from "./Login/index";
-import NavBar from "./Login/NavBar";
+import Test from "./Test";
 
 const App = () => {
+  var props = {
+    text: "player later",
+    textColot: "red",
+    color: "queenBlue",
+    hover: "crayola"
+  }
   return (
     <BrowserRouter>
       <Routes>
         {/* <Route path="/details/:id" element={<Details />} /> */}
-        <Route path="/" element={<NavBar />} />
+        <Route path="/" element={<Test />} />
       </Routes>
     </BrowserRouter>
   );
 };
 
-render(<App />, document.getElementById("roott"));
+render(<App />, document.getElementById("root"));

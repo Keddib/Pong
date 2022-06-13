@@ -1,20 +1,27 @@
 module.exports = {
   mode: "jit",
-  content: ['./src/**/*.{html,js}'],
+  content: ['./src/**/*.{html,js}', './public/*.html'],
   theme: {
     colors: {
       // Configure your color palette here
       transparent: 'transparent',
       current: 'currentColor',
-      lotion: 'rgb(var(--color-lotion) / <alpha-value>)',
-      spaceCadet: 'rgb(var(--color-spaceCadet) / <alpha-value>)',
-      pictonBlue: 'rgb(var(--color-pictonBlue) / <alpha-value>)',
-      cornFlower: 'rgb(var(--color-cornFlowerBlue) / <alpha-value>)',
-      queenBlue: 'rgb(var(--color-queenBlue) / <alpha-value>)',
-      crayola: 'rgb(var(--color-crayola) / <alpha-value>)',
-      electricGreen: 'rgb(var(--color-electricGreen) / <alpha-value>)',
-      yonder: 'rgb(var(--color-yonder) / <alpha-value>)',
-      red: 'rgb(var(--color-red) / <alpha-value>)',
+      // primary
+      // rgbLotion: 'rgb(var(--color-lotion) / <alpha-value>)',
+      // rgbSpaceCadet: 'rgb(var(--color-spaceCadet) / <alpha-value>)',
+      // rgbPictonBlue: 'rgb(var(--color-pictonBlue) / <alpha-value>)',
+      // rgbCornFlower: 'rgb(var(--color-cornFlowerBlue) / <alpha-value>)',
+      // rgbQueenBlue: 'rgb(var(--color-queenBlue) / <alpha-value>)',
+      lotion: '#fdfdf9',
+      spaceCadet: '#132952',
+      pictonBlue: '#2dbff0',
+      cornFlower: '#26477d',
+      queenBlue: '#47649e',
+      // secondary
+      crayola: '#ffb027',
+      electricGreen: '#00ff1a',
+      yonder: '#a1b0cb',
+      red: '#ff0000',
     },
     fontFamily: {
       'beaufort': ["Beaufort", "Georgia", "serif"],
@@ -30,15 +37,17 @@ module.exports = {
     },
     container: {
       center: true,
-    },
-    screens: {
-      'sm': '500px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px'
     }
   },
   variants: {},
-  plugins: [require("@tailwindcss/forms")]
+  plugins: [require("@tailwindcss/forms"), function ({ addComponents }) {
+    addComponents({
+      '.container': {
+        maxWidth: '100%',
+        '@screen xl': {
+          maxWidth: '1680px',
+        },
+      }
+    })
+  }]
 }
