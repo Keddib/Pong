@@ -6,12 +6,8 @@ module.exports = {
       // Configure your color palette here
       transparent: 'transparent',
       current: 'currentColor',
+      black: '#000000',
       // primary
-      // rgbLotion: 'rgb(var(--color-lotion) / <alpha-value>)',
-      // rgbSpaceCadet: 'rgb(var(--color-spaceCadet) / <alpha-value>)',
-      // rgbPictonBlue: 'rgb(var(--color-pictonBlue) / <alpha-value>)',
-      // rgbCornFlower: 'rgb(var(--color-cornFlowerBlue) / <alpha-value>)',
-      // rgbQueenBlue: 'rgb(var(--color-queenBlue) / <alpha-value>)',
       lotion: '#fdfdf9',
       spaceCadet: '#132952',
       pictonBlue: '#2dbff0',
@@ -26,6 +22,7 @@ module.exports = {
     fontFamily: {
       'beaufort': ["Beaufort", "Georgia", "serif"],
       'spiegel': ["Spiegel", "Arial", "sans-serif"],
+      'poppins': ['Poppins', 'sans-serif']
     },
     fontWeight: {
       light: 300,

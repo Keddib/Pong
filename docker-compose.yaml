@@ -10,7 +10,7 @@ services:
     build: ./$SERVICES/Front/Dockerfile
     container_name: Pong-front
     ports:
-      - '8000:8000' # expose ports - HOST:CONTAINER
+      - '80:8000' # expose ports - HOST:CONTAINER
     # depends_on:
     #   - db
     volumes:
