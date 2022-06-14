@@ -4,6 +4,12 @@
 @tailwind utilities;
 
 @layer components {
+  .homeBackGround {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+  }
   .background-singin {
     background-color: #525254;
   }

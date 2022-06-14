@@ -1,6 +1,6 @@
 module.exports = {
   mode: "jit",
-  content: ['./src/**/*.{html,js}', './public/*.html'],
+  content: ['./src/**/*.{html,js, jsx, ts}', './public/*.html'],
   theme: {
     colors: {
       // Configure your color palette here

@@ -3,6 +3,7 @@ import Button from "../Components/Button"
 import LOGO42 from "../../public/assets/images/42.svg"
 import Input from "../Components/Input";
 import { InputPhoto } from "../Components/Input"
+import { Link } from "react-router-dom"
 
 function Auth() {
 
@@ -15,7 +16,7 @@ function Auth() {
       <Button text="Sign up with intra42" className="button42" >
         <LOGO42 className="fill-spaceCadet" />
       </Button>
-      <p className=" mt-3" >Do you have an account?<span className="text-pictonBlue/70 cursor-pointer hover:text-pictonBlue">Sign in</span></p>
+      <p className=" mt-3" >Do you have an account?<Link to="/signin" className="text-pictonBlue/70 cursor-pointer hover:text-pictonBlue">Sign in</Link> </p>
     </div>
   );
 }

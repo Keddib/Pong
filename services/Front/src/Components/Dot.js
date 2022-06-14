@@ -6,17 +6,5 @@ const Dot = ({ className }) => {
   );
 };
 
-function ShiningDot({ className }) {
-  return (
-    <span className="mr-1 inline-flex h-2 w-2 justify-center items-center">
-      <span
-        className={`animate-ping absolute inline-flex w-[10px] h-[10px] rounded-full opacity-75 ${className}`}
-      ></span>
-      <span
-        className={`relative inline-flex rounded-full h-2 w-2 ${className}`}
-      ></span>
-    </span>
-  );
-}
 
-export { Dot, ShiningDot };
+export default Dot;
