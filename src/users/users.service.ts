@@ -15,6 +15,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) : Promise<User> {
   
+    return this.userRepository.save(createUserDto);
     return this.userRepository.create(createUserDto);
     // return 'This action adds a new user';
   }

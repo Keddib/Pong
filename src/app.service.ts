@@ -32,8 +32,6 @@ export class AppService {
         redirect_uri: this.apiConf.get<string>('callbackURL'),
       }
 
-    }).then(resp => {
-      return resp;
     });
 
     const token =  authToken.data["access_token"];
@@ -45,18 +43,22 @@ export class AppService {
       headers: {
         "Authorization": "Bearer " + token
       }
-    }).then((res) => {
-      return res.data;
-    });
+    })
+    // To check later for all user details and update
+    if (this.userRepository.find( { where: [{login: userData.data.login} ] })) {
+      return "User already in Database";
+    }
 
-
-    console.log(userData.email);
+    console.log(userData.data.email);
     const user = new CreateUserDto;
 
-    user.email = userData.email;
-    user.displayedName = userData.login;
-    user.avatar = userData.image_url;
-    return "HELLO";
+    user.email = userData.data.email;
+    user.displayedName = userData.data.login;
+    user.avatar = userData.data.image_url;
+    user.login = userData.data.login;
+    user.password = 'defaultpassword';
+    this.userRepository.create(user);
+    return this.userRepository.save(user);
   }
 
   

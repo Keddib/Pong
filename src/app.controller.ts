@@ -42,8 +42,6 @@ export class fortyTwoAuth extends PassportStrategy(Strategy, "42") {
   @Get('login')
   @UseGuards(AuthGuard('42'))
   auth(@Req() req) {
-
-    console.log('access this or seg');
   }
 
 }
