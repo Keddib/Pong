@@ -1,0 +1,136 @@
+@layer components {
+  /* Player wrapper */
+
+  .user-wrapper {
+    @apply grow flex items-center ease-in-out duration-500;
+  }
+  .user-img {
+    @apply w-16 h-16 rounded-full;
+  }
+
+  /* buttons */
+  .button {
+    @apply shadow-lg capitalize font-spiegel font-bold py-2 w-full text-xl
+	rounded-2xl transition ease-in-out delay-75 border;
+  }
+
+  .button--1 {
+    @apply button bg-pictonBlue border-pictonBlue text-lotion
+    hover:bg-spaceCadet hover:border-spaceCadet;
+  }
+
+  .button--2 {
+    @apply button bg-pictonBlue border-pictonBlue text-lotion
+    hover:bg-lotion hover:border-lotion hover:text-spaceCadet;
+  }
+
+  .button--3 {
+    @apply button bg-spaceCadet border-spaceCadet text-lotion hover:bg-lotion
+  hover:text-spaceCadet hover:border-lotion;
+  }
+  .button--4 {
+    @apply button bg-lotion/50 border-lotion/50 text-lotion hover:bg-lotion
+  hover:text-red/80 hover:border-red/80;
+  }
+  .button--5 {
+    @apply button bg-queenBlue/50 text-lotion hover:bg-lotion
+  hover:text-red/80 hover:border-red/80;
+  }
+
+  .button--42 {
+    @apply button bg-lotion text-spaceCadet hover:border-pictonBlue
+    flex justify-center border-spaceCadet border-2;
+  }
+
+  .button--42 svg path {
+    @apply fill-spaceCadet;
+  }
+  .signup {
+    @apply bg-spaceCadet text-lotion border-lotion hover:border-pictonBlue;
+  }
+
+  .signup svg path {
+    @apply fill-lotion;
+  }
+  /* input elements */
+
+  .input {
+    @apply block w-full bg-transparent text-base  py-[8px] rounded-xl border-2
+	capitalize font-light mt-2 focus:outline-none  focus:ring-0 shadow-md
+	invalid:border-red/80 invalid:text-red/80 focus:invalid:border-red/80 p-4;
+  }
+
+  .input--1 {
+    @apply input border-spaceCadet text-spaceCadet focus:border-pictonBlue
+	placeholder-spaceCadet/50;
+  }
+  .input--2 {
+    @apply input border-lotion text-lotion focus:border-pictonBlue
+	placeholder-lotion/50;
+  }
+
+  .label {
+    @apply block font-poppins capitalize mt-2 lg:mt-6;
+  }
+  .label-dark {
+    @apply label text-spaceCadet;
+  }
+  .label-light {
+    @apply label text-lotion;
+  }
+  .input--span {
+    @apply block text-base font-medium;
+  }
+
+  /* small components dots for status */
+  .dot {
+    @apply inline-flex rounded-full h-3 w-3 absolute top-12 right-1;
+  }
+  .red-dot {
+    @apply dot bg-red;
+  }
+  .online-dot {
+    @apply dot bg-electricGreen;
+  }
+  .playing-dot {
+    @apply dot bg-pictonBlue;
+  }
+  .watching-dot {
+    @apply dot bg-crayola;
+  }
+  .offline-dot {
+    @apply dot bg-lotion/50;
+  }
+
+  /* style for div that wrap all pages */
+  .page {
+    @apply w-full h-full;
+  }
+
+  /* gredient color */
+  .D3-color {
+    background: radial-gradient(
+      circle at 50% 40%,
+      #fdfdf9,
+      #ffb027 66%,
+      #9b5050 100%
+    );
+  }
+
+  /* userbar */
+  .userBar {
+    @apply flex rounded-l-2xl pr-6 py-1 items-center hover:border-pictonBlue
+    border-[2px] border-transparent w-full bg-queenBlue ease-in duration-300;
+  }
+
+  .userBarLine {
+    @apply w-[5px] h-12 rounded-xl bg-transparent group-hover:bg-pictonBlue
+    mr-6 ease-in duration-300;
+  }
+
+  .dropdown {
+    @apply absolute rounded-2xl z-10 top-12 right-0 w-[250px] h-fit py-4 px-4
+    bg-spaceCadet border border-lotion/50 hover:border-lotion flex
+    flex-col gap-2 max-h-96 overflow-auto no-scrollbar;
+  }
+}

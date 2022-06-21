@@ -3,7 +3,6 @@ module.exports = {
   content: ['./src/**/*.{html,js, jsx, ts}', './public/*.html'],
   theme: {
     colors: {
-      // Configure your color palette here
       transparent: 'transparent',
       current: 'currentColor',
       black: '#000000',
@@ -32,19 +31,29 @@ module.exports = {
       bold: 700,
       heavy: 800,
     },
+    screens: {
+      'sm': '500px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     container: {
       center: true,
     }
   },
   variants: {},
-  plugins: [require("@tailwindcss/forms"), function ({ addComponents }) {
-    addComponents({
-      '.container': {
-        maxWidth: '100%',
-        '@screen xl': {
-          maxWidth: '1680px',
-        },
-      }
-    })
-  }]
+  plugins: [
+    require("@tailwindcss/forms"),
+    function ({ addComponents }) {
+      addComponents({
+        '.container': {
+          maxWidth: '100%',
+          '@screen xl': {
+            maxWidth: '1536px',
+          },
+        }
+      })
+    }
+  ]
 }
