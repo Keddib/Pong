@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController, fortyTwoAuth } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { ChatRoomsModule } from './chat-rooms/chat-rooms.module';
 import { GamesModule } from './games/games.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from "src/users/entities/user.entity";
 import { ChatRoom } from "src/chat-rooms/entities/chat-room.entity";
 import { Game } from "src/games/entities/game.entity";
 import { ConfigModule } from '@nestjs/config';
+import { ChatMessagesModule } from './chat-messages/chat-messages.module';
+import { ChatRoomsModule } from './chat-rooms/chat-rooms.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot( {
@@ -28,7 +29,8 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forFeature([User]),
     UsersModule,
     ChatRoomsModule,
-    GamesModule
+    GamesModule,
+    ChatMessagesModule
   ],
   controllers: [fortyTwoAuth, AppController],
   providers: [AppService],
