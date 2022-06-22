@@ -24,10 +24,10 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') avatar: Uint8Array, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(avatar, updateUserDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') avatar: string, @Body() updateUserDto: UpdateUserDto) {
+  //   return this.usersService.update(avatar, updateUserDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

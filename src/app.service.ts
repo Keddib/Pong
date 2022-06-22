@@ -6,6 +6,7 @@ import { User } from './users/entities/user.entity';
 import { UsersService } from './users/users.service';
 import axios from "axios";
 import { ConfigService } from '@nestjs/config';
+import { ChatRoom } from './chat-rooms/entities/chat-room.entity';
 
 @Injectable()
 export class AppService {
@@ -60,6 +61,9 @@ export class AppService {
       user.displayedName = userData.data.login;
       user.avatar = userData.data.image_url;
       user.login = userData.data.login;
+
+      const chatRoom = new ChatRoom;
+      user.chatRooms =  [chatRoom];
       user.password = 'defaultpassword';
       this.userRepository.create(user);
       this.userRepository.save(user);

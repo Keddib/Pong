@@ -1,10 +1,13 @@
+import { ChatRoom } from "src/chat-rooms/entities/chat-room.entity";
+
 export class CreateUserDto {
 
     uid: number;
     displayedName: string;
-    avatar: Uint8Array;
+    avatar: string;
     login: string;
     password: string;
     email: string;
+    chatRooms: ChatRoom[];
     // status
 }

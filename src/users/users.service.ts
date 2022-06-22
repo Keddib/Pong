@@ -15,8 +15,8 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) : Promise<User> {
   
+    this.userRepository.create(createUserDto);
     return this.userRepository.save(createUserDto);
-    return this.userRepository.create(createUserDto);
     // return 'This action adds a new user';
   }
 
@@ -33,7 +33,7 @@ export class UsersService {
     // return `This action returns a #${id} user`;
   }
 
-  update(avatar: Uint8Array, updateUserDto: UpdateUserDto) {
+  update(avatar: string, updateUserDto: UpdateUserDto) {
 
     // return this.userRepository.update({ avatar: avatar });
     return `This action updates a #${avatar} user`;

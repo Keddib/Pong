@@ -10,6 +10,10 @@ import { Game } from "src/games/entities/game.entity";
 import { ConfigModule } from '@nestjs/config';
 import { ChatMessagesModule } from './chat-messages/chat-messages.module';
 import { ChatRoomsModule } from './chat-rooms/chat-rooms.module';
+import { ChatMessage } from './chat-messages/entities/chat-message.entity';
+import { AuthModule } from './auth/auth.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [TypeOrmModule.forRoot( {
@@ -22,7 +26,7 @@ import { ChatRoomsModule } from './chat-rooms/chat-rooms.module';
     logging: true,
     subscribers: [],
     migrations: [],
-    entities: [User, Game, ChatRoom],
+    entities: [User, Game, ChatRoom, ChatMessage],
     synchronize: true, // to remove when finished 
   }),
     ConfigModule.forRoot(),
@@ -30,7 +34,8 @@ import { ChatRoomsModule } from './chat-rooms/chat-rooms.module';
     UsersModule,
     ChatRoomsModule,
     GamesModule,
-    ChatMessagesModule
+    ChatMessagesModule,
+    AuthModule
   ],
   controllers: [fortyTwoAuth, AppController],
   providers: [AppService],

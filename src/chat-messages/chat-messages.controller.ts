@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
 import { ChatMessagesService } from './chat-messages.service';
 import { CreateChatMessageDto } from './dto/create-chat-message.dto';
 import { UpdateChatMessageDto } from './dto/update-chat-message.dto';
@@ -13,8 +13,10 @@ export class ChatMessagesController {
   }
 
   @Get()
-  findAll() {
-    return this.chatMessagesService.findAll();
+  async findAll(@Res() res) {
+    const messages = await this.chatMessagesService.findAll();
+    console.log(messages);
+    res.json(messages);
   }
 
   @Get(':id')

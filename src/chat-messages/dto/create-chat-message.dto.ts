@@ -2,8 +2,9 @@
 
 export class CreateChatMessageDto {
 
-    mid: number;
+    messageId: number;
     text: string;
+    roomId: number;
     ownerId: number;
     createdAt: Date;
 
