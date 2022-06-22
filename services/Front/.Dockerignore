@@ -1,5 +1,8 @@
 src
+<<<<<<< HEAD
 public
+=======
+>>>>>>> 9d74cbdd3df64868d04422e5ecc92b414d572422
 ./parcel-cache
 dist
 node_modules

@@ -1,0 +1,207 @@
+@layer components {
+  /* dashboard back ground  */
+  .backGround-img {
+    @apply text-lotion bg-cover bg-fixed bg-origin-border bg-center bg-repeat;
+  }
+
+  /* dashboard grid */
+  .dash-layout {
+    @apply h-full flex flex-col items-center sm:dash-layout-grid overflow-hidden;
+  }
+  .dash-layout-grid {
+    display: grid;
+    grid-template-columns: [firstC] 90px [secondC] auto [thirdC] 350px [end];
+    grid-template-rows: [firstR] 98px [secondR] auto [end];
+  }
+
+  /* chat sidebar */
+
+  .chat-sidebar-layout {
+    grid-column-start: thirdC;
+    grid-column-end: span 1;
+    grid-row-start: secondR;
+    grid-row-end: span 1;
+  }
+  .chat-sidebar {
+    @apply hidden xl:block w-full h-full overflow-auto no-scrollbar xl:chat-sidebar-layout;
+  }
+
+  /* header */
+  .headerGrid {
+    grid-column-start: secondC;
+    grid-column-end: span 2;
+    grid-row-start: firstR;
+    grid-row-end: secondR;
+  }
+
+  .DashHeader {
+    @apply flex justify-between items-center h-fit py-4 px-6 md:px-8
+    ease-in-out duration-500 headerGrid;
+  }
+
+  .EX {
+    /* EX star */
+    @apply w-[200px] h-[60px] hidden relative md:flex  justify-between;
+  }
+
+  /* icon box */
+
+  .icon-wrapper {
+    @apply flex items-center cursor-pointer w-full max-w-[88px] h-[60px];
+  }
+
+  .icon-line {
+    @apply transition ease-in-out delay-75  w-[5px] h-4/6 bg-transparent
+    group-hover:bg-lotion rounded-2xl group-hover:shadow-lotion shadow-sm;
+  }
+  .icon-div {
+    @apply w-full mr-[5px] flex justify-center;
+  }
+  .nav-icon {
+    @apply inline-block w-[26px] h-[26px] fill-lotion/70 group-hover:fill-lotion
+    transition ease-in-out delay-75;
+  }
+
+  .active .icon-line {
+    @apply bg-pictonBlue;
+  }
+  .active .nav-icon {
+    @apply fill-pictonBlue;
+  }
+
+  .notifications {
+    @apply relative;
+  }
+
+  .bell-button {
+    @apply w-10 h-10 flex justify-center items-center rounded-full
+    bg-queenBlue/50 hover:bg-queenBlue transition ease-in-out delay-75
+    focus:bg-queenBlue;
+  }
+
+  .iconBell {
+    @apply nav-icon group-hover:fill-lotion group-focus:fill-lotion;
+  }
+
+  /* navbar style */
+
+  .navbar-grid {
+    grid-column-start: firstC;
+    grid-column-end: secondC;
+    grid-row-start: firstR;
+    grid-row-end: span 2;
+  }
+
+  .navbar {
+    @apply h-fit w-full shadow-sm gradientColor
+    border-b-[1px] rounded-b-xl px-4 flex justify-between items-center
+    sm:w-[88px] sm:h-full sm:rounded-b-none sm:border-b-0
+    sm:px-0 sm:py-10 sm:justify-start sm:flex-col
+    border-lotion/50 sm:rounded-r-2xl sm:border-r-[1px] sm:navbar-grid
+    overflow-auto no-scrollbar;
+  }
+
+  .animate-bar {
+    transition: 0.5s;
+    transform: translateX(-100vh);
+  }
+  .navbar nav {
+    @apply fixed top-0 left-0 w-full h-full z-20 bg-spaceCadet animate-bar
+    flex flex-col justify-center items-center sm:transform-none ease-in-out
+    sm:static sm:bg-transparent sm:pt-12;
+  }
+
+  .navbar nav .nav-btn {
+    @apply absolute top-0 right-0 mt-4 mr-4;
+  }
+
+  .navbar .show-nav {
+    @apply transform-none;
+  }
+
+  .nav-btn {
+    @apply sm:hidden;
+  }
+
+  .gradientColor {
+    background-image: linear-gradient(
+      to right top,
+      #0d1f41,
+      #0e2144,
+      #0f2247,
+      #10244b,
+      #11264e,
+      #122851,
+      #122953,
+      #132b56,
+      #132c59,
+      #132d5c,
+      #142e5f,
+      #142f62
+    );
+  }
+
+  /* main page holder */
+
+  .Dash-main {
+    @apply main-grid h-full w-full p-2 sm:p-4 lg:p-6 xl:p-8
+    duration-500 xl:main-grid-xl overflow-hidden;
+  }
+  .main-grid {
+    grid-column-start: secondC;
+    grid-column-end: span 2;
+    grid-row-start: secondR;
+    grid-row-end: span 1;
+  }
+  .main-grid-xl {
+    grid-column-end: span 1;
+  }
+
+  /* dashboard home page */
+
+  .home-layout {
+    @apply h-full overflow-auto no-scrollbar flex flex-col  gap-4 flex-1;
+  }
+
+  /* game mode */
+
+  .game-mode {
+    @apply w-full rounded-xl flex justify-center items-center
+    shadow-xl relative min-h-[235];
+  }
+
+  .game-mode img {
+    @apply hidden md:block;
+  }
+  .bg-mode-one {
+    @apply game-mode bg-gradient-to-r from-[#144452] to-[#028F9E];
+  }
+  .bg-mode-one img {
+    @apply absolute bottom-0 lg:right-20 right-4 w-[204] h-[265];
+  }
+  .bg-mode-two {
+    @apply game-mode bg-gradient-to-r from-[#a88f01] to-[#EAC702] xl:w-[49%];
+  }
+  .bg-mode-two img {
+    @apply absolute bottom-0 lg:right-20 xl:right-2 right-4 w-[216] h-[216];
+  }
+  .bg-mode-three {
+    @apply game-mode bg-gradient-to-r from-[#c01111] to-[#a63e3e] xl:w-[49%];
+  }
+  .bg-mode-three img {
+    @apply absolute bottom-2 lg:right-20 xl:right-2 right-4 w-[216] h-[216];
+  }
+
+  /* main friends page */
+
+  .tabBar {
+    @apply bg-queenBlue  rounded-full py-1 flex justify-evenly items-center
+    w-full sm:w-[400px];
+  }
+  .tabLink {
+    @apply hover:text-lotion text-lotion/50 ease-in duration-300;
+  }
+  .tabLine {
+    @apply w-1 h-8 rounded-xl bg-pictonBlue;
+  }
+}
