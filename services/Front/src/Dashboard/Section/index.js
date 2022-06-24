@@ -5,33 +5,35 @@ import Messages from "./Messages";
 import Rooms from "./Rooms";
 import Profile from "./Profile";
 import Game from "./Game";
+import { useRef } from "react";
 
-function getPage(page) {
+function getPage(page, props) {
   switch (page) {
     case 'home':
       return <Home />;
     case 'leaderboard':
-      return <Leaderboard />;
+      return <Leaderboard  />;
     case 'friends':
-      return <Friends />;
+      return <Friends  />;
     case 'messages':
-      return <Messages />;
+      return <Messages  />;
     case 'rooms':
-      return <Rooms />;
+      return <Rooms  />;
     case 'profile':
-      return <Profile />;
+      return <Profile  />;
     case 'game':
-      return <Game />;
+      return <Game props={props} />;
     default:
       return null;
   }
 }
 
 const Section = (props) => {
+  const sectionRef = useRef(null);
+  const Page = getPage(props.page, {parentRef:sectionRef});
 
-  const Page = getPage(props.page);
   return (
-    <section className="border border-red Dash-main container">
+    <section ref={sectionRef} className="border border-red Dash-main container">
       {Page}
     </section>
   );
