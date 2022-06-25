@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateChatRoomDto } from 'src/chat-rooms/dto/create-chat-room.dto';
+import { ChatRoom } from 'src/chat-rooms/entities/chat-room.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -10,11 +12,22 @@ export class UsersService {
 
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+
+    @InjectRepository(ChatRoom)
+    private readonly chatRepository: Repository<ChatRoom>
   ) {}
+
+  async createChatRoom(createChatRoom: CreateChatRoomDto) {
+  
+    const chatRoom = new CreateChatRoomDto;
+  
+      chatRoom.owner
+  }
 
   async create(createUserDto: CreateUserDto) : Promise<User> {
   
+
     this.userRepository.create(createUserDto);
     return this.userRepository.save(createUserDto);
     // return 'This action adds a new user';

@@ -10,7 +10,7 @@ export class ChatRoomsService {
   
   constructor(
     @InjectRepository(ChatRoom)
-    private chatRoom: Repository<ChatRoom>
+    private readonly chatRoom: Repository<ChatRoom>
     ) {}
 
   create(createChatRoomDto: CreateChatRoomDto) {

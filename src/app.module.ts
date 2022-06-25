@@ -12,8 +12,7 @@ import { ChatMessagesModule } from './chat-messages/chat-messages.module';
 import { ChatRoomsModule } from './chat-rooms/chat-rooms.module';
 import { ChatMessage } from './chat-messages/entities/chat-message.entity';
 import { AuthModule } from './auth/auth.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { ChatGatewayModule } from './chatGateway/chatGateway.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot( {
@@ -35,7 +34,8 @@ import { join } from 'path';
     ChatRoomsModule,
     GamesModule,
     ChatMessagesModule,
-    AuthModule
+    AuthModule,
+    ChatGatewayModule
   ],
   controllers: [fortyTwoAuth, AppController],
   providers: [AppService],
