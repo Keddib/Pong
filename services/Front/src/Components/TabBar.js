@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 export default function TabBar({ links }) {
   return (
-    <nav className=" tabBar">
+    <nav className=" tabBar py-2">
       <NavLink to={links.first.path} className="tabLink" >{links.first.name}</NavLink>
       <div className="tabLine"></div>
       <NavLink to={links.second.path} className="tabLink">{links.second.name}</NavLink>

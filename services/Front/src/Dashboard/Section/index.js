@@ -4,6 +4,9 @@ import Leaderboard from "./Leaderboard";
 import Messages from "./Messages";
 import Rooms from "./Rooms";
 import Profile from "./Profile";
+import Game from "./Game";
+import Error404 from "/src/Components/404";
+
 
 function getPage(page) {
   switch (page) {
@@ -19,6 +22,8 @@ function getPage(page) {
       return <Rooms />;
     case 'profile':
       return <Profile />;
+    case 'game':
+      return <Game />;
     default:
       return null;
   }
@@ -28,8 +33,10 @@ const Section = (props) => {
 
   const Page = getPage(props.page);
   return (
-    <section className="border border-red Dash-main container">
-      {Page}
+    <section className="Dash-main container">
+      <div className="dash-home-layout">
+        {Page ? Page : <Error404 />}
+      </div>
     </section>
   );
 };

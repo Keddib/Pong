@@ -11,28 +11,33 @@ import Logout from "/src/assets/icons/logout.svg";
 
 const Navbar = (props) => {
 
+  const logout = () => {
+    console.log('logout clicked');
+    // show drop down for logout confirmation
+  }
+
   return (
     <nav className="show-nav">
-      <IconLink page="/app/" showNav={props.showNav}>
+      <IconLink page="home" showNav={props.showNav}>
         <HomeIcon className="nav-icon" />
       </IconLink>
-      <IconLink page="/app/leaderboard" showNav={props.showNav}>
+      <IconLink page="leaderboard" showNav={props.showNav}>
         <BoardIcon className="nav-icon" />
       </IconLink>
-      <IconLink page="/app/messages" showNav={props.showNav}>
+      <IconLink page="messages" showNav={props.showNav}>
         <ChatIcon className="nav-icon" />
       </IconLink>
-      <IconLink page="/app/friends/" showNav={props.showNav}>
+      <IconLink page="friends" showNav={props.showNav}>
         <FriendsIcon className="nav-icon" />
       </IconLink>
-      <IconLink page="/app/rooms" showNav={props.showNav}>
+      <IconLink page="rooms" showNav={props.showNav}>
         <GroupIcon className="nav-icon" />
       </IconLink>
-      <IconLink page="/app/profile" showNav={props.showNav}>
+      <IconLink page="profile" showNav={props.showNav}>
         <ProfileIcon className="nav-icon" />
       </IconLink>
       <div className="sm:grow"> </div>
-      <button className="group mt-4">
+      <button className="group mt-4" onClick={logout}>
         <Logout className="nav-icon  group-hover:fill-red/80 " />
       </button>
       <button onClick={props.showNav} className="group nav-btn">

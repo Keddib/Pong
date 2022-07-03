@@ -41,4 +41,10 @@
   .signinDialogWrraper {
     @apply page flex justify-center items-center xl:w-1/2;
   }
+
+  .profile-picture-input {
+    @apply block w-full text-sm text-lotion/50 file:mr-4 file:py-2 file:px-4
+      file:rounded-full file:border-0 file:text-sm file:bg-lotion/50
+      hover:file:bg-lotion cursor-pointer file:text-spaceCadet;
+  }
 }

@@ -28,6 +28,7 @@
     "@parcel/transformer-svg-react": "^2.6.0",
     "@tailwindcss/forms": "^0.4.0",
     "autoprefixer": "^10.4.7",
+    "buffer": "^6.0.3",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-parcel": "^1.10.6",

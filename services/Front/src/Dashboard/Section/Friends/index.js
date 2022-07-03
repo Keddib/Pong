@@ -9,7 +9,7 @@ export default function Friends() {
   const links = {
     first: {
       name: 'Friends',
-      path: '/app/friends/'
+      path: ''
     },
     second: {
       name: 'Requests',
@@ -22,7 +22,7 @@ export default function Friends() {
       <TabBar links={links} />
       <Routes>
         <Route index element={<FriendList />} />
-        <Route path="/app/friends/requests" element={<FriendRequests />} />
+        <Route path="requests" element={<FriendRequests />} />
       </Routes>
     </div>
   );

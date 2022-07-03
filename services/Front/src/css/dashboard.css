@@ -10,7 +10,7 @@
   }
   .dash-layout-grid {
     display: grid;
-    grid-template-columns: [firstC] 90px [secondC] auto [thirdC] 350px [end];
+    grid-template-columns: [firstC] 90px [secondC] auto [thirdC] 400px [end];
     grid-template-rows: [firstR] 98px [secondR] auto [end];
   }
 
@@ -41,7 +41,7 @@
 
   .EX {
     /* EX star */
-    @apply w-[200px] h-[60px] hidden relative md:flex  justify-between;
+    @apply w-[200px] h-[60px] hidden relative lg:flex  justify-between;
   }
 
   /* icon box */
@@ -98,7 +98,7 @@
     sm:w-[88px] sm:h-full sm:rounded-b-none sm:border-b-0
     sm:px-0 sm:py-10 sm:justify-start sm:flex-col
     border-lotion/50 sm:rounded-r-2xl sm:border-r-[1px] sm:navbar-grid
-    overflow-auto no-scrollbar;
+    overflow-auto no-scrollbar py-2;
   }
 
   .animate-bar {
@@ -159,8 +159,8 @@
 
   /* dashboard home page */
 
-  .home-layout {
-    @apply h-full overflow-auto no-scrollbar flex flex-col  gap-4 flex-1;
+  .dash-home-layout {
+    @apply h-full overflow-auto no-scrollbar flex justify-center items-center;
   }
 
   /* game mode */
@@ -196,12 +196,16 @@
 
   .tabBar {
     @apply bg-queenBlue  rounded-full py-1 flex justify-evenly items-center
-    w-full sm:w-[400px];
+    w-full sm:max-w-[400px];
   }
   .tabLink {
     @apply hover:text-lotion text-lotion/50 ease-in duration-300;
   }
   .tabLine {
     @apply w-1 h-8 rounded-xl bg-pictonBlue;
+  }
+
+  .mini-chat {
+    height: calc(100% - 80px);
   }
 }

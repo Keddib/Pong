@@ -1,38 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loading from "/src/Components/Loading";
-import UserBar from "/src/Components/UserBar";
-import User from "/src/assets/images/user.jpg";
+import ElementBar from "/src/Components/ElementBar";
+import UserCard from "/src/Components/UserCard";
+import GamePad from "/src/assets/icons/gamepad.svg";
+import DmIcon from "/src/assets/icons/dm.svg";
 
-var friendList = [];
 
-for (let i = 0; i < 10; i++) {
-  friendList[i] =
-  {
-    id: Math.floor(Math.random() * 100) + 1,
-    name: 'Alaex07',
-    status: 'online',
-    statusColor: 'online-dot',
-    img: User
-  }
+const userExample = {
+  username: 'AlaeZx07',
+  id: 121878,
+}
+
+
+
+
+function FriendListItems() {
+  return (
+    <ElementBar >
+      <div className="w-full flex justify-between items-center">
+        <UserCard user={userExample} />
+        <div className="flex items-center gap-4 sm:gap-8 sm:mr-8">
+          <button className="" >
+            <GamePad className="w-6 h-6 sm:w-8 sm:h-8 fill-lotion/50 hover:fill-lotion ease-in duration-150" />
+          </button>
+          <button className="" >
+            <DmIcon className="w-6 h-4 sm:w-8 sm:h-6 fill-lotion/50 hover:fill-lotion ease-in duration-150" />
+          </button>
+        </div>
+      </div>
+
+    </ElementBar>
+  );
 }
 
 export default function FriendList() {
 
   let [done, setDone] = useState(false);
 
-  setTimeout(() => {
-    setDone(true);
-  }, 1000);
+  useEffect(() => {
+
+    const TO = setTimeout(() => {
+      setDone(true);
+    }, 1000);
+
+    return (() => (clearTimeout(TO)));
+  }, []);
 
   return (
     <ul className="flex flex-col gap-1 h-full overflow-auto no-scrollbar">
-      {
-        !done ? <Loading /> : friendList.map((friend) => {
-          return (
-            <UserBar key={friend.id} user={friend} />
-          );
-        })
-      }
+      {done ? <FriendListItems /> : <Loading />}
     </ul>
   );
 }

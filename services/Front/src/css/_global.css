@@ -2,10 +2,10 @@
   /* Player wrapper */
 
   .user-wrapper {
-    @apply grow flex items-center ease-in-out duration-500;
+    @apply w-fit flex items-center ease-in-out duration-500;
   }
   .user-img {
-    @apply w-16 h-16 rounded-full;
+    @apply w-10 h-10 sm:w-16 sm:h-16 rounded-full;
   }
 
   /* buttons */
@@ -28,12 +28,17 @@
     @apply button bg-spaceCadet border-spaceCadet text-lotion hover:bg-lotion
   hover:text-spaceCadet hover:border-lotion;
   }
+
+  .button--3.active {
+    @apply bg-lotion text-spaceCadet border-lotion;
+  }
+
   .button--4 {
     @apply button bg-lotion/50 border-lotion/50 text-lotion hover:bg-lotion
   hover:text-red/80 hover:border-red/80;
   }
   .button--5 {
-    @apply button bg-queenBlue/50 text-lotion hover:bg-lotion
+    @apply button bg-queenBlue/50 border-queenBlue/50 text-lotion hover:bg-lotion
   hover:text-red/80 hover:border-red/80;
   }
 
@@ -56,8 +61,7 @@
 
   .input {
     @apply block w-full bg-transparent text-base  py-[8px] rounded-xl border-2
-	capitalize font-light mt-2 focus:outline-none  focus:ring-0 shadow-md
-	invalid:border-red/80 invalid:text-red/80 focus:invalid:border-red/80 p-4;
+	capitalize font-light mt-2 focus:outline-none  focus:ring-0 shadow-md p-4;
   }
 
   .input--1 {
@@ -122,10 +126,19 @@
     @apply flex rounded-l-2xl pr-6 py-1 items-center hover:border-pictonBlue
     border-[2px] border-transparent w-full bg-queenBlue ease-in duration-300;
   }
+  .element-bar {
+    @apply flex rounded-l-2xl pr-6 py-1 items-center hover:border-pictonBlue
+    border-[2px] border-transparent w-full h-fit bg-queenBlue ease-in duration-300;
+  }
+
+  .element-bar-line {
+    @apply w-[5px] rounded-xl bg-transparent group-hover:bg-pictonBlue
+     ease-in duration-300 h-8 md:h-12;
+  }
 
   .userBarLine {
     @apply w-[5px] h-12 rounded-xl bg-transparent group-hover:bg-pictonBlue
-    mr-6 ease-in duration-300;
+     ease-in duration-300;
   }
 
   .dropdown {
