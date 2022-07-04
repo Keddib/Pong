@@ -16,17 +16,17 @@ var user1 = {
 export default function Game() {
 
   let [player, setPlayer] = useState(false);
-  let [game, setGame] = useState('waiting');
+  let [gameState, setGameState] = useState('waiting');
   let navigate = useNavigate();
 
-  setTimeout(() => { setPlayer(user1); setTimeout(() => setGame('play'), 1000) }, 200000000);
+  setTimeout(() => { setPlayer(user1); setTimeout(() => setGameState('play'), 1000) }, 1000);
 
-  let page = <Waiting opponent={player} setGame={setGame} />
+  let page = <Waiting opponent={player} setGameState={setGameState} />
 
-  if (game == 'play')
-    page = <Play players={[user1, user1]} />
-  else if (game == 'canceled') {
-    navigate('/home/', { replace: true });
+  if (gameState == 'play')
+    page = <Play players={[user1, user1]} setGameState={setGameState} />
+  else if (gameState == 'canceled') {
+    navigate('/home', { replace: true });
   }
   return (
     <>

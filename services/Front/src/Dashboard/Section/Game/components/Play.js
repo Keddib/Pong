@@ -1,3 +1,5 @@
+import Pong from "/src/Components/Pong";
+import React, { useEffect, useState, useRef } from "react";
 import { SM } from "/src/Components/Constants";
 import useMedia from "/src/Hooks/useMedia";
 import UserCard from "/src/Components/UserCard";
@@ -14,16 +16,40 @@ function PlayersBar({ players }) {
   );
 }
 
-
 export default function Play(props) {
 
+  const parentRef = useRef(null);
   let sm = useMedia(SM);
+  const [sectionWidth, setSectionWidth] = useState(0)
+  const [sectionHeight, setSectionHeight] = useState(0)
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const setup = () => {
+      setSectionWidth(parentRef.current.clientWidth);
+      setSectionHeight(parentRef.current.clientHeight);
+      console.log(parentRef.current);
+      setReady(true);
+    }
+    setup();
+    window.addEventListener("resize", setup);
+    return (() => window.removeEventListener('resize', setup));
+  }, []);
+
+  console.log('start', sectionWidth, sectionHeight);
 
   return (
     <div className="m-auto w-full h-full flex flex-col gap-4 justify-center">
       {sm && <PlayersBar players={props.players} />}
-      <div className="gameComponent w-full bg-black h-3/4 rounded-3xl">
+      <div ref={parentRef} className="gameComponent w-full grow rounded-3xl">
+        {
+          ready && <Pong
+            width={sectionWidth} height={sectionHeight}
+            initBallX={500} initBallY={350} ballRadius={50} ballSpeed={10}
+            paddleWidth={30} paddleHeight={150} paddleSpeed={10}
+          />
+        }
       </div>
     </div>
-  );
+  )
 }
