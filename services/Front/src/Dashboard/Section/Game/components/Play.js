@@ -47,6 +47,7 @@ export default function Play(props) {
             width={sectionWidth} height={sectionHeight}
             initBallX={500} initBallY={350} ballRadius={50} ballSpeed={10}
             paddleWidth={30} paddleHeight={150} paddleSpeed={10}
+            gameStateData={props.gameStateData} socket={props.socket}
           />
         }
       </div>

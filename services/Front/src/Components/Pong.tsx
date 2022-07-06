@@ -32,6 +32,9 @@ interface GameWindowProps {
   paddleWidth: number;
   paddleHeight: number;
   paddleSpeed: number;
+
+  gameStateData : any;
+  socket:any;
 }
 
 interface GameState {
@@ -52,6 +55,9 @@ interface GameState {
 }
 
 const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
+
+  //let socket: any = useRef<Socket>(null);
+
 
   // Responsiveness
   let aspectRatio : number = 16/9;
@@ -89,7 +95,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   const setGameStateData = (newVal) => {
     gamestatedata.current = {...gamestatedata.current, ...newVal}
   }
-  const getGameStateData = () => gamestatedata.current;
+  const getGameStateData = () => props.gameStateData.current;
 
   // draw
   const drawBall = (p5: p5Types) => {
@@ -110,12 +116,12 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
     if (p5.mouseY >
       getGameStateData().paddleOneY  * scalingRatio + props.paddleHeight * scalingRatio / 2 + props.paddleSpeed * scalingRatio) {
-      socket.current.emit("playerInput", { input: "DOWN" });
+      props.socket.current.emit("playerInput", { input: "DOWN" });
     } else if (
       p5.mouseY <
       getGameStateData().paddleOneY * scalingRatio + props.paddleHeight * scalingRatio / 2 - props.paddleSpeed * scalingRatio
     ) {
-      socket.current.emit("playerInput", { input: "UP" });
+      props.socket.current.emit("playerInput", { input: "UP" });
     }
   };
   const handlePlayerTwoInput = (p5: p5Types) => {
@@ -124,12 +130,12 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       return;
     }
     if (p5.mouseY > getGameStateData().paddleTwoY * scalingRatio + props.paddleHeight * scalingRatio / 2 + props.paddleSpeed * scalingRatio) {
-      socket.current.emit("playerInput", { input: "DOWN" });
+      props.socket.current.emit("playerInput", { input: "DOWN" });
     } else if (
       p5.mouseY <
       getGameStateData().paddleTwoY * scalingRatio + props.paddleHeight * scalingRatio / 2 - props.paddleSpeed * scalingRatio
     ) {
-      socket.current.emit("playerInput", { input: "UP" });
+      props.socket.current.emit("playerInput", { input: "UP" });
     }
   };
   //resize
@@ -150,11 +156,9 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
   // SETUP
   let canvas: p5Types.Renderer;
-  let socket: any = useRef<Socket>(null);
   const setup = (p5: p5Types, canvasParentRef: Element) => {
-
+    
     canvas = p5.createCanvas(relativeWidth, relativeHeight).parent(canvasParentRef);
-
     canvas.mousePressed(() => {
       mousePressed.current = true;
     });
@@ -163,25 +167,10 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     });
   };
   
-
-
   useEffect(() => {
-    console.log("bruh")
-    socket.current = io("ws://localhost:3001").on('connect',()=>{
-      console.log( socket.current)
-      socket.current.emit("playerJoined");
-
-      socket.current.on("gameState", (data: GameState) => {
-        //console.log(data);
-
-        setGameStateData(data);
-
-      });
-    });
-
+    console.log("canvas mounted")
     return () => {
       if (canvas !== undefined) canvas.remove();
-      if (socket.current !== undefined) socket.current.close();
     };
   }, []);
 
@@ -217,8 +206,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
     //handle input
     //console.log(socket.current)
-    if (getGameStateData().players.indexOf(socket.current.id) === 0) handlePlayerOneInput(p5);
-    if (getGameStateData().players.indexOf(socket.current.id) === 1) handlePlayerTwoInput(p5);
+    if (getGameStateData().players.indexOf(props.socket.current.id) === 0) handlePlayerOneInput(p5);
+    if (getGameStateData().players.indexOf(props.socket.current.id) === 1) handlePlayerTwoInput(p5);
   };
 
   return <Sketch setup={setup} draw={draw} windowResized={onResize}/>;

@@ -32,7 +32,7 @@ function LoadingPlayer() {
 }
 
 
-export default function Waiting({ opponent, setGame }) {
+export default function Waiting({ opponent, setGameState }) {
 
   return (
     <div className="m-auto w-full pt-8 flex flex-col items-center gap-10">
@@ -44,7 +44,7 @@ export default function Waiting({ opponent, setGame }) {
         {opponent ? <UserCard user={opponent} /> : <LoadingPlayer />}
       </div>
       <button
-        onClick={() => setGame('canceled')}
+        onClick={() => setGameState('canceled')}
         className="button--5 w-40"
       >
         cancel
