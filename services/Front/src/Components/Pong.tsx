@@ -53,19 +53,20 @@ interface GameState {
 
 const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
-  const [P5, setP5] = useState(0);
-  // Responsivity
+  // Responsiveness
   let aspectRatio : number = 16/9;
   let absoluteWidth : number = 1000;
   let relativeWidth : number = props.width;
   let absoluteHeight : number = absoluteWidth / aspectRatio;
   let relativeHeight : number = relativeWidth / aspectRatio;
 
+  let scalingRatio : number = relativeWidth / absoluteWidth; 
+
   console.log(aspectRatio, absoluteWidth, absoluteHeight)
   console.log(aspectRatio, relativeWidth, relativeHeight)
 
   //STATE
-  let mousePressed: any = useRef<boolean>(false);
+  let mousePressed = useRef<boolean>(false);
 
   let ballX: number = props.initBallX;
   let ballY: number = props.initBallY;
@@ -75,7 +76,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   let paddleTwoY: number = 0;
   var state: 0|2|1 = 0;
   let players: Array<string> = []
-  const gamestatedata: any = useRef<GameState>({
+  const gamestatedata = useRef<GameState>({
     ballX,
     ballY,
     paddleOneX,
@@ -92,13 +93,14 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
   // draw
   const drawBall = (p5: p5Types) => {
-    p5.ellipse(getGameStateData().ballX, getGameStateData().ballY, props.ballRadius, props.ballRadius);
+
+    p5.ellipse(getGameStateData().ballX * scalingRatio, getGameStateData().ballY * scalingRatio, props.ballRadius * scalingRatio, props.ballRadius * scalingRatio);
   };
   const drawPaddleOne = (p5: p5Types) => {
-    p5.rect(getGameStateData().paddleOneX, getGameStateData().paddleOneY, props.paddleWidth, props.paddleHeight);
+    p5.rect(getGameStateData().paddleOneX * scalingRatio, getGameStateData().paddleOneY * scalingRatio, props.paddleWidth * scalingRatio, props.paddleHeight * scalingRatio);
   };
   const drawPaddleTwo = (p5: p5Types) => {
-    p5.rect(getGameStateData().paddleTwoX, getGameStateData().paddleTwoY, props.paddleWidth, props.paddleHeight);
+    p5.rect(getGameStateData().paddleTwoX * scalingRatio, getGameStateData().paddleTwoY * scalingRatio, props.paddleWidth * scalingRatio, props.paddleHeight * scalingRatio);
   };
   const handlePlayerOneInput = (p5: p5Types) => {
     if (!mousePressed.current) {
@@ -106,11 +108,12 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       return;
     }
 
-    if (p5.mouseY > getGameStateData().paddleOneY + props.paddleHeight / 2 + props.paddleSpeed) {
+    if (p5.mouseY >
+      getGameStateData().paddleOneY  * scalingRatio + props.paddleHeight * scalingRatio / 2 + props.paddleSpeed * scalingRatio) {
       socket.current.emit("playerInput", { input: "DOWN" });
     } else if (
       p5.mouseY <
-      getGameStateData().paddleOneY + props.paddleHeight / 2 - props.paddleSpeed
+      getGameStateData().paddleOneY * scalingRatio + props.paddleHeight * scalingRatio / 2 - props.paddleSpeed * scalingRatio
     ) {
       socket.current.emit("playerInput", { input: "UP" });
     }
@@ -120,11 +123,11 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       //handle keys
       return;
     }
-    if (p5.mouseY > getGameStateData().paddleTwoY + props.paddleHeight / 2 + props.paddleSpeed) {
+    if (p5.mouseY > getGameStateData().paddleTwoY * scalingRatio + props.paddleHeight * scalingRatio / 2 + props.paddleSpeed * scalingRatio) {
       socket.current.emit("playerInput", { input: "DOWN" });
     } else if (
       p5.mouseY <
-      getGameStateData().paddleTwoY + props.paddleHeight / 2 - props.paddleSpeed
+      getGameStateData().paddleTwoY * scalingRatio + props.paddleHeight * scalingRatio / 2 - props.paddleSpeed * scalingRatio
     ) {
       socket.current.emit("playerInput", { input: "UP" });
     }
@@ -136,10 +139,12 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
     absoluteWidth = 1000;
     relativeWidth = props.width;
-  
+   
     absoluteHeight = absoluteWidth / aspectRatio;
     relativeHeight = relativeWidth / aspectRatio;
 
+    scalingRatio = relativeWidth / absoluteWidth; 
+    
     if(p5) p5.resizeCanvas(relativeWidth, relativeHeight);
   }
 
@@ -147,8 +152,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   let canvas: p5Types.Renderer;
   let socket: any = useRef<Socket>(null);
   const setup = (p5: p5Types, canvasParentRef: Element) => {
-    console.log('p5 set')
-    setP5(p5);
+
     canvas = p5.createCanvas(relativeWidth, relativeHeight).parent(canvasParentRef);
 
     canvas.mousePressed(() => {
