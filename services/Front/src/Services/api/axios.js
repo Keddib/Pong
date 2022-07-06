@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://localhost:3000";
+const URL = "http://localhost:3500";
 
 export default axios.create({
   baseURL: URL
@@ -20,7 +20,7 @@ export const authAPI = async (code, setError) => {
     // displayed name = username
     // 200
     // 201
-    const response = await axiosAuth.get("/",
+    const response = await axiosAuth.get("/auth",
       {
         headers: { 'Content-Type': 'application/json' },
         params: { 'code': code },
