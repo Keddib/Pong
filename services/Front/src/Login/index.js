@@ -29,6 +29,7 @@ export default function Login() {
     const authenticateUser = async () => {
       //  getUser
       let [data, status] = await authAPI(code, setErrorMsg);
+      console.log(status, data);
       if (status != -1) {
         if (status == 201) {
           data.isNew = true;

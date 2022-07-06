@@ -8,6 +8,7 @@ export default function Messages() {
         <Link to="/" > home </Link>
         <Link to="/access/signin" > signin </Link>
         <Link to="/access/signup" > signup </Link>
+        <Link to="/game" > game </Link>
       </div>
     </div>
   )
