@@ -24,9 +24,9 @@ const App = () => {
 
 
           <Route path="/*" element={
-            <RequireAuth>
+            // <RequireAuth>
               <Dashboard />
-            </RequireAuth>
+            // </RequireAuth>
           }>
             <Route index element={<Navigate to="home" replace />} />
             <Route path="home" element={<Section page='home' />} />
