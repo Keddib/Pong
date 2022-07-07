@@ -145,7 +145,7 @@
 
   .Dash-main {
     @apply main-grid h-full w-full p-2 sm:p-4 lg:p-6 xl:p-8
-    duration-500 xl:main-grid-xl overflow-hidden;
+    duration-500 overflow-hidden;
   }
   .main-grid {
     grid-column-start: secondC;

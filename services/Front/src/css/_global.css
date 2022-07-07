@@ -88,21 +88,21 @@
 
   /* small components dots for status */
   .dot {
-    @apply inline-flex rounded-full h-3 w-3 absolute top-12 right-1;
+    @apply inline-flex rounded-full h-3 w-3 absolute top-7 sm:top-12 right-0 sm:right-1;
   }
   .red-dot {
     @apply dot bg-red;
   }
-  .online-dot {
+  .online {
     @apply dot bg-electricGreen;
   }
-  .playing-dot {
+  .playing {
     @apply dot bg-pictonBlue;
   }
-  .watching-dot {
+  .watching {
     @apply dot bg-crayola;
   }
-  .offline-dot {
+  .offline {
     @apply dot bg-lotion/50;
   }
 

@@ -1,15 +1,32 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+
+import TabBar from "/src/Components/TabBar";
+import ConversationList from "./ConversationList";
+
+
+const links = {
+  first: {
+    name: 'friends',
+    path: ''
+  },
+  second: {
+    name: 'rooms',
+    path: ''
+  }
+}
+
+
 
 export default function Messages() {
   return (
-    <div>
-      <h1>messages</h1>
-      <div className="flex flex-col">
-        <Link to="/" > home </Link>
-        <Link to="/access/signin" > signin </Link>
-        <Link to="/access/signup" > signup </Link>
-        <Link to="/game" > game </Link>
+
+    <div className="m-auto w-full h-full flex flex-col gap-4">
+      <div className="bg-queenBlue/50 rounded-2xl p-2 py-4  flex flex-col gap-4">
+        <TabBar links={links} />
+        <div className="grow">
+          <ConversationList />
+        </div>
       </div>
-    </div>
+    </div >
   )
 }

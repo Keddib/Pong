@@ -23,7 +23,7 @@ const ProfileHeader = () => {
       <div className="left-side flex items-center gap-4 md:gap-8">
         <div className="rounded-full bg-queenBlue/50 relative">
           <ExStar className="absolute  -right-2 bottom-0" />
-          <div className="w-20 h-20 md:w-40 md:h-40 ">
+          <div className="w-20 h-20 md:w-40 md:h-40 rounded-full overflow-hidden">
             <Image imageUrl={user.image_url} alt="user profile" className="rounded-full" />
           </div>
         </div>

@@ -41,7 +41,7 @@ export default function Leaderboard() {
         <div className="Rank">
           <ul className="flex flex-col gap-2">
             <li key={1 * 10}>
-              <ElementBar className="border-crayola hover:border-crayola" line="bg-crayola hover:bg-crayola">
+              <ElementBar className="border-crayola hover:border-crayola" line="bg-crayola group-hover:bg-crayola">
                 <Award className="w-6 h-6 fill-crayola" />
                 <div className="flex justify-between items-center w-full">
                   <UserCard user={user1} />
