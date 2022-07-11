@@ -2,6 +2,7 @@ import { Strategy, Profile } from "passport-42";
 import { PassportStrategy } from "@nestjs/passport";
 import { Inject, Injectable } from "@nestjs/common";
 import { AuthenticationProvider, AuthService } from "./auth.service";
+import { User } from "src/users/entities/user.entity";
 
 const FORTYTWO_APP_ID =
   "a57b6c08b2acdbe87240256738b7e23fc9e049afd718f6730f5d2642c246d1c3";
@@ -27,7 +28,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, "42") {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-  ): Promise<any> {
+  ): Promise<User> {
     // console.log(profile);
     return this.authService.validateUser({ftId: profile.id.toString(), username: profile.username, avatar: profile.photos[0].value});
   }

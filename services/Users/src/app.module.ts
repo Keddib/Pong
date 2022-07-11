@@ -17,5 +17,6 @@ import { PassportModule } from '@nestjs/passport';
   ],
   controllers: [],
   providers: [],
+  exports:[TypeOrmModule]
 })
 export class AppModule {}

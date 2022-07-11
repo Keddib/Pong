@@ -1,6 +1,12 @@
-import { Controller, Get, Res, UseGuards } from "@nestjs/common";
-import { Response } from "express";
+import { Controller, Get, Res, Req, UseGuards } from "@nestjs/common";
+import { Request, Response } from "express";
 import { AuthenticatedGuard, FortyTwoAuthGuard } from "./auth.guard";
+
+
+interface AuthenticatedRequest extends Request{
+    user: any;
+    logOut: (callback:()=>void) => void;
+}
 
 @Controller("auth")
 export class AuthController {
@@ -15,17 +21,21 @@ export class AuthController {
   @Get("redirect")
   @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
-    res.send("Redirected after oauth login");
+    res.send("Logged in succesfully");
   }
 
   // /auth/status get auth status
   @Get("status")
   @UseGuards(AuthenticatedGuard)
-  status() {
-    return "ok";  
+  status(@Req() req: AuthenticatedRequest) {
+    return req.user;  
   }
 
   // /auth/logout destroy session
   @Get("logout")
-  logout() {}
+  @UseGuards(AuthenticatedGuard)
+  logout(@Req() req: AuthenticatedRequest) {
+    req.logOut(()=>{return;})
+    return "Logged out succesfully";
+  }
 }

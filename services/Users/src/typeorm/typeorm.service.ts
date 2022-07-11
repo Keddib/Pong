@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypeOrmSession } from 'src/auth/utils/Session.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmConfigService {
@@ -18,9 +20,10 @@ export class TypeOrmConfigService implements TypeOrmConfigService {
 
     // };
     return {
+      name:"default",
       type: 'sqlite',
       database: './dbfile.db',
-      entities: ['dist/**/*.entity.{ts,js}'],
+      entities: [User, TypeOrmSession],
       migrations: ['dist/migrations/*.{ts,js}'],
       migrationsTableName: 'typeorm_migrations',
       logger: 'file',
