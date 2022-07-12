@@ -3,9 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getEnvPath } from './common/helper/env.helper';
 import { TypeOrmConfigService } from './shared/typeorm/typeorm.service';
-import { ApiModule } from './api/api.module';
 
 import { AppGateway } from './api/game/app.gateway'; //ws
+import { AuthService } from './api/game/app.service';
+import { GameModule } from './api/game/game.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 
@@ -13,9 +14,9 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
   imports: [
     ConfigModule.forRoot({ envFilePath, isGlobal: true }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
-    ApiModule,
+    GameModule,
   ],
   controllers: [],
-  providers: [AppGateway],
+  providers: [],
 })
 export class AppModule {}

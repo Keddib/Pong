@@ -58,18 +58,30 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
   //let socket: any = useRef<Socket>(null);
 
-
+  // console.log(props.height, props.width, "props")
   // Responsiveness
   let aspectRatio : number = 16/9;
+
   let absoluteWidth : number = 1000;
   let relativeWidth : number = props.width;
+
   let absoluteHeight : number = absoluteWidth / aspectRatio;
   let relativeHeight : number = relativeWidth / aspectRatio;
 
+  if (relativeHeight > props.height){
+
+    let tmp = props.height / relativeHeight;
+    relativeWidth*= tmp;
+    relativeHeight*= tmp;
+    // console.log("something wrong")
+  }
+
   let scalingRatio : number = relativeWidth / absoluteWidth; 
 
-  console.log(aspectRatio, absoluteWidth, absoluteHeight)
-  console.log(aspectRatio, relativeWidth, relativeHeight)
+  // console.log(aspectRatio, absoluteWidth, absoluteHeight)
+  // console.log(aspectRatio, relativeWidth, relativeHeight)
+
+
 
   //STATE
   let mousePressed = useRef<boolean>(false);
@@ -141,24 +153,33 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   //resize
 
   const onResize = ( p5: p5Types)=>{
-    console.log("resizing", p5)
+    // console.log("resizing", props.width, props.height)
 
     absoluteWidth = 1000;
     relativeWidth = props.width;
    
     absoluteHeight = absoluteWidth / aspectRatio;
     relativeHeight = relativeWidth / aspectRatio;
+    if (relativeHeight > props.height){
 
+      let tmp = props.height / relativeHeight;
+      relativeWidth*= tmp;
+      relativeHeight*= tmp;
+      // console.log(props.height, relativeHeight, "should be the same ")
+      // p5.translate(props.width-relativeWidth/2,0);
+    }
     scalingRatio = relativeWidth / absoluteWidth; 
     
-    if(p5) p5.resizeCanvas(relativeWidth, relativeHeight);
+    if(p5) p5.resizeCanvas(props.width, relativeHeight);
+
   }
 
   // SETUP
   let canvas: p5Types.Renderer;
   const setup = (p5: p5Types, canvasParentRef: Element) => {
-    
-    canvas = p5.createCanvas(relativeWidth, relativeHeight).parent(canvasParentRef);
+
+    // if(relativeWidth<props.width)
+      canvas = p5.createCanvas(props.width, relativeHeight).parent(canvasParentRef);
     canvas.mousePressed(() => {
       mousePressed.current = true;
     });
@@ -168,7 +189,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   };
   
   useEffect(() => {
-    console.log("canvas mounted")
+    // console.log("canvas mounted")
     return () => {
       if (canvas !== undefined) canvas.remove();
     };
@@ -178,6 +199,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   const draw = (p5: p5Types) => {
     p5.background(0);
     p5.frameRate(60);
+    if(relativeWidth<props.width)
+      p5.translate((props.width-relativeWidth)/2,0);
 
     //console.log(getGameStateData().state)
     if (!getGameStateData().state) {
@@ -196,7 +219,11 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       );
       return;
     }
-
+    p5.push()
+    p5.stroke(255)
+    p5.line(-1,0,-1,relativeHeight)
+    p5.line(relativeWidth+1,0,relativeWidth+1,relativeHeight)
+    p5.pop()
     //ball
     drawBall(p5);
     //paddle one

@@ -38,8 +38,8 @@ export default function Game() {
   const socket = useRef(null)
 
   useEffect(()=>{
-    socket.current = io("http://localhost:3001").on('connect',()=>{
-      console.log("socket created", socket.current)
+    socket.current = io("http://localhost:3001",{withCredentials:true}).on('connect',()=>{
+      //console.log("socket created", socket.current)
       socket.current.emit('playerJoined');
       socket.current.on("gameState",(data)=>{
         if (gameState == 'waiting') setGameState('play')

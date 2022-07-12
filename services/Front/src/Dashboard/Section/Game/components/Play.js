@@ -28,7 +28,7 @@ export default function Play(props) {
     const setup = () => {
       setSectionWidth(parentRef.current.clientWidth);
       setSectionHeight(parentRef.current.clientHeight);
-      console.log(parentRef.current);
+      //console.log(parentRef.current);
       setReady(true);
     }
     setup();
@@ -36,12 +36,12 @@ export default function Play(props) {
     return (() => window.removeEventListener('resize', setup));
   }, []);
 
-  console.log('start', sectionWidth, sectionHeight);
+  //console.log('start', sectionWidth, sectionHeight);
 
   return (
     <div className="m-auto w-full h-full flex flex-col gap-4 justify-center">
       {sm && <PlayersBar players={props.players} />}
-      <div ref={parentRef} className="gameComponent w-full grow rounded-3xl">
+      <div ref={parentRef} className="gameComponent w-full align-center grow rounded-3xl">
         {
           ready && <Pong
             width={sectionWidth} height={sectionHeight}
