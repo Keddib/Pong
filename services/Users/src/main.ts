@@ -27,6 +27,7 @@ async function bootstrap() {
     saveUninitialized : false,
     store: new TypeormStore().connect(sessionRepo)
   }))
+  app.enableCors({origin:["http://localhost:8000"], credentials:true})
   app.use(passport.initialize())
   app.use(passport.session())
   await app.listen(3000);

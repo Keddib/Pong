@@ -20,23 +20,33 @@ export const authAPI = async (code, setError) => {
     // displayed name = username
     // 200
     // 201
-    const response = await axiosAuth.get("/auth",
-      {
-        headers: { 'Content-Type': 'application/json' },
-        params: { 'code': code },
-        withCredentials: true
-      }
-    );
+    // const response = await axiosAuth.get("/auth",
+    //   {
+    //     headers: { 'Content-Type': 'application/json' },
+    //     params: { 'code': code },
+    //     withCredentials: true
+    //   }
+    // );
+    console.log("checking auth status")
+    const response = await axiosAuth.get("http://localhost:3000/auth/status",
+    {
+      // headers: { 'Content-Type': 'application/json' },
+      // params: { 'code': code },
+      withCredentials: true
+    }
+  );
     return [response?.data, response?.status];
 
   } catch (err) {
-    if (!err?.response) {
-      setError('No Server Response');
-    } else if (err.response?.status === 401) {
-      setError('Unauthorized');
-    } else {
-      setError('Login Failed');
-    }
+    console.log(err)
+    if(code)
+{      if (!err?.response) {
+        setError('No Server Response');
+      } else if (err.response?.status === 401) {
+        setError('Unauthorized');
+      } else {
+        setError('Login Failed');
+      }}
     return [null, -1];
   }
 }

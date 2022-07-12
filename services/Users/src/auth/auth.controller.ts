@@ -20,8 +20,12 @@ export class AuthController {
   // /auth/redirect redirect url oauth provider will call after success
   @Get("redirect")
   @UseGuards(FortyTwoAuthGuard)
-  redirect(@Res() res: Response) {
-    res.send("Logged in succesfully");
+  redirect(@Req() req: Request,@Res() res: Response) {
+    // console.log(req.query)
+    if (req.query.code)
+      res.redirect("http://localhost:8000/access/signin?code="+req.query.code)
+    else
+      res.redirect("http://localhost:8000/access/signin")
   }
 
   // /auth/status get auth status

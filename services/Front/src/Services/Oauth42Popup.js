@@ -22,6 +22,7 @@ export default function oauthPopup(callback) {
     try {
       getCodeFromRedirection();
     } catch (e) {
+      console.log(e)
       // we're here when the childPopup window has been closed
       if (childPopup.closed) {
         clearInterval(interval);
@@ -32,9 +33,11 @@ export default function oauthPopup(callback) {
   }, 500);
 
   function getCodeFromRedirection() {
+    
     if (childPopup.document.domain === document.domain) {
       if (childPopup.document.readyState === "complete") {
-        callback(childPopup.document.URL.split('=')[1]);
+        console.log(childPopup.document.URL.split('code=')[1])
+        callback(childPopup.document.URL.split('code=')[1]);
         clearInterval(interval);
         childPopup.close();
         clearTimeout(timeOutCallback);

@@ -19,6 +19,7 @@ export default function oauthPopup(setCode) {
   }, 60000);
 
   var interval = setInterval(function () {
+    console.log(childPopup.document)
     try {
       getCodeFromRedirection();
     } catch (e) {
@@ -33,6 +34,7 @@ export default function oauthPopup(setCode) {
   }, 500);
 
   function getCodeFromRedirection() {
+    console.log(childPopup.document)
     if (childPopup.document.domain === document.domain) {
       if (childPopup.document.readyState === "complete") {
         setCode(childPopup.document.URL.split('=')[1]);

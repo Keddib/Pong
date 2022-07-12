@@ -18,7 +18,8 @@ export default function Login() {
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
-  console.log('signin, fro : ', from);
+
+  console.log('signin, fro : ', from, code);
 
   const hundleSubmit = (e) => {
     e.preventDefault();
@@ -30,12 +31,12 @@ export default function Login() {
       //  getUser
       let [data, status] = await authAPI(code, setErrorMsg);
       console.log(status, data);
-      if (status != -1) {
-        if (status == 201) {
-          data.isNew = true;
-          setIsContinue(true);
-          navigate("/access/signup", { replace: true });
-        }
+      if (status == 200) {
+        // if (status == 201) {
+        //   data.isNew = true;
+        //   setIsContinue(true);
+        //   navigate("/access/signup", { replace: true });
+        // }
         signin(data);
         if (status == 200) {
           console.log('signin', from);
@@ -43,6 +44,8 @@ export default function Login() {
         }
       }
     }
+    if (!code)
+      authenticateUser();
     if (!called) {
       if (code) {
         if (code == 'error') {
@@ -53,9 +56,11 @@ export default function Login() {
         }
       }
     }
-  }, [code, called, setErrorMsg, navigate, signin, from]);
+  });
 
-  return (
+// }, [code, called, setErrorMsg, navigate, signin, from]);
+
+return (
     <Routes>
       <Route path="signin" element={<SigninDialog hundleSubmit={hundleSubmit} errorMsg={errorMsg} />} />
       <Route path="signup" element={<SignupDialog isContinue={isContinue} hundleSubmit={hundleSubmit} errorMsg={errorMsg} />} />

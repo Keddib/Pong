@@ -285,6 +285,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     if (this.playerToGameIdx.has(client.id)) {
       console.log("game idx ", this.playerToGameIdx.get(client.id))
       this.games[this.playerToGameIdx.get(client.id)].toggleGameState()
+      if(this.games[this.playerToGameIdx.get(client.id)].getPlayers().length != 2)
+        this.games[this.playerToGameIdx.get(client.id)].players.push("-1");
       //this.games.slice(this.playerToGameIdx.get(client.id), 1);
       this.playerToGameIdx.delete(client.id);
     }
