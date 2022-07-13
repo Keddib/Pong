@@ -43,6 +43,17 @@ export class Game {
   loop: NodeJS.Timer;
 
   state: 0 | 1 | 2;
+  /*
+0 // queue mode 
+1 // waiting for player to start 
+2   // playing 
+      // player left (timeout before forfait)
+3   // outcome + ( next round(waiting for player to start) || ?? )
+      // player doesnt start next round (timeout before forfait)
+4 // final outcome 
+    // play again (back to queue)
+    // ask for rematch ?? if still there 
+  */
   players: Array<string>;
   room: string;
 }

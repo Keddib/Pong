@@ -46,7 +46,7 @@ export class AppGateway
   }
 
   async handleConnection(client: Socket): Promise<void> {
-    // let tmp :any  = client;
+    // let tmp : any = client;
     // console.log(tmp)
     const cookie = client.handshake.headers.cookie;
     const user = await this.authService.isAuthenticated(cookie);
@@ -75,7 +75,7 @@ export class AppGateway
 
   @SubscribeMessage('playerJoined')
   joinRoom(socket: AuthenticatedSocket): void {
-    console.log(socket.user)
+    console.log(socket.user);
     const roomName: string = socket.id;
     console.log(roomName);
 
@@ -115,9 +115,5 @@ export class AppGateway
       ...payload,
       userId: client.id,
     });
-
-    //this.logger.log("Player One going " + payload.input + " new y =" + this.game.paddleOneY)
-
-    //this.server.emit("msgToClient", payload);
   }
 }
