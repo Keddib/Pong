@@ -2,6 +2,7 @@ import { Controller, Get, Res, Req, UseGuards } from "@nestjs/common";
 import { Request, Response } from "express";
 import { AuthenticatedGuard, FortyTwoAuthGuard } from "./auth.guard";
 
+const front_url = "http://localhost:8000"
 
 interface AuthenticatedRequest extends Request{
     user: any;
@@ -23,9 +24,9 @@ export class AuthController {
   redirect(@Req() req: Request,@Res() res: Response) {
     // console.log(req.query)
     if (req.query.code)
-      res.redirect("http://localhost:8000/access/signin?code="+req.query.code)
+      res.redirect(front_url+"/access/signin?code="+req.query.code)
     else
-      res.redirect("http://localhost:8000/access/signin")
+      res.redirect(front_url+"/access/signin")
   }
 
   // /auth/status get auth status
