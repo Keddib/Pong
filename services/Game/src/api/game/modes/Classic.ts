@@ -216,23 +216,77 @@ export class ClassicGame extends Game {
       this.ballX = max(this.ballX, this.ballRadius / 2 + this.paddleWidth);
       if (this.ballX - this.ballRadius / 2 - this.paddleWidth <= 0)
         this.ballDirX *= -1;
+    } else if (
+      //vertical intersection, ball going down
+      this.ballDirX === -1 &&
+      this.ballDirY === 1 &&
+      this.ballX > 0 &&
+      this.ballX < this.paddleOneX + this.paddleWidth && // ball in front of paddle and going toward paddle
+      this.ballY < this.paddleOneY + this.paddleHeight / 2
+    ) {
+      this.ballY = min(this.ballY, this.paddleOneY - this.ballRadius / 2);
+      if (this.ballY + this.ballRadius / 2 >= this.paddleOneY)
+        this.ballDirY *= -1;
+    } else if (
+      //vertical intersection, ball going up
+      this.ballDirX === -1 &&
+      this.ballDirY === -1 &&
+      this.ballX > 0 &&
+      this.ballX < this.paddleOneX + this.paddleWidth &&
+      this.ballY > this.paddleOneY + this.paddleHeight / 2
+    ) {
+      this.ballY = max(
+        this.ballY,
+        this.paddleOneY + this.paddleHeight + this.ballRadius / 2,
+      );
+      if (
+        this.ballY - this.ballRadius / 2 <=
+        this.paddleOneY + this.paddleHeight
+      )
+        this.ballDirY *= -1;
     }
   }
   handlePaddleTwoBounce() {
     if (
+      //horizontal intersection
       this.ballDirX === 1 &&
       this.ballY > this.paddleTwoY &&
       this.ballY < this.paddleTwoY + this.paddleHeight // ball in front of paddle and going toward paddle
     ) {
-      // console.log("in paddle two range")
-
       this.ballX = min(
         this.ballX,
         this.width - this.ballRadius / 2 - this.paddleWidth,
       );
-
       if (this.ballX + this.ballRadius / 2 + this.paddleWidth >= this.width)
         this.ballDirX *= -1;
+    } else if (
+      //vertical intersection, ball going down
+      this.ballDirX === 1 &&
+      this.ballDirY === 1 &&
+      this.ballX > this.paddleTwoX &&
+      this.ballX < this.paddleTwoX + this.paddleWidth && // ball in front of paddle and going toward paddle
+      this.ballY < this.paddleTwoY + this.paddleHeight / 2
+    ) {
+      this.ballY = min(this.ballY, this.paddleTwoY - this.ballRadius / 2);
+      if (this.ballY + this.ballRadius / 2 >= this.paddleTwoY)
+        this.ballDirY *= -1;
+    } else if (
+      //vertical intersection, ball going up
+      this.ballDirX === 1 &&
+      this.ballDirY === -1 &&
+      this.ballX > this.paddleTwoX &&
+      this.ballX < this.paddleTwoX + this.paddleWidth &&
+      this.ballY > this.paddleTwoY + this.paddleHeight / 2
+    ) {
+      this.ballY = max(
+        this.ballY,
+        this.paddleTwoY + this.paddleHeight + this.ballRadius / 2,
+      );
+      if (
+        this.ballY - this.ballRadius / 2 <=
+        this.paddleTwoY + this.paddleHeight
+      )
+        this.ballDirY *= -1;
     }
   }
   handleInput(payload: UserInput) {
