@@ -26,7 +26,7 @@ interface AuthenticatedSocket extends Socket {
     credentials: true,
   },
 })
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -39,6 +39,7 @@ export class AppGateway
   //game object
   private games: Array<ClassicGame> = Array<ClassicGame>();
   private playerToGameIdx: Map<string, number> = new Map<string, number>();
+  private authenticatedSockets: Array<string> = Array<string>();
 
   afterInit(server: Server): void {
     this.server = server;
@@ -50,14 +51,22 @@ export class AppGateway
     // console.log(tmp)
     const cookie = client.handshake.headers.cookie;
     const user = await this.authService.isAuthenticated(cookie);
-    if (!user) client.conn.close(true);
-    else this.logger.log('Client Connected :' + user.username);
+    if (!user) return client.conn.close(true);
+
+    this.logger.log('Client Connected :' + user.username);
+    this.authenticatedSockets.push(client.id);
   }
 
   async handleDisconnect(client: Socket): Promise<void> {
-    const cookie = client.handshake.headers.cookie;
-    const user = await this.authService.isAuthenticated(cookie);
-    if (!user) return;
+    // const cookie = client.handshake.headers.cookie;
+    // const user = await this.authService.isAuthenticated(cookie);
+    // if (!user) return;
+    if (!this.authenticatedSockets.includes(client.id)) return;
+
+    this.authenticatedSockets.splice(
+      this.authenticatedSockets.indexOf(client.id),
+      1,
+    );
 
     this.logger.log('Client Disconnected :' + client.id);
 
@@ -75,7 +84,10 @@ export class AppGateway
 
   @SubscribeMessage('playerJoined')
   joinRoom(socket: AuthenticatedSocket): void {
+    if (!this.authenticatedSockets.includes(socket.id)) return;
+
     console.log(socket.user);
+
     const roomName: string = socket.id;
     console.log(roomName);
 
@@ -117,10 +129,10 @@ export class AppGateway
       if (client.id === g.players[totalGoals % 2])
         this.games[this.playerToGameIdx.get(client.id)].setState(2);
     }
-    if (g.state === 2)
-      this.games[this.playerToGameIdx.get(client.id)].handleInput({
-        ...payload,
-        userId: client.id,
-      });
+    // if (g.state === 2)
+    this.games[this.playerToGameIdx.get(client.id)].handleInput({
+      ...payload,
+      userId: client.id,
+    });
   }
 }

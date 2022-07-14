@@ -80,6 +80,7 @@ interface GameState {
   scores: Array<number>;
 
   players: Array<string>;
+  timestamp: number;
 }
 
 export class ClassicGame extends Game {
@@ -103,8 +104,8 @@ export class ClassicGame extends Game {
     // Game variables
     this.ballX = this.initBallX;
     this.ballY = this.initBallY;
-    this.ballDirX = 1;
-    this.ballDirY = 1;
+    this.ballDirX = -1;
+    this.ballDirY = -1;
 
     this.paddleOneX = 0;
     this.paddleOneY = 0;
@@ -125,8 +126,8 @@ export class ClassicGame extends Game {
     this.ballY = this.initBallY;
 
     const totalGoals = this.scores[0] + this.scores[1];
-    this.ballDirX = !(totalGoals % 2) ? 1 : -1;
-    this.ballDirY = !(totalGoals % 2) ? 1 : -1;
+    this.ballDirX = totalGoals % 2 ? 1 : -1;
+    this.ballDirY = -1;
 
     this.paddleOneX = 0;
     this.paddleOneY = 0;
@@ -175,6 +176,7 @@ export class ClassicGame extends Game {
       state: this.state,
       players: this.players,
       scores: this.scores,
+      timestamp: Date.now(),
     };
   }
   async emitState() {

@@ -11,7 +11,6 @@ export interface User {
 @Injectable()
 export class AuthService {
   async isAuthenticated(cookie: string): Promise<false | User> {
-
     try {
       const res = await axios.get('http://localhost:3000/auth/status', {
         headers: { cookie },

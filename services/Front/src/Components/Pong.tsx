@@ -53,6 +53,7 @@ interface GameState {
   state: 0 | 1 | 2; // 0 waiting for player to join // 1 playing // 2 opponent left
   players: Array<string>;
   scores: Array<number>
+  timestamp: number;
 }
 
 const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
@@ -66,8 +67,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   let absoluteWidth : number = 1000;
   let relativeWidth : number = props.width;
 
-  let absoluteHeight : number = absoluteWidth / aspectRatio;
-  let relativeHeight : number = relativeWidth / aspectRatio;
+  let absoluteHeight : number = absoluteWidth / aspectRatio; // 
+  let relativeHeight : number = relativeWidth / aspectRatio; // if any of these overflowas section dimensions, we scale based on the one that over flows
 
   if (relativeHeight > props.height){
 
@@ -93,7 +94,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   let paddleOneY: number = 0;
   let paddleTwoX: number = props.width - props.paddleWidth;
   let paddleTwoY: number = 0;
-  var state: 0|2|1 = 0;
+  var state: 0|2|1|3|4 = 0;
   let players: Array<string> = []
   const gamestatedata = useRef<GameState>({
     ballX,
@@ -198,6 +199,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
   // DRAW
   // States : 0 in queue // 1 playing ? // 3 waiting 
+  let ping : number = 0;
   const draw = (p5: p5Types) => {
     p5.background(0);
     p5.frameRate(60);
@@ -218,6 +220,14 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       getGameStateData().scores[0]+" - "+getGameStateData().scores[1]+" st : "+getGameStateData().state,
       props.width/ 4,
       props.height / 4
+    );
+    if(p5.frameCount % 40 == 0)
+      ping = Date.now()-getGameStateData().timestamp;
+    p5.textSize(15);
+    p5.text(
+      "ping : "+ping+"ms",
+      props.width/ 2,
+      40
     );
 
     // if (getGameStateData().state === 2) {
@@ -248,12 +258,14 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       p5.fill(0xffffff);
       p5.textSize(40);
       const scores = getGameStateData().scores;
+      const scoresSum = scores[0] + scores[1];
+      //console.log(scoresSum%2,getGameStateData().players, getGameStateData().players[scoresSum%2])
       p5.text(
-        props.socket.current.id === getGameStateData().players[(scores[0]+scores[1]) % 2]?
+        props.socket.current.id === getGameStateData().players[scoresSum % 2]?
         "Click on the screen to start the game ":
         "Waiting for oponent to start the game",
         50,
-        props.height / 2
+        3*(props.height / 8)
       );
       //return;
     }
