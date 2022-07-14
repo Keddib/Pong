@@ -42,19 +42,23 @@ export class Game {
 
   loop: NodeJS.Timer;
 
-  state: 0 | 1 | 2;
+  state: 0 | 1 | 2 | 3 | 4;
   /*
-0 // queue mode 
-1 // waiting for player to start 
-2   // playing 
-      // player left (timeout before forfait)
-3   // outcome + ( next round(waiting for player to start) || ?? )
-      // player doesnt start next round (timeout before forfait)
-4 // final outcome 
-    // play again (back to queue)
-    // ask for rematch ?? if still there 
+  0 // queue mode 
+  1 // waiting for player to start 
+  2   // playing 
+        // player left (timeout before forfait)
+  3   // outcome + ( next round(waiting for player to start) || ?? )
+        // player doesnt start next round (timeout before forfait)
+  4 // final outcome 
+      // play again (back to queue)
+      // ask for rematch ?? if still there 
+
   */
   players: Array<string>;
+  scores: Array<number>;
+  maxScore: number;
+
   room: string;
 }
 
@@ -71,7 +75,10 @@ interface GameState {
   paddleTwoX: number;
   paddleTwoY: number;
 
-  state: 0 | 1 | 2;
+  state: 0 | 1 | 2 | 3 | 4;
+
+  scores: Array<number>;
+
   players: Array<string>;
 }
 
@@ -108,10 +115,25 @@ export class ClassicGame extends Game {
     this.state = 0;
 
     this.players = [];
+    this.scores = [0, 0];
+    this.maxScore = 3;
     this.room = '';
     //this.run();
   }
+  init() {
+    this.ballX = this.initBallX;
+    this.ballY = this.initBallY;
 
+    const totalGoals = this.scores[0] + this.scores[1];
+    this.ballDirX = !(totalGoals % 2) ? 1 : -1;
+    this.ballDirY = !(totalGoals % 2) ? 1 : -1;
+
+    this.paddleOneX = 0;
+    this.paddleOneY = 0;
+
+    this.paddleTwoX = this.width - this.paddleWidth;
+    this.paddleTwoY = 0;
+  }
   cleanup(): void {
     this.emitState();
     clearInterval(this.loop);
@@ -123,17 +145,20 @@ export class ClassicGame extends Game {
   addPlayer(id: string): void {
     if (this.players.length < 2) this.players.push(id);
     if (this.players.length === 2) {
+      this.state = 3; // state between rounds
       this.run();
-      this.toggleGameState();
     }
   }
   setRoomName(name: string): void {
     this.room = name;
   }
-  toggleGameState(): void {
-    this.state = this.state === 0 ? 1 : 2;
-    if (this.state === 2) this.cleanup();
+  setState(st: 0 | 1 | 2 | 3 | 4): void {
+    this.state = st;
   }
+  // toggleGameState(): void {
+  //   this.state = this.state === 0 ? 1 : 2;
+  //   if (this.state === 2) this.cleanup();
+  // }
   getGameState(): GameState {
     return {
       ballX: this.ballX,
@@ -149,6 +174,7 @@ export class ClassicGame extends Game {
 
       state: this.state,
       players: this.players,
+      scores: this.scores,
     };
   }
   async emitState() {
@@ -157,11 +183,17 @@ export class ClassicGame extends Game {
   async run() {
     const fps = 60;
     this.loop = setInterval(() => {
-      this.updateBall();
-      this.handlePaddleOneBounce();
-      this.handlePaddleTwoBounce();
+      if (this.state === 2) {
+        this.updateBall();
+        this.handlePaddleOneBounce();
+        this.handlePaddleTwoBounce();
+      }
+
       this.emitState();
     }, 1000 / fps);
+  }
+  gameOver(): boolean {
+    return this.scores.includes(this.maxScore);
   }
   updateBall() {
     //update
@@ -180,8 +212,18 @@ export class ClassicGame extends Game {
     if (
       this.ballX + this.ballRadius / 2 >= this.width ||
       this.ballX - this.ballRadius / 2 <= 0
-    )
+    ) {
       this.ballDirX *= -1;
+
+      if (this.ballX + this.ballRadius / 2 >= this.width) this.scores[0] += 1; // +1 playerOne
+      if (this.ballX - this.ballRadius / 2 <= 0) this.scores[1] += 1; // +1 playerTwo
+      if (!this.gameOver()) {
+        this.state = 3; // waiting for player to start the game
+        this.init();
+      } else this.state = 4; // final outcome
+
+      //this.cleanup(); // pause loop
+    }
     if (
       this.ballY + this.ballRadius / 2 >= this.height ||
       this.ballY - this.ballRadius / 2 <= 0

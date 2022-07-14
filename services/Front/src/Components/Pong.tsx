@@ -52,6 +52,7 @@ interface GameState {
 
   state: 0 | 1 | 2; // 0 waiting for player to join // 1 playing // 2 opponent left
   players: Array<string>;
+  scores: Array<number>
 }
 
 const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
@@ -196,6 +197,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   }, []);
 
   // DRAW
+  // States : 0 in queue // 1 playing ? // 3 waiting 
   const draw = (p5: p5Types) => {
     p5.background(0);
     p5.frameRate(60);
@@ -203,27 +205,67 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       p5.translate((props.width-relativeWidth)/2,0);
 
     //console.log(getGameStateData().state)
-    if (!getGameStateData().state) {
-      p5.fill(0xffffff);
-      p5.textSize(40);
-      p5.text("Waiting for opponent to join...", 50, props.height / 2);
-      return;
-    }
-    if (getGameStateData().state === 2) {
+    // if (getGameStateData().state === 0 ) {
+    //   p5.fill(0xffffff);
+    //   p5.textSize(40);
+    //   p5.text("Waiting for opponent to join...", 50, props.height / 2);
+    //   return;
+    // }
+    p5.push()
+    p5.fill(0xffffff);
+    p5.textSize(40);
+    p5.text(
+      getGameStateData().scores[0]+" - "+getGameStateData().scores[1]+" st : "+getGameStateData().state,
+      props.width/ 4,
+      props.height / 4
+    );
+
+    // if (getGameStateData().state === 2) {
+    //   p5.fill(0xffffff);
+    //   p5.textSize(40);
+    //   p5.text(
+    //     "Opponent disconnected, refresh to play again...",
+    //     50,
+    //     props.height / 2
+    //   );
+    //   return;
+    // }
+
+
+    if (getGameStateData().state === 4) {
       p5.fill(0xffffff);
       p5.textSize(40);
       p5.text(
-        "Opponent disconnected, refresh to play again...",
+        "GameOver",
         50,
         props.height / 2
       );
       return;
     }
+
+    //waiting for player to start the game
+    if (getGameStateData().state === 3) {
+      p5.fill(0xffffff);
+      p5.textSize(40);
+      const scores = getGameStateData().scores;
+      p5.text(
+        props.socket.current.id === getGameStateData().players[(scores[0]+scores[1]) % 2]?
+        "Click on the screen to start the game ":
+        "Waiting for oponent to start the game",
+        50,
+        props.height / 2
+      );
+      //return;
+    }
+
+    // boundaries for game window
+    p5.pop()
     p5.push()
     p5.stroke(255)
     p5.line(-1,0,-1,relativeHeight)
     p5.line(relativeWidth+1,0,relativeWidth+1,relativeHeight)
     p5.pop()
+  
     //ball
     drawBall(p5);
     //paddle one

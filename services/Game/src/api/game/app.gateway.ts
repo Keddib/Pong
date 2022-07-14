@@ -63,7 +63,7 @@ export class AppGateway
 
     if (this.playerToGameIdx.has(client.id)) {
       console.log('game idx ', this.playerToGameIdx.get(client.id));
-      this.games[this.playerToGameIdx.get(client.id)].toggleGameState();
+      this.games[this.playerToGameIdx.get(client.id)].setState(4);
       if (
         this.games[this.playerToGameIdx.get(client.id)].getPlayers().length != 2
       )
@@ -111,9 +111,16 @@ export class AppGateway
 
   @SubscribeMessage('playerInput')
   handlePlayerInput(client: Socket, payload: UserInput): void {
-    this.games[this.playerToGameIdx.get(client.id)].handleInput({
-      ...payload,
-      userId: client.id,
-    });
+    const g: ClassicGame = this.games[this.playerToGameIdx.get(client.id)];
+    if (g.state === 3) {
+      const totalGoals = g.scores[0] + g.scores[1];
+      if (client.id === g.players[totalGoals % 2])
+        this.games[this.playerToGameIdx.get(client.id)].setState(2);
+    }
+    if (g.state === 2)
+      this.games[this.playerToGameIdx.get(client.id)].handleInput({
+        ...payload,
+        userId: client.id,
+      });
   }
 }

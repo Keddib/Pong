@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Play from "./components/Play";
 import Waiting from "./components/Waiting";
 import UserImg from "/src/assets/images/user.jpg";
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 
 var user1 = {
   id: "123",
@@ -13,10 +13,10 @@ var user1 = {
   dot: "green-dot"
 };
 // interface GameState {
-//   // Game variables
+    // Game variables
 //   ballX: number;
 //   ballY: number;
-//   ballDirX: number;
+//   ballDirX: number; 
 //   ballDirY: number;
 
 //   paddleOneX: number;
@@ -25,7 +25,7 @@ var user1 = {
 //   paddleTwoX: number;
 //   paddleTwoY: number;
 
-//   state: 0 | 1 | 2; // 0 waiting for player to join // 1 playing // 2 opponent left
+//   state: 0 | 1 | 2; // 0 waiting for player to join // 1 forfeit (timeout) // 2 playing // 3 pause between rounds // 4 gameover // 
 //   players: Array<string>;
 // }
 export default function Game() {
@@ -38,7 +38,9 @@ export default function Game() {
   const socket = useRef(null)
 
   useEffect(()=>{
-    socket.current = io("http://localhost:3001",{withCredentials:true}).on('connect',()=>{
+    socket.current = io("http://localhost:3001",
+      { withCredentials: true }
+    ).on('connect',()=>{
       //console.log("socket created", socket.current)
       socket.current.emit('playerJoined');
       socket.current.on("gameState",(data)=>{
@@ -48,7 +50,7 @@ export default function Game() {
     })
 
     return ()=>socket.current.close();
-  }, []);
+  });
   
   let navigate = useNavigate();
 
