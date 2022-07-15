@@ -70,17 +70,19 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   let absoluteHeight : number = absoluteWidth / aspectRatio; // 
   let relativeHeight : number = relativeWidth / aspectRatio; // if any of these overflowas section dimensions, we scale based on the one that over flows
 
+  let scalingRatio : number = relativeWidth / absoluteWidth; 
   if (relativeHeight > props.height){
 
     let tmp = props.height / relativeHeight;
     relativeWidth*= tmp;
     relativeHeight*= tmp;
     // console.log("something wrong")
+    scalingRatio = relativeHeight / absoluteHeight;
   }
 
-  let scalingRatio : number = relativeWidth / absoluteWidth; 
+  
 
-  // console.log(aspectRatio, absoluteWidth, absoluteHeight)
+  // console.log(aspectRatio, absolutewidth, absoluteHeight)
   // console.log(aspectRatio, relativeWidth, relativeHeight)
 
 
@@ -162,6 +164,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
    
     absoluteHeight = absoluteWidth / aspectRatio;
     relativeHeight = relativeWidth / aspectRatio;
+
+       scalingRatio = relativeWidth / absoluteWidth; 
     if (relativeHeight > props.height){
 
       let tmp = props.height / relativeHeight;
@@ -169,8 +173,10 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       relativeHeight*= tmp;
       // console.log(props.height, relativeHeight, "should be the same ")
       // p5.translate(props.width-relativeWidth/2,0);
+      scalingRatio = relativeHeight / absoluteHeight;
+
     }
-    scalingRatio = relativeWidth / absoluteWidth; 
+ 
     
     if(p5) p5.resizeCanvas(props.width, relativeHeight);
 
@@ -217,18 +223,12 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     p5.fill(0xffffff);
     p5.textSize(40);
     p5.text(
-      getGameStateData().scores[0]+" - "+getGameStateData().scores[1]+" st : "+getGameStateData().state,
+      getGameStateData().scores[0]+" - "+getGameStateData().scores[1]+" state : "+getGameStateData().state,
       props.width/ 4,
       props.height / 4
     );
-    if(p5.frameCount % 40 == 0)
-      ping = Date.now()-getGameStateData().timestamp;
-    p5.textSize(15);
-    p5.text(
-      "ping : "+ping+"ms",
-      props.width/ 2,
-      40
-    );
+    p5.pop();
+
 
     // if (getGameStateData().state === 2) {
     //   p5.fill(0xffffff);
@@ -252,7 +252,14 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       );
       return;
     }
-
+    if(p5.frameCount % 40 == 0)
+      ping = Date.now()-getGameStateData().timestamp;
+    p5.textSize(15);
+    p5.text(
+      "ping : "+ping+"ms",
+      props.width/ 2,
+      40
+    );
     //waiting for player to start the game
     if (getGameStateData().state === 3) {
       p5.fill(0xffffff);

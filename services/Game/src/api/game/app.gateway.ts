@@ -21,6 +21,8 @@ interface AuthenticatedSocket extends Socket {
 }
 
 @WebSocketGateway({
+  pingTimeout: 7000,
+  pingInterval: 1000,
   cors: {
     origin: 'http://localhost:8000',
     credentials: true,
@@ -55,6 +57,7 @@ export class AppGateway
 
     this.logger.log('Client Connected :' + user.username);
     this.authenticatedSockets.push(client.id);
+    console.log('authenticated sockets', this.authenticatedSockets.length);
   }
 
   async handleDisconnect(client: Socket): Promise<void> {
@@ -69,6 +72,7 @@ export class AppGateway
     );
 
     this.logger.log('Client Disconnected :' + client.id);
+    console.log('authenticated sockets', this.authenticatedSockets.length);
 
     if (this.playerToGameIdx.has(client.id)) {
       console.log('game idx ', this.playerToGameIdx.get(client.id));

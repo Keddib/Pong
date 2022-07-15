@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Play from "./components/Play";
 import Waiting from "./components/Waiting";
 import UserImg from "/src/assets/images/user.jpg";
-import { io } from "socket.io-client";
+import io from "socket.io-client";
 
 var user1 = {
   id: "123",
@@ -38,7 +38,7 @@ export default function Game() {
   const socket = useRef(null)
 
   useEffect(()=>{
-    socket.current = io("http://localhost:3001",
+    socket.current = io("ws://localhost:3001",
       { withCredentials: true }
     ).on('connect',()=>{
       //console.log("socket created", socket.current)

@@ -46,7 +46,7 @@ export default function Play(props) {
           ready && <Pong
             width={sectionWidth} height={sectionHeight}
             initBallX={500} initBallY={350} ballRadius={50} ballSpeed={10}
-            paddleWidth={30} paddleHeight={150} paddleSpeed={10}
+            paddleWidth={30} paddleHeight={800} paddleSpeed={10}
             gameStateData={props.gameStateData} socket={props.socket}
           />
         }

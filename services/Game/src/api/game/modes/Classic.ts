@@ -98,7 +98,7 @@ export class ClassicGame extends Game {
     this.ballSpeed = 10;
 
     this.paddleWidth = 30;
-    this.paddleHeight = 150;
+    this.paddleHeight = 800;
     this.paddleSpeed = 10;
 
     // Game variables
