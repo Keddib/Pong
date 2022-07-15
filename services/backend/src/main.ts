@@ -1,8 +1,27 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as passport from 'passport';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+
+  app.use(
+    session({
+    
+      secret: 'some secret is here but i don\'t see it yet',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 360000 }
+    }),
+  )
+
+  // Init passport authentication 
+  app.use(passport.initialize());
+  // persistent login sessions 
+  app.use(passport.session());
+
   await app.listen(3500);
 }
 bootstrap();

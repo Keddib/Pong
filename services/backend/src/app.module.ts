@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { ChatMessage } from './entities/chatMessage.entity';
 import { ChatRoom } from './entities/chatRoom.entity';
 import { User } from './entities/user.entity';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -23,7 +25,9 @@ import { User } from './entities/user.entity';
     migrations: [],
     entities: [User, ChatMessage, ChatRoom],
     synchronize: true, // to remove when finished 
-  }),],
+  }),
+    UserModule,
+    AuthModule,],
   controllers: [AppController],
   providers: [AppService],
 })

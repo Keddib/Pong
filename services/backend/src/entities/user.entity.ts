@@ -6,9 +6,9 @@ import { ChatRoom } from './chatRoom.entity';
 export class User {
 
     @PrimaryGeneratedColumn('uuid')
-    uid: number;
+    uid: string;
 
-    @Column({ unique: true })
+    @Column({ unique: true, nullable: true})
     displayedName: string;
 
     @Column({nullable: true})
