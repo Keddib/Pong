@@ -6,58 +6,62 @@ volumes:
 
 services:
 
-  front:
-    build: ./$SERVICES/Front/
-    container_name: Pong-front
-    ports:
-      - '80:8000' # expose ports - HOST:CONTAINER
-    volumes:
-      - ./$SERVICES/Front:/usr/src/app
+  # front:
+  #   build:
+  #     context: ./$SERVICES/Front/
+  #     dockerfile: Dockerfile
+  #   container_name: Pong-front
+  #   ports:
+  #     - '80:8000' # expose ports - HOST:CONTAINER
+  #   volumes:
+  #     - ./$SERVICES/Front:/usr/src/app
 
-  game:
-    build: ./$SERVICES/Game/
-    container_name: Pong-game
-    ports:
-      - '3001:3001' # expose ports - HOST:CONTAINER
-    depends_on:
-      - users
-    volumes:
-      - ./$SERVICES/Game:/usr/src/app
+  # game:
+  #   build:
+  #     context: ./$SERVICES/Game/
+  #     dockerfile: Dockerfile
+  #   container_name: Pong-game
+  #   ports:
+  #     - '3001:3001' # expose ports - HOST:CONTAINER
+  #   depends_on:
+  #     - users
+  #   volumes:
+  #     - ./$SERVICES/Game:/usr/src/app
 
-  users:
-    build: ./$SERVICES/Users/
-    container_name: Pong-users
+  backend:
+    build: ./$SERVICES/backend/
+    container_name: Pong-backend
     ports:
       - '3500:3500' # expose ports - HOST:CONTAINER
     volumes:
-      - ./$SERVICES/Users/:/usr/src/app
-    # depends_on:
-    #   - db
+      - ./$SERVICES/backend/:/usr/src/app
+    depends_on:
+      - db
 
-  # db:
-  #   image: postgres
-  #   container_name: Pong-db
-  #   ports:
-  #     - '5433:5432'
-  #   restart: always
-  #   environment:
-  #     POSTGRES_DB: $DB_DATABASE
-  #     POSTGRES_USER: $DB_USERNAME
-  #     POSTGRES_PASSWORD: $DB_PASSWORD
-  #   volumes:
-  #     - db-data:/var/lib/postgresql/data
+  db:
+    image: postgres
+    container_name: Pong-db
+    ports:
+      - '5433:5432'
+    restart: always
+    environment:
+      POSTGRES_DB: $DB_DATABASE
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASSWORD: $DB_PASSWORD
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
 # phpMyAdmin just for development in case we need a look up to database
 
-  # phpmyadmin:
-  #   container_name: phpmyadmin
-  #   image: neimheadh/phppgadmin:latest
-  #   ports:
-  #     - 8080:80
-  #   environment:
-  #     POSTGRES_HOST: $DB_HOST
-  #     POSTGRES_PORT: $DB_PORT
-  #     POSTGRES_USER: $DB_USERNAME
-  #     POSTGRES_PASS: $DB_PASSWORD
-  #   depends_on:
-  #     - db
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: neimheadh/phppgadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      POSTGRES_HOST: $DB_HOST
+      POSTGRES_PORT: $DB_PORT
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASS: $DB_PASSWORD
+    depends_on:
+      - db
