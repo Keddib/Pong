@@ -1,8 +1,10 @@
-import { Controller, Get, Post, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, Request, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 import { User } from 'src/entities/user.entity';
 import { isAuthGuard } from './guards/session.guard';
+import { fortyTwoGuard } from './guards/fortytwo.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 
 @Controller('auth')
@@ -18,6 +20,15 @@ export class AuthController {
         // return req.user;
 
         return this.authService.login(req);
+    }
+
+
+    @Get()
+    @UseGuards(fortyTwoGuard)
+    async loginWithIntra(@Query() code) {
+
+        console.log(code['code']);
+        return this.authService.loginWithIntra();
     }
 
     @Get('logged')
