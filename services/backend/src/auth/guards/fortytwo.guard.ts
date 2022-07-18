@@ -11,6 +11,8 @@ export class fortyTwoGuard extends AuthGuard('42') {
 
         const req = context.switchToHttp().getRequest();
 
+        console.log(req.user)
+        await super.logIn(req);
         return req.user;
     }
 }

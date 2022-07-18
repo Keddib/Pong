@@ -22,7 +22,7 @@ export class UserController {
 
 
   @Get()
-  // @UseGuards(fortyTwoGuard)
+  @UseGuards(isAuthGuard)
   findAll(@Request() req) {
 
     console.log(req.user);
@@ -43,6 +43,7 @@ export class UserController {
   @Delete(':id')
   @UseGuards(isAuthGuard)
   remove(@Param('id') id: string) {
+
     return this.userService.remove(id);
   }
 }

@@ -7,6 +7,7 @@ import { Strategy } from "passport-42";
 import { CreateUserDto } from "src/dtos/user.dto";
 import { User } from "src/entities/user.entity";
 import { UserService } from "src/user/user.service";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class fortyTwoStrategy extends PassportStrategy(Strategy, "42") {
@@ -33,14 +34,16 @@ export class fortyTwoStrategy extends PassportStrategy(Strategy, "42") {
             return null;
         let userFound: User;
         if ( userFound = await this.userService.findByUsername(profile['username']))
-            return userFound;
+            return cb(null, userFound);
         const user = new CreateUserDto;
     
         user.displayedName = profile['displayName'];
         user.avatar = profile['photos']['value'];
-        user.email = profile['emails']['value'];
+        user.email = profile['emails'][0]['value'];
         user.login = profile['username'];
-        user.password = "defaultpass";
+        const saltOrRounds = 10;
+        const hash = await bcrypt.hash("defaultpass", saltOrRounds);
+        user.password = hash;
         // user.
         // user.picture
         console.log(cb);

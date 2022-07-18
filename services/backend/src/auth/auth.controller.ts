@@ -15,9 +15,6 @@ export class AuthController {
     @Post('login')
     @UseGuards(LocalGuard)
     async login(@Request() req) {
-    
-        // //  created session using gaurd
-        // return req.user;
 
         return this.authService.login(req);
     }
@@ -35,27 +32,14 @@ export class AuthController {
     @Get('intra')
     @UseGuards(fortyTwoGuard)
     async loginWithIntra() {
-
-        console.log('hello there');
     }
 
-    @Get('logged')
-    @UseGuards(isAuthGuard)
-    async logged() {
-
-        return console.log('user logged in ');
-    }
 
     @Get('logout')
     @UseGuards(isAuthGuard)
     async logout(@Request() req, @Response() res) {
         
-        // req.logout();≥
-        req.session.destroy();
-        res.clearCookie('connect.sid');
-        // return this.authSer÷vice.logout();
-        res.send();
-        return this.authService.logout();
+        return this.authService.logout(req, res);
          
     }
 
