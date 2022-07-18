@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Request, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from '../dtos/user.dto';
 import { isAuthGuard } from 'src/auth/guards/session.guard';
+import { fortyTwoGuard } from 'src/auth/guards/fortytwo.guard';
 
 @Controller('user')
 export class UserController {
@@ -21,8 +22,10 @@ export class UserController {
 
 
   @Get()
-  @UseGuards(isAuthGuard)
-  findAll() {
+  // @UseGuards(fortyTwoGuard)
+  findAll(@Request() req) {
+
+    console.log(req.user);
     return this.userService.findAll();
   }
 
