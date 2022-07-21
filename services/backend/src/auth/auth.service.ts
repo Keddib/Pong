@@ -25,6 +25,42 @@ export class AuthService {
         return user;
     }
 
+
+    async returnUser(code : string) : Promise<User | undefined> {
+   
+      const authToken = await axios({
+      
+        url: "https://api.intra.42.fr/oauth/token",
+        method: "POST",
+        data: {
+          grant_type: "authorization_code",
+          client_id: "701e6934d4fe51b1cb9441ec66efe6749314ca61646406288bc4f058d5a9ec05",
+          client_secret: "1a6c63ae00df1990b58af86bf2a7c89249424ca8d86691fd0b3a28b027feda02",
+          code,
+          redirect_uri: "http://localhost/auth42",
+        }
+
+      });
+    
+      console.log('extracting authToken');
+      const token =  authToken.data["access_token"];
+      // console.log(token);
+      console.log(token);
+      const userData = await axios({
+        url: "https://api.intra.42.fr/v2/me",
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      })
+
+      const user = await this.userService.findByUsername(userData.data.login);
+      if ( user )
+        return user;
+
+      return null;
+    }
+
     async validateIntraUser(username: string, password: string) : Promise<User> {
 
         const user = await this.userService.findByUsername(username);
@@ -49,6 +85,7 @@ export class AuthService {
     
       req.session.destroy();
       res.clearCookie('connect.sid');
-      res.send();
+      req.logout(()=>{});
+      res.send("Logged out");
     }
 }

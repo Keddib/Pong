@@ -21,7 +21,7 @@ export class fortyTwoStrategy extends PassportStrategy(Strategy, "42") {
         super({
             clientID: "701e6934d4fe51b1cb9441ec66efe6749314ca61646406288bc4f058d5a9ec05",
             clientSecret: "1a6c63ae00df1990b58af86bf2a7c89249424ca8d86691fd0b3a28b027feda02",
-            callbackURL: "http://localhost:3500/auth",
+            callbackURL: "http://localhost/auth42",
         });
     }
 

@@ -1,5 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
+import axios from "/src/Services/api/axios";
 
 
 const AuthContext = createContext({});
@@ -30,11 +31,24 @@ export const AuthProvider = ({ children }) => {
 }
 
 function RequireAuth({ children }) {
-  let { isUserAuth } = useContext(AuthContext);
+  let { isUserAuth, signin } = useContext(AuthContext);
   let location = useLocation();
 
   if (isUserAuth()) {
     return children;
+  } else {
+    (async () =>{
+
+      try {
+        const response = await axios.get('/auth/isLogged',  { withCredentials: true })
+        console.log(response);
+        // set user navigate to dashboard
+        signin(response.data);
+        return children;
+      } catch (e) {
+        console.log(e);
+      }
+    })();
   }
 
 

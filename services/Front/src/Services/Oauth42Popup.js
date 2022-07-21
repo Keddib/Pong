@@ -14,7 +14,7 @@ export default function oauthPopup(callback) {
 
   const timeOutCallback = setTimeout(function timeOut() {
     clearInterval(interval);
-    childPopup.close();
+    // childPopup.close();
     callback('error');
   }, 60000);
 
@@ -39,7 +39,7 @@ export default function oauthPopup(callback) {
         console.log(childPopup.document.URL.split('code=')[1])
         callback(childPopup.document.URL.split('code=')[1]);
         clearInterval(interval);
-        childPopup.close();
+        // childPopup.close();
         clearTimeout(timeOutCallback);
       }
     }
@@ -48,7 +48,7 @@ export default function oauthPopup(callback) {
       // as the x-site security check throws
       // but just in case
       clearInterval(interval);
-      childPopup.close();
+      // childPopup.close();
       callback('error');
       clearTimeout(timeOutCallback);
     }

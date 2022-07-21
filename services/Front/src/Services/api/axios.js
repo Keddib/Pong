@@ -28,10 +28,10 @@ export const authAPI = async (code, setError) => {
     //   }
     // );
     console.log("checking auth status")
-    const response = await axiosAuth.get("http://localhost:3000/auth/status",
+    const response = await axiosAuth.get("http://localhost:3500/auth",
     {
-      // headers: { 'Content-Type': 'application/json' },
-      // params: { 'code': code },
+      headers: { 'Content-Type': 'application/json' },
+      params: { 'code': code },
       withCredentials: true
     }
   );

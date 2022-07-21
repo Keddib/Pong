@@ -21,12 +21,12 @@ export class AuthController {
 
     @Get('')
     @UseGuards(fortyTwoGuard)
-    async userProfile(@Query() code) {
+    async userProfile(@Query() code) : Promise<User | undefined> {
 
-        // if (code['code'])
-        //     return this.authService.loginWithIntra(code);
-        // else
-        //     throw new UnauthorizedException();
+        code = code['code'];
+        if (code['code'])
+            return this.authService.returnUser(code);
+        return undefined;
     }
 
     @Get('intra')
@@ -34,6 +34,16 @@ export class AuthController {
     async loginWithIntra() {
     }
 
+
+    @Get('isLogged')
+    @UseGuards(isAuthGuard)
+    async loggedIn(@Request() req) : Promise<User | null> {
+
+        console.log(req.user, " user is connected ");
+        if (req.user)
+            return req.user;
+        return null;
+    }
 
     @Get('logout')
     @UseGuards(isAuthGuard)
