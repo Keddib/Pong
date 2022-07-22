@@ -72,7 +72,6 @@ export class AppGateway
       this.authenticatedSockets.indexOf(client.id),
       1,
     );
-
     this.logger.log('Client Disconnected :' + client.id);
     console.log('authenticated sockets', this.authenticatedSockets.length);
 

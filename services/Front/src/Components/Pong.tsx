@@ -25,10 +25,11 @@ interface GameWindowProps {
   socket: any;
   width: number;
   height: number;
+  
 }
 
 interface GameState {
-  // Window dimensions 
+  // Window dimensions
   aspectRatio: number;
   width: number;
   height: number;
@@ -50,11 +51,10 @@ interface GameState {
   paddleTwoX: number;
   paddleTwoY: number;
 
-
   state: 0 | 1 | 2 | 3 | 4;
 
   scores: Array<number>;
-
+  maxScore : number;
   players: Array<string>;
   timestamp: number;
 }
@@ -252,14 +252,28 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     // }
 
       //gameover state
+
     if (getGameStateData().state === 4) {
+      const scores = getGameStateData().scores;
+      const winner = getGameStateData().players[scores[0] > scores[1] ? 0 : 1]
+      
       p5.fill(0xffffff);
       p5.textSize(40);
-      p5.text(
-        "GameOver",
-        50,
-        getGameStateData().height / 2
-      );
+      if (scores[0] < getGameStateData().maxScore && scores[1] < getGameStateData().maxScore)
+      {
+        p5.text(
+          "A player disconnected",
+          50,
+          getGameStateData().height / 2
+        );
+      }
+      else{
+        p5.text(
+          (winner == props.socket.current.id ? "Victory" : "Defeat"),
+          50,
+          getGameStateData().height / 2
+        );
+      }
       return;
     }
 

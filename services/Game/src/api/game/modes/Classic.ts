@@ -88,7 +88,7 @@ interface GameState {
   state: 0 | 1 | 2 | 3 | 4;
 
   scores: Array<number>;
-
+  maxScore : number;
   players: Array<string>;
   timestamp: number;
 }
@@ -113,7 +113,7 @@ export class ClassicGame extends Game {
     this.ballDirY = -1;
 
     this.paddleWidth = 30;
-    this.paddleHeight = 800;
+    this.paddleHeight = 100;
     this.paddleSpeed = 5;
     this.paddleOneX = 0;
     this.paddleOneY = 0;
@@ -191,6 +191,7 @@ export class ClassicGame extends Game {
       state: this.state,
       players: this.players,
       scores: this.scores,
+      maxScore : this.maxScore,
       timestamp: Date.now(),
     };
   }
