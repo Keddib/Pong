@@ -21,50 +21,58 @@ import { useRef } from "react";
  */ 
 
 interface GameWindowProps {
+  gameStateData: any;
+  socket: any;
   width: number;
   height: number;
-
-  initBallX: number;
-  initBallY: number;
-  ballRadius: number;
-  ballSpeed: number;
-
-  paddleWidth: number;
-  paddleHeight: number;
-  paddleSpeed: number;
-
-  gameStateData : any;
-  socket:any;
 }
 
 interface GameState {
-  // Game variables
+  // Window dimensions 
+  aspectRatio: number;
+  width: number;
+  height: number;
+
+  //ball
   ballX: number;
   ballY: number;
   ballDirX: number;
   ballDirY: number;
+  ballSpeed: number;
+  ballRadius: number;
 
+  //paddle
+  paddleWidth: number;
+  paddleHeight: number;
+  paddleSpeed: number;
   paddleOneX: number;
   paddleOneY: number;
-
   paddleTwoX: number;
   paddleTwoY: number;
 
-  state: 0 | 1 | 2; // 0 waiting for player to join // 1 playing // 2 opponent left
+
+  state: 0 | 1 | 2 | 3 | 4;
+
+  scores: Array<number>;
+
   players: Array<string>;
-  scores: Array<number>
   timestamp: number;
 }
 
 const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
+    const [P5, setP5] = useState(null);
   //let socket: any = useRef<Socket>(null);
-
+  const setGameStateData = (newVal) => {
+    gamestatedata.current = {...gamestatedata.current, ...newVal}
+  }
+  const getGameStateData = () : GameState => props.gameStateData.current;
+  
   // console.log(props.height, props.width, "props")
   // Responsiveness
-  let aspectRatio : number = 16/9;
+  let aspectRatio : number = getGameStateData().aspectRatio;
 
-  let absoluteWidth : number = 1000;
+  let absoluteWidth : number = getGameStateData().width;
   let relativeWidth : number = props.width;
 
   let absoluteHeight : number = absoluteWidth / aspectRatio; // 
@@ -72,15 +80,13 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
   let scalingRatio : number = relativeWidth / absoluteWidth; 
   if (relativeHeight > props.height){
-
-    let tmp = props.height / relativeHeight;
-    relativeWidth*= tmp;
-    relativeHeight*= tmp;
-    // console.log("something wrong")
-    scalingRatio = relativeHeight / absoluteHeight;
+      absoluteHeight = getGameStateData().height;
+      relativeHeight = props.height;
+      absoluteWidth = absoluteHeight * aspectRatio; // 
+      relativeWidth = relativeHeight * aspectRatio; // if any of these overflowas section dimensions, we scale based on the one that over flows
+      scalingRatio = relativeHeight / absoluteHeight; 
   }
-
-  
+  // console.log("scalingRatio", scalingRatio, getGameStateData().paddleHeight, getGameStateData().paddleHeight * scalingRatio)
 
   // console.log(aspectRatio, absolutewidth, absoluteHeight)
   // console.log(aspectRatio, relativeWidth, relativeHeight)
@@ -90,11 +96,11 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   //STATE
   let mousePressed = useRef<boolean>(false);
 
-  let ballX: number = props.initBallX;
-  let ballY: number = props.initBallY;
+  let ballX: number = getGameStateData().initBallX;
+  let ballY: number = getGameStateData().initBallY;
   let paddleOneX: number = 0;
   let paddleOneY: number = 0;
-  let paddleTwoX: number = props.width - props.paddleWidth;
+  let paddleTwoX: number = getGameStateData().width - getGameStateData().paddleWidth;
   let paddleTwoY: number = 0;
   var state: 0|2|1|3|4 = 0;
   let players: Array<string> = []
@@ -108,21 +114,18 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     state,
     players,
   })
-  const setGameStateData = (newVal) => {
-    gamestatedata.current = {...gamestatedata.current, ...newVal}
-  }
-  const getGameStateData = () => props.gameStateData.current;
+
 
   // draw
   const drawBall = (p5: p5Types) => {
 
-    p5.ellipse(getGameStateData().ballX * scalingRatio, getGameStateData().ballY * scalingRatio, props.ballRadius * scalingRatio, props.ballRadius * scalingRatio);
+    p5.ellipse(getGameStateData().ballX * scalingRatio, getGameStateData().ballY * scalingRatio, getGameStateData().ballRadius * scalingRatio, getGameStateData().ballRadius * scalingRatio);
   };
   const drawPaddleOne = (p5: p5Types) => {
-    p5.rect(getGameStateData().paddleOneX * scalingRatio, getGameStateData().paddleOneY * scalingRatio, props.paddleWidth * scalingRatio, props.paddleHeight * scalingRatio);
+    p5.rect(getGameStateData().paddleOneX * scalingRatio, getGameStateData().paddleOneY * scalingRatio, getGameStateData().paddleWidth * scalingRatio, getGameStateData().paddleHeight * scalingRatio);
   };
   const drawPaddleTwo = (p5: p5Types) => {
-    p5.rect(getGameStateData().paddleTwoX * scalingRatio, getGameStateData().paddleTwoY * scalingRatio, props.paddleWidth * scalingRatio, props.paddleHeight * scalingRatio);
+    p5.rect(getGameStateData().paddleTwoX * scalingRatio, getGameStateData().paddleTwoY * scalingRatio, getGameStateData().paddleWidth * scalingRatio, getGameStateData().paddleHeight * scalingRatio);
   };
   const handlePlayerOneInput = (p5: p5Types) => {
     if (!mousePressed.current) {
@@ -131,11 +134,11 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     }
 
     if (p5.mouseY >
-      getGameStateData().paddleOneY  * scalingRatio + props.paddleHeight * scalingRatio / 2 + props.paddleSpeed * scalingRatio) {
+      getGameStateData().paddleOneY  * scalingRatio + getGameStateData().paddleHeight * scalingRatio / 2 + getGameStateData().paddleSpeed * scalingRatio) {
       props.socket.current.emit("playerInput", { input: "DOWN" });
     } else if (
       p5.mouseY <
-      getGameStateData().paddleOneY * scalingRatio + props.paddleHeight * scalingRatio / 2 - props.paddleSpeed * scalingRatio
+      getGameStateData().paddleOneY * scalingRatio + getGameStateData().paddleHeight * scalingRatio / 2 - getGameStateData().paddleSpeed * scalingRatio
     ) {
       props.socket.current.emit("playerInput", { input: "UP" });
     }
@@ -145,48 +148,55 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       //handle keys
       return;
     }
-    if (p5.mouseY > getGameStateData().paddleTwoY * scalingRatio + props.paddleHeight * scalingRatio / 2 + props.paddleSpeed * scalingRatio) {
+    if (p5.mouseY > getGameStateData().paddleTwoY * scalingRatio +getGameStateData().paddleHeight * scalingRatio / 2 +getGameStateData().paddleSpeed * scalingRatio) {
       props.socket.current.emit("playerInput", { input: "DOWN" });
     } else if (
       p5.mouseY <
-      getGameStateData().paddleTwoY * scalingRatio + props.paddleHeight * scalingRatio / 2 - props.paddleSpeed * scalingRatio
+      getGameStateData().paddleTwoY * scalingRatio + getGameStateData().paddleHeight * scalingRatio / 2 - getGameStateData().paddleSpeed * scalingRatio
     ) {
       props.socket.current.emit("playerInput", { input: "UP" });
     }
   };
   //resize
+  // useEffect(()=>{
+  //   absoluteWidth = getGameStateData().width;
+  //   relativeWidth = props.width;
+   
+  //   absoluteHeight = absoluteWidth / aspectRatio;
+  //   relativeHeight = relativeWidth / aspectRatio;
 
+  //   scalingRatio = relativeWidth / absoluteWidth; 
+  //   if (relativeHeight > props.height){
+  //     absoluteHeight = getGameStateData().height;
+  //     relativeHeight = props.height;
+  //     absoluteWidth = absoluteHeight / aspectRatio; // 
+  //     relativeWidth = relativeHeight / aspectRatio; // if any of these overflowas section dimensions, we scale based on the one that over flows
+  //     scalingRatio = relativeHeight / absoluteHeight; 
+  //   }
+  //   if(P5) P5.resizeCanvas(props.width, relativeHeight);
+  // },[props.width, props.height])
   const onResize = ( p5: p5Types)=>{
     // console.log("resizing", props.width, props.height)
-
-    absoluteWidth = 1000;
+    absoluteWidth = getGameStateData().width;
     relativeWidth = props.width;
-   
     absoluteHeight = absoluteWidth / aspectRatio;
     relativeHeight = relativeWidth / aspectRatio;
-
-       scalingRatio = relativeWidth / absoluteWidth; 
+    scalingRatio = relativeWidth / absoluteWidth; 
     if (relativeHeight > props.height){
-
-      let tmp = props.height / relativeHeight;
-      relativeWidth*= tmp;
-      relativeHeight*= tmp;
-      // console.log(props.height, relativeHeight, "should be the same ")
-      // p5.translate(props.width-relativeWidth/2,0);
-      scalingRatio = relativeHeight / absoluteHeight;
-
-    }
- 
-    
+      absoluteHeight = getGameStateData().height;
+      relativeHeight = props.height;
+      absoluteWidth = absoluteHeight * aspectRatio; // 
+      relativeWidth = relativeHeight * aspectRatio; // if any of these overflowas section dimensions, we scale based on the one that over flows
+      scalingRatio = relativeHeight / absoluteHeight;  
+  }
     if(p5) p5.resizeCanvas(props.width, relativeHeight);
-
   }
 
   // SETUP
   let canvas: p5Types.Renderer;
   const setup = (p5: p5Types, canvasParentRef: Element) => {
-
-    // if(relativeWidth<props.width)
+    setP5(p5);
+    // if(relativeWidth<getGameStateData().width)
       canvas = p5.createCanvas(props.width, relativeHeight).parent(canvasParentRef);
     canvas.mousePressed(() => {
       mousePressed.current = true;
@@ -224,8 +234,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     p5.textSize(40);
     p5.text(
       getGameStateData().scores[0]+" - "+getGameStateData().scores[1]+" state : "+getGameStateData().state,
-      props.width/ 4,
-      props.height / 4
+      getGameStateData().width/ 4,
+      getGameStateData().height / 4
     );
     p5.pop();
 
@@ -248,7 +258,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       p5.text(
         "GameOver",
         50,
-        props.height / 2
+        getGameStateData().height / 2
       );
       return;
     }
@@ -257,7 +267,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     p5.textSize(15);
     p5.text(
       "ping : "+ping+"ms",
-      props.width/ 2,
+      getGameStateData().width/ 2,
       40
     );
     //waiting for player to start the game
@@ -272,13 +282,12 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
         "Click on the screen to start the game ":
         "Waiting for oponent to start the game",
         50,
-        3*(props.height / 8)
+        3*(getGameStateData().height / 8)
       );
       //return;
     }
 
     // boundaries for game window
-    p5.pop()
     p5.push()
     p5.stroke(255)
     p5.line(-1,0,-1,relativeHeight)

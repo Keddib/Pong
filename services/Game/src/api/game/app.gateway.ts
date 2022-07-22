@@ -53,10 +53,12 @@ export class AppGateway
     // console.log(tmp)
     const cookie = client.handshake.headers.cookie;
     const user = await this.authService.isAuthenticated(cookie);
+    // console.log("user", user)
     if (!user) return client.conn.close(true);
 
     this.logger.log('Client Connected :' + user.username);
     this.authenticatedSockets.push(client.id);
+    client.emit("authenticated");
     console.log('authenticated sockets', this.authenticatedSockets.length);
   }
 
@@ -88,9 +90,10 @@ export class AppGateway
 
   @SubscribeMessage('playerJoined')
   joinRoom(socket: AuthenticatedSocket): void {
+    // console.log("playerJoined", this.authenticatedSockets, socket.id, this.authenticatedSockets.includes(socket.id));
     if (!this.authenticatedSockets.includes(socket.id)) return;
-
-    console.log(socket.user);
+    if(this.playerToGameIdx.has(socket.id)) return;
+    //console.log(socket.user);
 
     const roomName: string = socket.id;
     console.log(roomName);

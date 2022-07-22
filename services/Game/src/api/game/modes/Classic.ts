@@ -63,15 +63,25 @@ export class Game {
 }
 
 interface GameState {
-  // Game variables
+  // Window dimensions 
+  aspectRatio: number;
+  width: number;
+  height: number;
+
+  //ball
   ballX: number;
   ballY: number;
   ballDirX: number;
   ballDirY: number;
+  ballSpeed: number;
+  ballRadius: number;
 
+  //paddle
+  paddleWidth: number;
+  paddleHeight: number;
+  paddleSpeed: number;
   paddleOneX: number;
   paddleOneY: number;
-
   paddleTwoX: number;
   paddleTwoY: number;
 
@@ -86,30 +96,27 @@ interface GameState {
 export class ClassicGame extends Game {
   constructor(server: Server) {
     super();
+
     this.server = server;
+
     this.aspectRatio = 16 / 9;
     this.width = 1000;
-
     this.height = this.width / this.aspectRatio;
 
     this.initBallX = this.width / 2;
     this.initBallY = this.height / 2;
     this.ballRadius = 50;
     this.ballSpeed = 10;
-
-    this.paddleWidth = 30;
-    this.paddleHeight = 800;
-    this.paddleSpeed = 10;
-
-    // Game variables
     this.ballX = this.initBallX;
     this.ballY = this.initBallY;
     this.ballDirX = -1;
     this.ballDirY = -1;
 
+    this.paddleWidth = 30;
+    this.paddleHeight = 100;
+    this.paddleSpeed = 5;
     this.paddleOneX = 0;
     this.paddleOneY = 0;
-
     this.paddleTwoX = this.width - this.paddleWidth;
     this.paddleTwoY = 0;
 
@@ -162,16 +169,24 @@ export class ClassicGame extends Game {
   // }
   getGameState(): GameState {
     return {
+      aspectRatio: this.aspectRatio,
+
+      width: this.width,
+      height: this.height,
+
       ballX: this.ballX,
       ballY: this.ballY,
       ballDirX: this.ballDirX,
       ballDirY: this.ballDirY,
-
+      ballSpeed: this.ballSpeed,
+      ballRadius: this.ballRadius,
       paddleOneX: this.paddleOneX,
       paddleOneY: this.paddleOneY,
-
       paddleTwoX: this.paddleTwoX,
       paddleTwoY: this.paddleTwoY,
+      paddleWidth: this.paddleWidth,
+      paddleHeight: this.paddleHeight,
+      paddleSpeed: this.paddleSpeed,
 
       state: this.state,
       players: this.players,

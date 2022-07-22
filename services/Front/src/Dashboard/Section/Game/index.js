@@ -42,7 +42,9 @@ export default function Game() {
       { withCredentials: true }
     ).on('connect',()=>{
       //console.log("socket created", socket.current)
-      socket.current.emit('playerJoined');
+      socket.current.on("authenticated",(data)=>{
+        socket.current.emit('playerJoined');
+      })
       socket.current.on("gameState",(data)=>{
         if (gameState == 'waiting') setGameState('play')
         gameStateData.current=data;
