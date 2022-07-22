@@ -63,7 +63,7 @@ export class Game {
 }
 
 interface GameState {
-  // Window dimensions 
+  // Window dimensions
   aspectRatio: number;
   width: number;
   height: number;
@@ -113,7 +113,7 @@ export class ClassicGame extends Game {
     this.ballDirY = -1;
 
     this.paddleWidth = 30;
-    this.paddleHeight = 100;
+    this.paddleHeight = 800;
     this.paddleSpeed = 5;
     this.paddleOneX = 0;
     this.paddleOneY = 0;

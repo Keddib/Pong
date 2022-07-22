@@ -217,7 +217,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   // States : 0 in queue // 1 playing ? // 3 waiting 
   let ping : number = 0;
   const draw = (p5: p5Types) => {
-    p5.background(0);
+    p5.clear()
     p5.frameRate(60);
     if(relativeWidth<props.width)
       p5.translate((props.width-relativeWidth)/2,0);
@@ -251,7 +251,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     //   return;
     // }
 
-
+      //gameover state
     if (getGameStateData().state === 4) {
       p5.fill(0xffffff);
       p5.textSize(40);
@@ -262,6 +262,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       );
       return;
     }
+
+      //ping
     if(p5.frameCount % 40 == 0)
       ping = Date.now()-getGameStateData().timestamp;
     p5.textSize(15);
@@ -270,6 +272,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       getGameStateData().width/ 2,
       40
     );
+
     //waiting for player to start the game
     if (getGameStateData().state === 3) {
       p5.fill(0xffffff);
@@ -289,9 +292,15 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
     // boundaries for game window
     p5.push()
+
     p5.stroke(255)
-    p5.line(-1,0,-1,relativeHeight)
-    p5.line(relativeWidth+1,0,relativeWidth+1,relativeHeight)
+
+    p5.line(1, 0, 1, relativeHeight)
+    p5.line(relativeWidth-1, 0, relativeWidth -1, relativeHeight)
+
+    p5.line(1, 1, relativeWidth, 1)
+    p5.line(1, relativeHeight - 1, relativeWidth + 1, relativeHeight - 1)
+
     p5.pop()
   
     //ball

@@ -58,7 +58,7 @@ export class AppGateway
 
     this.logger.log('Client Connected :' + user.username);
     this.authenticatedSockets.push(client.id);
-    client.emit("authenticated");
+    client.emit('authenticated');
     console.log('authenticated sockets', this.authenticatedSockets.length);
   }
 
@@ -86,13 +86,17 @@ export class AppGateway
       //this.games.slice(this.playerToGameIdx.get(client.id), 1);
       this.playerToGameIdx.delete(client.id);
     }
+    if (this.authenticatedSockets.length === 0) {
+      this.playerToGameIdx.clear();
+      this.games.splice(0, this.games.length);
+    }
   }
 
   @SubscribeMessage('playerJoined')
   joinRoom(socket: AuthenticatedSocket): void {
     // console.log("playerJoined", this.authenticatedSockets, socket.id, this.authenticatedSockets.includes(socket.id));
     if (!this.authenticatedSockets.includes(socket.id)) return;
-    if(this.playerToGameIdx.has(socket.id)) return;
+    if (this.playerToGameIdx.has(socket.id)) return;
     //console.log(socket.user);
 
     const roomName: string = socket.id;
