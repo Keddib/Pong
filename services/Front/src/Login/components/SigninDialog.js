@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
-import LoginImage from "./LoginImage";
+import PlayerImgIn from "/src/assets/images/signin.png";
 import Dialog from "./Dialog";
 import AuthButton from "./AuthButton";
-import Error from "./LoginError";
 import { XL } from "/src/Components/Constants";
 import useMedia from "/src/Hooks/useMedia";
 
@@ -27,7 +26,11 @@ const SigninDialog = ({ hundleSubmit, errorMsg }) => {
             <form onSubmit={hundleSubmit}>
               <AuthButton action="signin" />
             </form>
-            {errorMsg && <Error message={errorMsg} />}
+            {errorMsg &&
+              <p className="text-center text-red/50">
+                {`${errorMsg} ! please try agian`}
+              </p>
+            }
             <p className="description">
               Don’t have an account?
               <Link to="/access/signup" className="click-p-l ml-2">
@@ -37,9 +40,19 @@ const SigninDialog = ({ hundleSubmit, errorMsg }) => {
           </Dialog>
         </div>
       </div>
-      {xl && <LoginImage isSignin={true} />}
+      {xl && <LoginImage />}
     </main >
   );
 }
 
 export default SigninDialog;
+
+
+const LoginImage = () => {
+
+  return (
+    <div className="img-w-signin">
+      <img className="rounded-2xl" alt="player img" src={PlayerImgIn} />
+    </div>
+  );
+}

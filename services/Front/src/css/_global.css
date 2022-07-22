@@ -121,11 +121,7 @@
     );
   }
 
-  /* userbar */
-  .userBar {
-    @apply flex rounded-l-2xl pr-6 py-1 items-center hover:border-pictonBlue
-    border-[2px] border-transparent w-full bg-queenBlue ease-in duration-300;
-  }
+  /* element-bar */
   .element-bar {
     @apply flex rounded-l-2xl pr-6 py-1 items-center hover:border-pictonBlue
     border-[2px] border-transparent w-full h-fit bg-queenBlue ease-in duration-300;
@@ -134,11 +130,6 @@
   .element-bar-line {
     @apply w-[5px] rounded-xl bg-transparent group-hover:bg-pictonBlue
      ease-in duration-300 h-8 md:h-12;
-  }
-
-  .userBarLine {
-    @apply w-[5px] h-12 rounded-xl bg-transparent group-hover:bg-pictonBlue
-     ease-in duration-300;
   }
 
   .dropdown {

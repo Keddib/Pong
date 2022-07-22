@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
+import PlayerImgUp from "/src/assets/images/signup.png";
 import Dialog from "./Dialog";
 import AuthButton from "./AuthButton";
-import Error from "./LoginError";
 import ContinueDialog from "./ContinueDialog";
 import useMedia from "/src/Hooks/useMedia";
 import { XL } from "/src/Components/Constants";
-import LoginImage from "./LoginImage";
 
 
 const title = {
@@ -31,7 +30,9 @@ const SignupDialog = ({ isContinue, hundleSubmit, errorMsg }) => {
                 <form onSubmit={hundleSubmit}>
                   <AuthButton action="signup" />
                 </form>
-                {errorMsg && <Error />}
+                {errorMsg && <p className="text-center text-red/50">
+                  {`${errorMsg} ! please try agian`}
+                </p>}
                 <p className="description-l">
                   Do you have an account?
                   <Link to="/access/signin" className="click-p-l ml-2">
@@ -42,9 +43,18 @@ const SignupDialog = ({ isContinue, hundleSubmit, errorMsg }) => {
           }
         </div>
       </div>
-      {xl && <LoginImage isSignin={false} />}
+      {xl && <LoginImage />}
     </main >
   );
 }
 
 export default SignupDialog;
+
+const LoginImage = () => {
+
+  return (
+    <div className="img-w-signup">
+      <img className="rounded-2xl" alt="player img" src={PlayerImgUp} />
+    </div>
+  );
+}
