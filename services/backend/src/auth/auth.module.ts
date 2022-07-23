@@ -9,7 +9,7 @@ import { fortyTwoStrategy } from './strategies/fortytwo.strategy';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UserModule , PassportModule.register({ session:  true }), SessionSerializer],
+  imports: [UserModule , PassportModule.register({ session:  true })],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, fortyTwoStrategy],
   exports: [AuthService]

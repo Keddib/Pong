@@ -6,16 +6,16 @@ import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 export class ChatMessage {
 
     @PrimaryGeneratedColumn()
-    messageId: number;
+    messageId: string;
 
     @Column( { unique: true })
     text: string;
 
     @OneToOne(type => ChatRoom, chatRoom => chatRoom.cid)
-    roomId: number;
+    roomId: string;
 
     @OneToOne(type => User, user => user.uid)
-    ownerId: number;
+    ownerId: string;
 
     @Column()
     createdAt: Date;

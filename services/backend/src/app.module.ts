@@ -8,7 +8,7 @@ import { ChatRoom } from './entities/chatRoom.entity';
 import { User } from './entities/user.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ChatGatewayModule } from './chat-gateway/chat-gateway.module';
+import { ChatModule } from './chat/chat.module';
 
 
 @Module({
@@ -29,7 +29,8 @@ import { ChatGatewayModule } from './chat-gateway/chat-gateway.module';
   }),
     UserModule,
     AuthModule,
-    ChatGatewayModule],
+    ChatModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
