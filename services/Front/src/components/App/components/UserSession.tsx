@@ -1,7 +1,8 @@
 import useAuth from "hooks/useAuth";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import checkUserSession from "../services/checkUserSession";
+import {checkUserSession} from "services/axios";
+import Loading from "components/Loading";
 
 const UserSession = () => {
   const { signin, isUserAuth } = useAuth();
@@ -24,7 +25,7 @@ const UserSession = () => {
     isUserAuth() ? setIsLoading(false) : verifyUserSession();
   }, []);
 
-  return <>{isLoading ? <h1>Loading...</h1> : <Outlet />}</>;
+  return <>{isLoading ? <Loading/> : <Outlet />}</>;
 };
 
 export default UserSession;

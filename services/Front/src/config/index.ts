@@ -5,9 +5,8 @@ import { MediaQuery } from "types/config";
 dotenv.config();
 
 const api = {
-  auth42:
-    "https://api.intra.42.fr/oauth/authorize?client_id=dac506e7095f7f042e1e9de45db80a9706974bbc636c35a367dd88b2bfdcebbb&redirect_uri=http%3A%2F%2Flocalhost%2Fauth42%2F&response_type=code",
-  users: process.env.USERS || "localhost:3500",
+  auth42: process.env.AUTH42REDIRECT,
+  users: process.env.USERS
 };
 
 interface MediaQueries {

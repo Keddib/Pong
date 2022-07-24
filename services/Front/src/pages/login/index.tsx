@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import useAuth from "hooks/useAuth";
-import authenticateUser from "./services/authenticateUser";
+import {authenticateUser} from "services/axios";
 import oAuthPopup from "./services/oauthPopup";
 import SigninDialog from "./components/Signin";
 import SignupDialog from "./components/Signup";

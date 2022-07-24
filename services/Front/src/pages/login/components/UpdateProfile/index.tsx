@@ -1,10 +1,11 @@
 import { useState, FunctionComponent } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Dialog from "pages/login/components/Dialog";
 import useAuth from "hooks/useAuth";
 import Image from "components/Image";
-import { uploadData, validateInpute } from "./services";
+import { validateInpute } from "./services";
+import axios from "axios";
+import { updateUser } from "services/axios";
 
 const title = {
   primary: "welcome to",
@@ -44,7 +45,7 @@ const ContinueDialog: FunctionComponent = () => {
     try {
       setIsLoading(true);
       setError("");
-      const user = await uploadData(data);
+      const user = await updateUser(data);
       setIsLoading(false);
       signin(user);
       navigate("/home", { replace: true });
