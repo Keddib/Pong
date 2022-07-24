@@ -212,7 +212,7 @@ export class ClassicGame extends Game {
   }
   replacePlayer(oldSock: string, newSock: string){
     const idx = this.players.indexOf(oldSock);
-    console.log("old sock ", oldSock, "new sock " , newSock, idx)
+    // console.log("old sock ", oldSock, "new sock " , newSock, idx)
     this.players[idx] = newSock;
   }
   gameOver(): boolean {

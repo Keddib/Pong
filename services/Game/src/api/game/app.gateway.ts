@@ -42,12 +42,14 @@ export class AppGateway
   private games: Array<ClassicGame> = Array<ClassicGame>();
   private userIdToGameIdx: Map<string, number> = new Map<string, number>();
   private socketToUserId: Map<string, string> = new Map<string, string>();
+  private userIdToTimeout : Map<string, NodeJS.Timeout> = new Map<string, NodeJS.Timeout>()
   private authenticatedSockets: Array<string> = Array<string>();
 
   afterInit(server: Server): void {
     this.server = server;
     this.logger.log('Init');
   }
+
   private getByValue(map, searchValue) {
     for (let [key, value] of map.entries()) {
       if (value === searchValue)
@@ -55,6 +57,7 @@ export class AppGateway
     }
     return undefined;
   }
+
   async handleConnection(client: Socket): Promise<void> {
     const cookie = client.handshake.headers.cookie;
     const user = await this.authService.isAuthenticated(cookie);
@@ -68,11 +71,15 @@ export class AppGateway
       console.log("user "+user.username+" has an old socket")
       if(this.userIdToGameIdx.has(user.ftId))
       {
+        console.log("clearing timeout")
+        clearTimeout(this.userIdToTimeout.get(user.ftId));
+        this.userIdToTimeout.delete(user.ftId);
         this.games[this.userIdToGameIdx.get(user.ftId)].replacePlayer(oldSock, client.id);
         const g : ClassicGame = this.games[this.userIdToGameIdx.get(user.ftId)];
 
         console.log("user "+user.username+" has a game" ,g.state, g.players);
         client.join(this.games[this.userIdToGameIdx.get(user.ftId)].room);
+        
       }
     }
     this.socketToUserId.delete(oldSock);
@@ -106,12 +113,25 @@ export class AppGateway
 
       }
       else{ // two players in
+
         this.games[this.userIdToGameIdx.get(userId)].setState(3);
         console.log("player left a game with two players ")
 
         const g : ClassicGame = this.games[this.userIdToGameIdx.get(userId)];
         console.log("user has a game", g.state, g.players);
 
+        const timeoutPeriod = 5000;
+        this.userIdToTimeout.set(userId,setTimeout(()=>{
+          let p = this.games[this.userIdToGameIdx.get(userId)].players;
+
+          this.games[this.userIdToGameIdx.get(userId)].setState(4);
+          this.games[this.userIdToGameIdx.get(userId)].players = ["-1","-1"]; //.push('-1');
+          this.userIdToGameIdx.delete(this.socketToUserId.get(p[0]));
+          this.userIdToGameIdx.delete(this.socketToUserId.get(p[1]));
+
+          this.socketToUserId.delete(client.id);
+          console.log("timeout reached")
+        },timeoutPeriod))
         //this.userIdToGameIdx.delete(userId);
       }
       
@@ -119,7 +139,7 @@ export class AppGateway
     // if (this.authenticatedSockets.length === 0) {
     //   this.userIdToGameIdx.clear();
     //   this.games.splice(0, this.games.length);
-    // }
+    // } 
   }
 
   @SubscribeMessage('playerJoined')
