@@ -52,7 +52,7 @@ export default function Game() {
     })
 
     return ()=>socket.current.close();
-  });
+  },[]);
   
   let navigate = useNavigate();
 

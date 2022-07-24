@@ -210,6 +210,11 @@ export class ClassicGame extends Game {
       this.emitState();
     }, 1000 / fps);
   }
+  replacePlayer(oldSock: string, newSock: string){
+    const idx = this.players.indexOf(oldSock);
+    console.log("old sock ", oldSock, "new sock " , newSock, idx)
+    this.players[idx] = newSock;
+  }
   gameOver(): boolean {
     return this.scores.includes(this.maxScore);
   }

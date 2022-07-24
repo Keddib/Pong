@@ -40,71 +40,103 @@ export class AppGateway
 
   //game object
   private games: Array<ClassicGame> = Array<ClassicGame>();
-  private playerToGameIdx: Map<string, number> = new Map<string, number>();
+  private userIdToGameIdx: Map<string, number> = new Map<string, number>();
+  private socketToUserId: Map<string, string> = new Map<string, string>();
   private authenticatedSockets: Array<string> = Array<string>();
 
   afterInit(server: Server): void {
     this.server = server;
     this.logger.log('Init');
   }
-
+  private getByValue(map, searchValue) {
+    for (let [key, value] of map.entries()) {
+      if (value === searchValue)
+        return key;
+    }
+    return undefined;
+  }
   async handleConnection(client: Socket): Promise<void> {
-    // let tmp : any = client;
-    // console.log(tmp)
     const cookie = client.handshake.headers.cookie;
     const user = await this.authService.isAuthenticated(cookie);
-    // console.log("user", user)
     if (!user) return client.conn.close(true);
 
-    this.logger.log('Client Connected :' + user.username);
+    this.logger.log('Client Connected :' + user.username, client.id);
+
     this.authenticatedSockets.push(client.id);
+    const oldSock = this.getByValue(this.socketToUserId,user.ftId);
+    if (oldSock != undefined) { // userId was already connected
+      console.log("user "+user.username+" has an old socket")
+      if(this.userIdToGameIdx.has(user.ftId))
+      {
+        this.games[this.userIdToGameIdx.get(user.ftId)].replacePlayer(oldSock, client.id);
+        const g : ClassicGame = this.games[this.userIdToGameIdx.get(user.ftId)];
+
+        console.log("user "+user.username+" has a game" ,g.state, g.players);
+        client.join(this.games[this.userIdToGameIdx.get(user.ftId)].room);
+      }
+    }
+    this.socketToUserId.delete(oldSock);
+    this.socketToUserId.set(client.id, user.ftId);
     client.emit('authenticated');
+
     console.log('authenticated sockets', this.authenticatedSockets.length);
   }
 
   async handleDisconnect(client: Socket): Promise<void> {
-    // const cookie = client.handshake.headers.cookie;
-    // const user = await this.authService.isAuthenticated(cookie);
-    // if (!user) return;
     if (!this.authenticatedSockets.includes(client.id)) return;
-
     this.authenticatedSockets.splice(
       this.authenticatedSockets.indexOf(client.id),
       1,
     );
+
     this.logger.log('Client Disconnected :' + client.id);
     console.log('authenticated sockets', this.authenticatedSockets.length);
 
-    if (this.playerToGameIdx.has(client.id)) {
-      console.log('game idx ', this.playerToGameIdx.get(client.id));
-      this.games[this.playerToGameIdx.get(client.id)].setState(4);
+    const userId = this.socketToUserId.get(client.id);
+    if (this.userIdToGameIdx.has(userId)) {
+      console.log('game idx ', this.userIdToGameIdx.get(userId));
       if (
-        this.games[this.playerToGameIdx.get(client.id)].getPlayers().length != 2
+        this.games[this.userIdToGameIdx.get(userId)].getPlayers().length < 2
       )
-        this.games[this.playerToGameIdx.get(client.id)].players.push('-1');
-      //this.games.slice(this.playerToGameIdx.get(client.id), 1);
-      this.playerToGameIdx.delete(client.id);
+      {
+        this.games[this.userIdToGameIdx.get(userId)].players = ["-1","-1"]; //.push('-1');
+        this.games[this.userIdToGameIdx.get(userId)].setState(4);
+        this.userIdToGameIdx.delete(userId);
+        this.socketToUserId.delete(client.id);
+
+      }
+      else{ // two players in
+        this.games[this.userIdToGameIdx.get(userId)].setState(3);
+        console.log("player left a game with two players ")
+
+        const g : ClassicGame = this.games[this.userIdToGameIdx.get(userId)];
+        console.log("user has a game", g.state, g.players);
+
+        //this.userIdToGameIdx.delete(userId);
+      }
+      
     }
-    if (this.authenticatedSockets.length === 0) {
-      this.playerToGameIdx.clear();
-      this.games.splice(0, this.games.length);
-    }
+    // if (this.authenticatedSockets.length === 0) {
+    //   this.userIdToGameIdx.clear();
+    //   this.games.splice(0, this.games.length);
+    // }
   }
 
   @SubscribeMessage('playerJoined')
   joinRoom(socket: AuthenticatedSocket): void {
     // console.log("playerJoined", this.authenticatedSockets, socket.id, this.authenticatedSockets.includes(socket.id));
     if (!this.authenticatedSockets.includes(socket.id)) return;
-    if (this.playerToGameIdx.has(socket.id)) return;
+    const userId = this.socketToUserId.get(socket.id);
+    if (this.userIdToGameIdx.has(userId)) return;
     //console.log(socket.user);
 
     const roomName: string = socket.id;
     console.log(roomName);
 
-    // if (this.playerToGameIdx.has(socket.id)) {
-    //   console.log(this.games[this.playerToGameIdx[socket.id]].getPlayers());
-    //   if (this.games[this.playerToGameIdx[socket.id]].getPlayers().length == 2)
-    //     this.games[this.playerToGameIdx[socket.id]].toggleGameState();
+    // if (this.userIdToGameIdx.has(socket.id)) {
+    //   console.log(this.games[this.userIdToGameIdx[socket.id]].getPlayers());
+    //   if (this.games[this.userIdToGameIdx[socket.id]].getPlayers().length == 2)
+    //     this.games[this.userIdToGameIdx[socket.id]].toggleGameState();
     //   return;
     // }
 
@@ -128,19 +160,20 @@ export class AppGateway
       console.log('created game idx=' + 0, roomName);
     }
 
-    this.playerToGameIdx.set(socket.id, this.games.length - 1);
+    this.userIdToGameIdx.set(userId, this.games.length - 1);
   }
 
   @SubscribeMessage('playerInput')
   handlePlayerInput(client: Socket, payload: UserInput): void {
-    const g: ClassicGame = this.games[this.playerToGameIdx.get(client.id)];
+    const userId = this.socketToUserId.get(client.id);
+    const g: ClassicGame = this.games[this.userIdToGameIdx.get(userId)];
     if (g.state === 3) {
       const totalGoals = g.scores[0] + g.scores[1];
       if (client.id === g.players[totalGoals % 2])
-        this.games[this.playerToGameIdx.get(client.id)].setState(2);
+        this.games[this.userIdToGameIdx.get(userId)].setState(2);
     }
     // if (g.state === 2)
-    this.games[this.playerToGameIdx.get(client.id)].handleInput({
+    this.games[this.userIdToGameIdx.get(userId)].handleInput({
       ...payload,
       userId: client.id,
     });
