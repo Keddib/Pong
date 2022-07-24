@@ -9,12 +9,6 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestApplication>(AppModule);
 
-
-  app.useStaticAssets(join(__dirname, '..', 'static'));
-  app.enableCors({
-    origin: ['http://localhost:3500', 'http://localhost'],
-    credentials: true,
-  });
   app.use(
     session({
     
@@ -24,11 +18,17 @@ async function bootstrap() {
       cookie: { maxAge: 360000 }
     }),
   )
-
   // Init passport authentication 
   app.use(passport.initialize());
+
   // persistent login sessions 
   app.use(passport.session());
+
+  app.useStaticAssets(join(__dirname, '..', 'static'));
+  app.enableCors({
+    origin: ['http://localhost:3500', 'http://localhost'],
+    credentials: true,
+  });
 
   await app.listen(3500);
 }

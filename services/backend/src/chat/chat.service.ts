@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { createChatRoomDto } from 'src/dtos/chatRoom.dto';
 import { ChatMessage } from 'src/entities/chatMessage.entity';
 import { ChatRoom } from 'src/entities/chatRoom.entity';
 import { Repository } from 'typeorm';
@@ -28,6 +29,12 @@ export class ChatService {
     // return 'This action adds a new chat';
   }
 
+  async createRoom(createChatRoom : createChatRoomDto) : Promise<createChatRoomDto> {
+
+    await this.chatRoomRepo.create(createChatRoom);
+    return this.chatRoomRepo.save(createChatRoom);
+  }
+ 
   async joinRoom() {
 
   }

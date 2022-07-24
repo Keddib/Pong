@@ -1,4 +1,4 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WsResponse } from '@nestjs/websockets';
 import { ChatService } from './chat.service';
 import { createChatMessageDto } from '../dtos/chatMessage.dto';
 // import { UpdateChatDto } from '../dtos/';
@@ -7,13 +7,17 @@ import { ChatMessage } from 'src/entities/chatMessage.entity';
 import { UseGuards } from '@nestjs/common';
 import { isAuthGuard } from 'src/auth/guards/session.guard';
 import { Request } from '@nestjs/common';
-
+import { CreateDateColumn } from 'typeorm';
+import  axios from 'axios';
+import { ChatRoom } from 'src/entities/chatRoom.entity';
+import { createChatRoomDto } from 'src/dtos/chatRoom.dto';
 
 
 @WebSocketGateway({
   cors: {
     origin: '*',
-  }
+  }, 
+  // cookie: true
 })
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
@@ -35,26 +39,55 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   handleConnection(client: Socket, ...args: any[]) {
 
-    console.log('Connected ', client.id);
+    console.log('Connected ', client);
     // Do Stuffs
   }
 
 
+
+  @SubscribeMessage('createRoom')
+  async createRoom(@MessageBody() roomName: string) : Promise<ChatRoom> {
+
+    let room : ChatRoom = new createChatRoomDto();
+
+
+    room.createdAt = new Date();  
+    // room.owner = "sdffdsg";
+    room.name = roomName;
+    room.type = "public";
+    this.server.emit("RoomCreated", roomName);
+    return this.chatService.createRoom(room);
+  }
+
   @WebSocketServer()
   private server: Server;
 
+  // @UseGuards(isAuthGuard)
   @SubscribeMessage('msgToServer')
-  async create(@MessageBody() createChatDto: createChatMessageDto) : Promise<ChatMessage> {
-
-    this.server.emit('msgToClient', createChatDto);
-    return  this.chatService.create(createChatDto);
+  async create( @MessageBody() text: string) : Promise<ChatMessage> {
+    
+    const chatMessage: ChatMessage = new createChatMessageDto;
+    // console.log(req.user);
+    chatMessage.ownerId = "dsfd";
+    chatMessage.roomId = "sdff";
+    chatMessage.text = text;
+    chatMessage.createdAt = new Date();
+    this.server.emit('msgToClient', text);
+    return  this.chatService.create(chatMessage);
   }
+  // @SubscribeMessage('msgToServer')
+  // async create(@MessageBody() createChatDto: createChatMessageDto) : Promise<ChatMessage> {
+
+  //   this.server.emit('msgToClient', createChatDto);
+  //   return  this.chatService.create(createChatDto);
+  // }
 
 
-  @SubscribeMessage('join')
-  async joinRoom(@Request() req) {
+  @SubscribeMessage('joinRoom')
+  async joinRoom(room : string ) {
 
-    console.log(req.user, "  we know user  ");
+    // console.log(req.user, "  we know user  ");
+    const room = this.chatService.findOne(room);
     return this.chatService.joinRoom();
   }
 

@@ -6,13 +6,13 @@ import { User } from "./user.entity";
 export class ChatRoom {
 
     @PrimaryGeneratedColumn()
-    cid: number;
+    cid: string;
 
     @Column()
     type: string;
     
     @ManyToOne(type => User, user => user.uid)
-    owner: number;
+    owner: string;
     
     @OneToMany(type => ChatMessage, chatMessage => chatMessage.roomId)
     messages: ChatMessage[];
@@ -20,4 +20,6 @@ export class ChatRoom {
     @Column()
     createdAt: Date;
 
+    @Column()
+    name: string;
 }

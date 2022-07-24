@@ -3,9 +3,10 @@ import { ChatMessage } from "src/entities/chatMessage.entity";
 
 export class createChatRoomDto {
 
-    cid: number;
+    cid: string;
     type: string;
-    owner: number;
+    owner: string;
+    name: string;
     messages: ChatMessage[];
     createdAt: Date;
 }

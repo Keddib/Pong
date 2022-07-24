@@ -31,7 +31,9 @@ export class AuthController {
 
     @Get('intra')
     @UseGuards(fortyTwoGuard)
-    async loginWithIntra() {
+    async loginWithIntra(@Request() req) {
+
+        return req.user;
     }
 
 

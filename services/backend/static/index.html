@@ -16,16 +16,35 @@
 
             <input v-model="text" type="text" />
             <button type="submit" @click.prevent="sendMessage()">Send Message</button>
-
         </form>
+
+        <form>
+
+            <input v-model="roomName" type="text"/>
+            <button type="submit" @click.prevent="createRoom()">Create Room</button>
+        </form>
+
+        <form>
+
+            <input v-model="room" type="text"/>
+            <button type="submit" @click.prevent="joinRoom()">Join Room</button>
+        </form>
+
         <p>
 
+            <h3> Available Rooms To Join </h3>
+            <ul>
+                <li v-for="room in Rooms"> {{ room }} </li>
+            </ul>
 
+        </p>
+        <p>
+            <h3>    Room Messages {{ joinnedRoom }}   </h3>
             <ul>
                 <li v-for="msg of messages"> {{  msg  }} </li>
 
-
             </ul>
+
 
         </p>
     </div>
@@ -39,17 +58,39 @@
                 chatRoomId: '',
                 text: '',
                 socket: null,
-                messages: [] 
+                messages: [],
+                roomName: '',
+                Rooms: [],
+                joinnedRoom: '',
             },
             methods: {
 
                 sendMessage() {
                     // this.messages.push(this.text);
-                    this.socket.emit('msgToServer', this.text);
+                    this.socket.to(joinnedRoom).emit('msgToServer', this.text);
                     this.text = "";
                 },
                 receiveMessage(msg) {
                     this.messages.push(msg);
+                },
+                createRoom() {
+                
+                    this.socket.emit('createRoom', this.roomName);
+                    this.roomName = "";
+                },
+                RoomCreated(room) {
+                    this.Rooms.push(room);
+                }
+                ,
+                joinRoom() {
+                
+                    this.socket.emit('joinRoom', this.room);
+                    this.room = "";
+                }
+                ,
+                RoomJoined(room) {
+
+                    joinnedRoom = room;
                 }
             },
             created() {
@@ -58,6 +99,10 @@
                 this.socket.on('msgToClient', (msg) => {
                     this.receiveMessage(msg);
                 });
+                this.socket.on('RoomCreated', (room) => {
+                    this.RoomCreated(room);
+                })
+                
             }
         });
 
