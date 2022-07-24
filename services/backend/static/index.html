@@ -26,8 +26,8 @@
 
         <form>
 
-            <input v-model="room" type="text"/>
-            <button type="submit" @click.prevent="joinRoom()">Join Room</button>
+            <input v-model="ChatRoomName" type="text"/>
+            <button type="submit" @click.prevent="joinChatRoom()">Join Room</button>
         </form>
 
         <p>
@@ -39,7 +39,7 @@
 
         </p>
         <p>
-            <h3>    Room Messages {{ joinnedRoom }}   </h3>
+            <h3 >    Room Messages {{ joinedRoom }}   </h3>
             <ul>
                 <li v-for="msg of messages"> {{  msg  }} </li>
 
@@ -61,14 +61,19 @@
                 messages: [],
                 roomName: '',
                 Rooms: [],
-                joinnedRoom: '',
+                room: '',
+                joinedRoom: '',
+                ChatRoomName: '',
             },
             methods: {
 
                 sendMessage() {
                     // this.messages.push(this.text);
-                    this.socket.to(joinnedRoom).emit('msgToServer', this.text);
-                    this.text = "";
+                    console.log(`send message to room ${this.joinedRoom} from ${this.Rooms}`);
+                    if (this.joinedRoom) {
+                        this.socket.emit('messageToRoom', this.joinedRoom, this.text);
+                        this.text = "";
+                    }
                 },
                 receiveMessage(msg) {
                     this.messages.push(msg);
@@ -82,26 +87,36 @@
                     this.Rooms.push(room);
                 }
                 ,
-                joinRoom() {
-                
-                    this.socket.emit('joinRoom', this.room);
-                    this.room = "";
-                }
-                ,
-                RoomJoined(room) {
-
-                    joinnedRoom = room;
+                joinChatRoom() {
+                    this.socket.emit('joinRoomToServer', this.ChatRoomName);
+                    console.log(` joining ${this.ChatRoomName}`);
+                    this.joinedRoom = this.ChatRoomName;
+                    // this.socket.join(this.ChatRoomName);
+                    this.ChatRoomName = "";
+                },
+                Roomjoined(room) {
+                    console.log(`joined room succesfully : ${this.joinedRoom}`);
                 }
             },
-            created() {
+            created() { 
                 
                 this.socket = io('http://localhost:3500/');
                 this.socket.on('msgToClient', (msg) => {
                     this.receiveMessage(msg);
                 });
+
+                this.socket.on('msgToClientifRoom', (msg, room) => {
+                    if (this.joinedRoom === room)
+                        this.receiveMessage(msg);
+                })
                 this.socket.on('RoomCreated', (room) => {
                     this.RoomCreated(room);
-                })
+                });
+                this.socket.on('joinRoomToClient', (room) => {
+                    // this.socket.join(room);
+                    this.RoomJoined(room);
+                });
+
                 
             }
         });
@@ -109,5 +124,5 @@
     </script>
 
 
-</body>
 </html>
+</body>

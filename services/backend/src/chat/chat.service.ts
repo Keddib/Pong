@@ -50,6 +50,10 @@ export class ChatService {
   
   }
 
+  async findRoomByName(name: string) : Promise<ChatRoom> {
+  
+    return await this.chatRoomRepo.findOne({where: {name: name}});
+  }
   async findOne(id: string) : Promise<ChatMessage> {
 
     return await this.chatMessageRepo.findOne({where: {messageId: id}});
