@@ -71,7 +71,7 @@
                     // this.messages.push(this.text);
                     console.log(`send message to room ${this.joinedRoom} from ${this.Rooms}`);
                     if (this.joinedRoom) {
-                        this.socket.emit('messageToRoom', this.joinedRoom, this.text);
+                        this.socket.emit('msgToServer', {"room": this.joinedRoom, "message": this.text});
                         this.text = "";
                     }
                 },

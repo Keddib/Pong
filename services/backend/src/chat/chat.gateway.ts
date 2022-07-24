@@ -64,15 +64,15 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   // @UseGuards(isAuthGuard)
   @SubscribeMessage('msgToServer')
-  async create( @MessageBody() text: string) : Promise<ChatMessage> {
+  async create(client: Socket, message: {room: string, message: string}) : Promise<ChatMessage> {
     
     const chatMessage: ChatMessage = new createChatMessageDto;
     // console.log(req.user);
     chatMessage.ownerId = "dsfd";
     chatMessage.roomId = "sdff";
-    chatMessage.text = text;
+    chatMessage.text = message['message'];
     chatMessage.createdAt = new Date();
-    this.server.emit('msgToClient', text);
+    this.server.to(message['room']).emit('msgToClient', message['message']);
     return  this.chatService.create(chatMessage);
   }
 
@@ -86,8 +86,16 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 
   @SubscribeMessage('joinRoomToServer')
-  joinRoom(room : string ) {
+  joinRoom(client: Socket, room: string ) {
 
+    client.join(room);
+    // client.emit('joinedRoom', room);
+  }
+
+  @SubscribeMessage('leaveRoomToServer')
+  leaveRoom(client: Socket, room: string ) {
+
+    client.leave(room);
     // console.log(req.user, "  we know user  ");
     // const roomFound = this.chatService.findRoomByName(room);
     // if (roomFound) {  
@@ -98,6 +106,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     return room;
     // return null;
   }
+
 
   @SubscribeMessage('messageToRoom')
   messageToRoom(@MessageBody() body: any) {
@@ -111,7 +120,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     chatMessage.createdAt = new Date();
     // this.server.emit('msgToClient', text);
     
-    this.server.socketsJoin(body[0]);
+    // this.server.socketsJoin(body[0]);
     this.server.to(body[0]).emit('msgToClientifRoom', body[1]);
     return  this.chatService.create(chatMessage);
   }
