@@ -257,8 +257,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
     if (getGameStateData().state === 4) {
       const scores = getGameStateData().scores;
-      const winner = getGameStateData().players[scores[0] > scores[1] ? 0 : 1]
-      
+      let winner = getGameStateData().players[scores[0] > scores[1] ? 0 : 1]
+      winner = scores[0] == scores[1] ? "Tie": winner;
       p5.fill(0xffffff);
       p5.textSize(40);
       if (scores[0] < getGameStateData().maxScore && scores[1] < getGameStateData().maxScore && !getGameStateData().done)
@@ -271,7 +271,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       }
       else{
         p5.text(
-          (winner == props.socket.current.id ? "Victory" : "Defeat"),
+          winner == "Tie" ? "Tie" : (winner == props.socket.current.id ? "Victory" : "Defeat"),
           50,
           getGameStateData().height / 2
         );
