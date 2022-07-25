@@ -60,6 +60,8 @@ export class Game {
   maxScore: number;
 
   room: string;
+
+  done : boolean;
 }
 
 interface GameState {
@@ -91,6 +93,8 @@ interface GameState {
   maxScore : number;
   players: Array<string>;
   timestamp: number;
+
+  done: boolean;
 }
 
 export class ClassicGame extends Game {
@@ -126,6 +130,8 @@ export class ClassicGame extends Game {
     this.scores = [0, 0];
     this.maxScore = 3;
     this.room = '';
+
+    this.done = false;
     //this.run();
   }
   init() {
@@ -146,7 +152,9 @@ export class ClassicGame extends Game {
     this.emitState();
     clearInterval(this.loop);
   }
-
+  setDone(d: boolean){
+    this.done = d;
+  }
   getPlayers(): Array<string> {
     return this.players;
   }
@@ -163,10 +171,6 @@ export class ClassicGame extends Game {
   setState(st: 0 | 1 | 2 | 3 | 4): void {
     this.state = st;
   }
-  // toggleGameState(): void {
-  //   this.state = this.state === 0 ? 1 : 2;
-  //   if (this.state === 2) this.cleanup();
-  // }
   getGameState(): GameState {
     return {
       aspectRatio: this.aspectRatio,
@@ -193,6 +197,8 @@ export class ClassicGame extends Game {
       scores: this.scores,
       maxScore : this.maxScore,
       timestamp: Date.now(),
+
+      done: this.done,
     };
   }
   async emitState() {

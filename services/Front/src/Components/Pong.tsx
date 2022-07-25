@@ -57,6 +57,8 @@ interface GameState {
   maxScore : number;
   players: Array<string>;
   timestamp: number;
+
+  done: boolean;
 }
 
 const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
@@ -259,7 +261,7 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       
       p5.fill(0xffffff);
       p5.textSize(40);
-      if (scores[0] < getGameStateData().maxScore && scores[1] < getGameStateData().maxScore)
+      if (scores[0] < getGameStateData().maxScore && scores[1] < getGameStateData().maxScore && !getGameStateData().done)
       {
         p5.text(
           "A player disconnected",

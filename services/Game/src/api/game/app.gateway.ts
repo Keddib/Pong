@@ -79,7 +79,11 @@ export class AppGateway
 
         console.log("user "+user.username+" has a game" ,g.state, g.players);
         client.join(this.games[this.userIdToGameIdx.get(user.ftId)].room);
-        
+
+        this.games[this.userIdToGameIdx.get(user.ftId)].setState(3);
+        this.games[this.userIdToGameIdx.get(user.ftId)].init();
+
+
       }
     }
     this.socketToUserId.delete(oldSock);
@@ -114,7 +118,8 @@ export class AppGateway
       }
       else{ // two players in
 
-        this.games[this.userIdToGameIdx.get(userId)].setState(3);
+        this.games[this.userIdToGameIdx.get(userId)].setState(4);
+
         console.log("player left a game with two players ")
 
         const g : ClassicGame = this.games[this.userIdToGameIdx.get(userId)];
@@ -126,10 +131,12 @@ export class AppGateway
 
           this.games[this.userIdToGameIdx.get(userId)].setState(4);
           this.games[this.userIdToGameIdx.get(userId)].players = ["-1","-1"]; //.push('-1');
+          this.games[this.userIdToGameIdx.get(userId)].setDone(true)
           this.userIdToGameIdx.delete(this.socketToUserId.get(p[0]));
           this.userIdToGameIdx.delete(this.socketToUserId.get(p[1]));
 
           this.socketToUserId.delete(client.id);
+
           console.log("timeout reached")
         },timeoutPeriod))
         //this.userIdToGameIdx.delete(userId);
