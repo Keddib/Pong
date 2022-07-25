@@ -74,14 +74,18 @@ export class AppGateway
         console.log("clearing timeout")
         clearTimeout(this.userIdToTimeout.get(user.ftId));
         this.userIdToTimeout.delete(user.ftId);
+        
+
+
         this.games[this.userIdToGameIdx.get(user.ftId)].replacePlayer(oldSock, client.id);
         const g : ClassicGame = this.games[this.userIdToGameIdx.get(user.ftId)];
+
+  
 
         console.log("user "+user.username+" has a game" ,g.state, g.players);
         client.join(this.games[this.userIdToGameIdx.get(user.ftId)].room);
 
-
-        const opponent : string = g.players[(g.players.indexOf(user.ftId) + 1) % 2];
+      const opponent : string = g.players[(g.players.indexOf(client.id) + 1) % 2];
         console.log("oponnent", opponent, this.socketToUserId.get(opponent))
 
         if (this.userIdToTimeout.has(this.socketToUserId.get(opponent)))
@@ -89,11 +93,15 @@ export class AppGateway
           console.log("user "+user.username+" disconnected and reconnected found oponnent disconnected" ,g.state, g.players);
           this.games[this.userIdToGameIdx.get(user.ftId)].setState(4);
         }
+        else if (this.games[this.userIdToGameIdx.get(user.ftId)].done || this.games[this.userIdToGameIdx.get(user.ftId)].gameOver())
+        {
+          this.userIdToGameIdx.delete(user.ftId)
+        }
         else
         {
           this.games[this.userIdToGameIdx.get(user.ftId)].setState(3);
+          this.games[this.userIdToGameIdx.get(user.ftId)].init();
         }
-        this.games[this.userIdToGameIdx.get(user.ftId)].init();
       }
     }
     this.socketToUserId.delete(oldSock);
@@ -126,10 +134,7 @@ export class AppGateway
         this.socketToUserId.delete(client.id);
 
       }
-      else{ // two players in
-
-        this.games[this.userIdToGameIdx.get(userId)].setState(4);
-
+      else if (!(this.games[this.userIdToGameIdx.get(userId)].done || this.games[this.userIdToGameIdx.get(userId)].gameOver())) { // two players in
         console.log("player left a game with two players ")
 
         const g : ClassicGame = this.games[this.userIdToGameIdx.get(userId)];
@@ -139,6 +144,13 @@ export class AppGateway
 
         const timeoutPeriod = g.timeoutPeriodInSeconds * 1e3;
         this.userIdToTimeout.set(userId,setTimeout(()=>{
+          if (!this.userIdToGameIdx.has(userId)) {
+            console.log("timeout reached but game over");
+            this.userIdToGameIdx.delete(userId)
+            this.socketToUserId.delete(client.id);
+            return;
+          };
+
           let p = this.games[this.userIdToGameIdx.get(userId)].players;
 
           this.games[this.userIdToGameIdx.get(userId)].winner = p[(p.indexOf(client.id) + 1) % 2];
@@ -150,11 +162,23 @@ export class AppGateway
           this.userIdToGameIdx.delete(this.socketToUserId.get(p[0]));
           this.userIdToGameIdx.delete(this.socketToUserId.get(p[1]));
 
-          this.socketToUserId.delete(client.id);
+          //this.socketToUserId.delete(client.id);
+          this.userIdToTimeout.delete(userId);
           // this.games[this.userIdToGameIdx.get(userId)].setTimeout(userId, false);
           console.log("timeout reached")
+          if (this.userIdToGameIdx.size === 0) {
+            this.userIdToGameIdx.clear();
+            this.games.splice(0, this.games.length);
+            this.userIdToTimeout.clear();
+            this.socketToUserId.clear();
+            console.log("cleared everything")
+          } 
         }, timeoutPeriod))
         //this.userIdToGameIdx.delete(userId);
+      }
+      else{
+        this.games[this.userIdToGameIdx.get(userId)].setDone(true);
+        this.userIdToGameIdx.delete(userId);
       }
       
     }
@@ -164,6 +188,7 @@ export class AppGateway
       this.games.splice(0, this.games.length);
       this.userIdToTimeout.clear();
       this.socketToUserId.clear();
+      console.log("cleared everything")
     } 
   }
 
@@ -172,7 +197,11 @@ export class AppGateway
     // console.log("playerJoined", this.authenticatedSockets, socket.id, this.authenticatedSockets.includes(socket.id));
     if (!this.authenticatedSockets.includes(socket.id)) return;
     const userId = this.socketToUserId.get(socket.id);
-    if (this.userIdToGameIdx.has(userId)) return;
+
+
+    if (this.userIdToGameIdx.has(userId)){
+      return;
+    }
     //console.log(socket.user);
 
     const roomName: string = socket.id;

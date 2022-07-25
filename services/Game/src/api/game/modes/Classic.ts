@@ -124,7 +124,7 @@ export class ClassicGame extends Game {
     this.ballDirY = -1;
 
     this.paddleWidth = 30;
-    this.paddleHeight = 800;
+    this.paddleHeight = 100;
     this.paddleSpeed = 5;
     this.paddleOneX = 0;
     this.paddleOneY = 0;
@@ -166,9 +166,8 @@ export class ClassicGame extends Game {
   setDone(d: boolean){
     this.done = d;
   }
-  setTimeout(userId: string, v: boolean){
-    const idx = this.players.indexOf(userId);
-    this.timeout[idx] = v;
+  setTimeout(v: number){
+    this.timeout = v;
   }
   getPlayers(): Array<string> {
     return this.players;
@@ -230,6 +229,9 @@ export class ClassicGame extends Game {
       }
 
       this.emitState();
+      if(this.done)
+        this.cleanup()
+
     }, 1000 / fps);
   }
   replacePlayer(oldSock: string, newSock: string){
