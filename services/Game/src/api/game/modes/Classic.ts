@@ -62,6 +62,10 @@ export class Game {
   room: string;
 
   done : boolean;
+  timeout : number; // for no timeout // time player left game 
+  timeoutPeriodInSeconds : number; // for no timeout // time player left game 
+
+  winner : string | undefined;
 }
 
 interface GameState {
@@ -95,6 +99,9 @@ interface GameState {
   timestamp: number;
 
   done: boolean;
+
+  winner : string;
+
 }
 
 export class ClassicGame extends Game {
@@ -117,7 +124,7 @@ export class ClassicGame extends Game {
     this.ballDirY = -1;
 
     this.paddleWidth = 30;
-    this.paddleHeight = 100;
+    this.paddleHeight = 800;
     this.paddleSpeed = 5;
     this.paddleOneX = 0;
     this.paddleOneY = 0;
@@ -132,6 +139,10 @@ export class ClassicGame extends Game {
     this.room = '';
 
     this.done = false;
+    this.timeout = 0;
+    this.timeoutPeriodInSeconds = 5; 
+
+    this.winner = "";
     //this.run();
   }
   init() {
@@ -154,6 +165,10 @@ export class ClassicGame extends Game {
   }
   setDone(d: boolean){
     this.done = d;
+  }
+  setTimeout(userId: string, v: boolean){
+    const idx = this.players.indexOf(userId);
+    this.timeout[idx] = v;
   }
   getPlayers(): Array<string> {
     return this.players;
@@ -199,6 +214,7 @@ export class ClassicGame extends Game {
       timestamp: Date.now(),
 
       done: this.done,
+      winner : this.winner,
     };
   }
   async emitState() {

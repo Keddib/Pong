@@ -59,6 +59,9 @@ interface GameState {
   timestamp: number;
 
   done: boolean;
+
+  winner : string ;
+
 }
 
 const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
@@ -257,8 +260,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
 
     if (getGameStateData().state === 4) {
       const scores = getGameStateData().scores;
-      let winner = getGameStateData().players[scores[0] > scores[1] ? 0 : 1]
-      winner = scores[0] == scores[1] ? "Tie": winner;
+      let winner =  getGameStateData().players[scores[0] > scores[1] ? 0 : 1]
+      winner = getGameStateData().winner !== "" ? getGameStateData().winner : (scores[0] == scores[1] ? "Tie": winner);
       p5.fill(0xffffff);
       p5.textSize(40);
       if (scores[0] < getGameStateData().maxScore && scores[1] < getGameStateData().maxScore && !getGameStateData().done)

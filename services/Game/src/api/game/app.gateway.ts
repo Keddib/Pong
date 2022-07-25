@@ -80,10 +80,20 @@ export class AppGateway
         console.log("user "+user.username+" has a game" ,g.state, g.players);
         client.join(this.games[this.userIdToGameIdx.get(user.ftId)].room);
 
-        this.games[this.userIdToGameIdx.get(user.ftId)].setState(3);
+
+        const opponent : string = g.players[(g.players.indexOf(user.ftId) + 1) % 2];
+        console.log("oponnent", opponent, this.socketToUserId.get(opponent))
+
+        if (this.userIdToTimeout.has(this.socketToUserId.get(opponent)))
+        {
+          console.log("user "+user.username+" disconnected and reconnected found oponnent disconnected" ,g.state, g.players);
+          this.games[this.userIdToGameIdx.get(user.ftId)].setState(4);
+        }
+        else
+        {
+          this.games[this.userIdToGameIdx.get(user.ftId)].setState(3);
+        }
         this.games[this.userIdToGameIdx.get(user.ftId)].init();
-
-
       }
     }
     this.socketToUserId.delete(oldSock);
@@ -125,28 +135,36 @@ export class AppGateway
         const g : ClassicGame = this.games[this.userIdToGameIdx.get(userId)];
         console.log("user has a game", g.state, g.players);
 
-        const timeoutPeriod = 5000;
+        this.games[this.userIdToGameIdx.get(userId)].setState(4);
+
+        const timeoutPeriod = g.timeoutPeriodInSeconds * 1e3;
         this.userIdToTimeout.set(userId,setTimeout(()=>{
           let p = this.games[this.userIdToGameIdx.get(userId)].players;
 
+          this.games[this.userIdToGameIdx.get(userId)].winner = p[(p.indexOf(client.id) + 1) % 2];
+          console.log("winner is", p[(p.indexOf(client.id) + 1) % 2], p.indexOf(client.id))
+
           this.games[this.userIdToGameIdx.get(userId)].setState(4);
           this.games[this.userIdToGameIdx.get(userId)].players = ["-1","-1"]; //.push('-1');
-          this.games[this.userIdToGameIdx.get(userId)].setDone(true)
+          this.games[this.userIdToGameIdx.get(userId)].setDone(true);
           this.userIdToGameIdx.delete(this.socketToUserId.get(p[0]));
           this.userIdToGameIdx.delete(this.socketToUserId.get(p[1]));
 
           this.socketToUserId.delete(client.id);
-
+          // this.games[this.userIdToGameIdx.get(userId)].setTimeout(userId, false);
           console.log("timeout reached")
-        },timeoutPeriod))
+        }, timeoutPeriod))
         //this.userIdToGameIdx.delete(userId);
       }
       
     }
-    // if (this.authenticatedSockets.length === 0) {
-    //   this.userIdToGameIdx.clear();
-    //   this.games.splice(0, this.games.length);
-    // } 
+ 
+    if (this.userIdToGameIdx.size === 0) {
+      this.userIdToGameIdx.clear();
+      this.games.splice(0, this.games.length);
+      this.userIdToTimeout.clear();
+      this.socketToUserId.clear();
+    } 
   }
 
   @SubscribeMessage('playerJoined')
