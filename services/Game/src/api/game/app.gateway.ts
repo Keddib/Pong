@@ -99,6 +99,7 @@ export class AppGateway
         }
         else
         {
+          this.games[this.userIdToGameIdx.get(user.ftId)].setTimeout(0);
           this.games[this.userIdToGameIdx.get(user.ftId)].setState(3);
           this.games[this.userIdToGameIdx.get(user.ftId)].init();
         }
@@ -142,6 +143,8 @@ export class AppGateway
 
         this.games[this.userIdToGameIdx.get(userId)].setState(4);
 
+        //setting timeout
+        this.games[this.userIdToGameIdx.get(userId)].setTimeout(Date.now())
         const timeoutPeriod = g.timeoutPeriodInSeconds * 1e3;
         this.userIdToTimeout.set(userId,setTimeout(()=>{
           if (!this.userIdToGameIdx.has(userId)) {

@@ -60,7 +60,10 @@ interface GameState {
 
   done: boolean;
 
-  winner : string ;
+  winner : string;
+
+  timeout : number; // 0 for no timeout // time player left game 
+  timeoutPeriodInSeconds : number; 
 
 }
 
@@ -266,8 +269,9 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
       p5.textSize(40);
       if (scores[0] < getGameStateData().maxScore && scores[1] < getGameStateData().maxScore && !getGameStateData().done)
       {
+        const countdownTillVictory = getGameStateData().timeoutPeriodInSeconds - Math.ceil((Date.now()-getGameStateData().timeout)/1000) + 1
         p5.text(
-          "A player disconnected",
+          "Opponenent disconnected, You win in " + countdownTillVictory,
           50,
           getGameStateData().height / 2
         );

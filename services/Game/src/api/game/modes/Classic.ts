@@ -63,7 +63,7 @@ export class Game {
 
   done : boolean;
   timeout : number; // for no timeout // time player left game 
-  timeoutPeriodInSeconds : number; // for no timeout // time player left game 
+  timeoutPeriodInSeconds : number; 
 
   winner : string | undefined;
 }
@@ -101,6 +101,9 @@ interface GameState {
   done: boolean;
 
   winner : string;
+
+  timeout : number; // 0 for no timeout // time player left game 
+  timeoutPeriodInSeconds : number; 
 
 }
 
@@ -214,6 +217,9 @@ export class ClassicGame extends Game {
 
       done: this.done,
       winner : this.winner,
+
+      timeout: this.timeout,
+      timeoutPeriodInSeconds: this.timeoutPeriodInSeconds,
     };
   }
   async emitState() {
