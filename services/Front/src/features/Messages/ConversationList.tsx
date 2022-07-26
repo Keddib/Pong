@@ -16,7 +16,7 @@ var user1 = {
   Level: 11,
 };
 
-const Conversation = () => {
+const ConversationLink = () => {
   return (
     <Link to="12893">
       <ElementBar className="" line="">
@@ -35,10 +35,10 @@ export default function ConversationList() {
   return (
     <ul className="flex flex-col gap-1">
       <li>
-        <Conversation />
+        <ConversationLink />
       </li>
       <li>
-        <Conversation />
+        <ConversationLink />
       </li>
     </ul>
   );
