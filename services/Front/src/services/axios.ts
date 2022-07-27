@@ -1,11 +1,9 @@
 import axios from "axios";
-import {api } from "config/index";
-
+import { api } from "config/index";
 
 const axiosUsers = axios.create({
   baseURL: api.users,
 });
-
 
 import { User } from "types/user";
 
@@ -23,7 +21,7 @@ const authenticateUser = async (
   setError: (message: string) => void
 ) => {
   try {
-    const res = await axiosUsers.get<User>("/auth", {
+    const res = await axiosUsers.get<User>("/auth/intra", {
       headers: { "Content-Type": "application/json" },
       params: { code: code },
       withCredentials: true,
@@ -45,7 +43,7 @@ const authenticateUser = async (
 
 async function checkUserSession(): Promise<User | null> {
   try {
-    const res = await axiosUsers.get<User>("/status", {
+    const res = await axiosUsers.get<User>("/auth/isLogged", {
       withCredentials: true,
     });
     return res.data;
@@ -55,5 +53,12 @@ async function checkUserSession(): Promise<User | null> {
   return null;
 }
 
+async function endSession() {
+  try {
+    await axiosUsers("/auth/logout", { withCredentials: true });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-export { axiosUsers, updateUser, authenticateUser, checkUserSession };
+export { updateUser, authenticateUser, checkUserSession, endSession };

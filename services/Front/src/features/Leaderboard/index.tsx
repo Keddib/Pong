@@ -1,6 +1,6 @@
 import Prize from "assets/images/prize.png";
-import UserCard from "components/UserCard";
 import Award from "assets/icons/award.svg";
+import UserCard from "components/Usercard";
 import ElementBar from "components/ElementBar";
 import Logo from "components/Logo";
 import useMedia from "hooks/useMedia";

@@ -1,12 +1,9 @@
 // get all end points needed from envirement variables
-import dotenv from "dotenv";
 import { MediaQuery } from "types/config";
-
-dotenv.config();
 
 const api = {
   auth42: process.env.AUTH42REDIRECT,
-  users: process.env.USERS
+  users: process.env.USERS,
 };
 
 interface MediaQueries {

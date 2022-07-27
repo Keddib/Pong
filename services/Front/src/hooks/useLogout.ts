@@ -1,4 +1,4 @@
-import { axiosUsers } from "services/axios";
+import { axiosUsers, endSession } from "services/axios";
 import useAuth from "./useAuth";
 
 function useLogout() {
@@ -6,7 +6,7 @@ function useLogout() {
 
   async function logout() {
     try {
-      await axiosUsers("/users/logout", { withCredentials: true });
+      await endSession();
       signout();
     } catch (error) {
       console.log(error);

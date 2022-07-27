@@ -7,12 +7,10 @@ import AuthRedirection from "./components/AuthRedirectionPage";
 import Loading from "components/Loading";
 import Error404 from "components/Error404";
 import UserSession from "./components/UserSession";
-import Dashboard from "~/src/pages/dashboard";
 
 const Welcome = lazy(() => import("pages/welcome"));
 const Login = lazy(() => import("pages/login"));
-// const Dashboard = lazy(() => import("./Dashboard"));
-// const Section = lazy(() => import("./Dashboard/Section"));
+const Dashboard = lazy(() => import("pages/dashboard"));
 
 const App = () => {
   return (
@@ -32,9 +30,9 @@ const App = () => {
                 <Route
                   path="/*"
                   element={
-                    // <RequireAuth>
-                    <Dashboard />
-                    // </RequireAuth>
+                    <RequireAuth>
+                      <Dashboard />
+                    </RequireAuth>
                   }
                 />
               </Route>

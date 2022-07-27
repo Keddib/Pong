@@ -7,10 +7,10 @@ type Props = {
 };
 
 const RequireAuth: FunctionComponent<Props> = ({ children }) => {
-  const { isUserAuth } = useAuth();
+  const auth = useAuth();
   const location = useLocation();
 
-  if (isUserAuth()) {
+  if (auth.isUserAuth()) {
     return children;
   }
   // if user comming to root '/' and not login redirect them to /welcome page

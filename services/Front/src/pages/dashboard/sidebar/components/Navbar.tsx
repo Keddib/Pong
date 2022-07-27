@@ -8,16 +8,14 @@ import ProfileIcon from "assets/icons/user-astronaut.svg";
 import Logout from "assets/icons/logout.svg";
 import IconLink from "components/Iconlink";
 import { FunctionComponent } from "react";
+import useLogout from "~/src/hooks/useLogout";
 
 type Props = {
   showNav: () => void;
 };
 
 const Navbar: FunctionComponent<Props> = (props) => {
-  const logout = () => {
-    console.log("logout clicked");
-    // show drop down for logout confirmation
-  };
+  const logout = useLogout();
 
   return (
     <nav className="show-nav">
