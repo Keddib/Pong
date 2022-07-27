@@ -43,6 +43,12 @@ export class AppController {
     return {status: 'logged in'}
   }
 
+  @Get('auth/logout')
+  @UseGuards(JwtAuthGuard)
+  logout(@Response({ passthrough: true }) res) {
+  
+    res.cookie('auth-jwt', {expires: Date.now()}, {httpOnly: true});
+  }
 
   @Post('auth/signup')
   signUpLocal(@Body() payload: JSON) {

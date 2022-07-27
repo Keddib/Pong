@@ -18,6 +18,11 @@ export class AuthService {
 
     }
 
+    async destroyToken() {
+    
+        
+    }
+
     async verify(authToken: string) {
     
         return await  this.jwtService.verify(authToken, {secret: this.configService.get<string>('JWT_SECRET')});
@@ -34,6 +39,8 @@ export class AuthService {
         }
         return null;
     }
+
+
 
     async ValidatePayload(payload: any) : Promise< User| null>{
     
