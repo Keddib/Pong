@@ -15,12 +15,12 @@ import { ChatModule } from './chat/chat.module';
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-    type: "postgres",
-    host: "db",
-    port: 5432,
-    username: "db_admin",
-    password: "db_pass",
-    database: "endpoint",
+    type: "sqlite",
+    // host: "db",
+    // port: 5432,
+    // username: "db_admin",
+    // password: "db_pass",
+    database: "pong.sqlite",
     logging: true,
     subscribers: [],
     migrations: [],

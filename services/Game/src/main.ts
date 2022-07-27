@@ -15,7 +15,7 @@ async function bootstrap() {
       new FastifyAdapter(),
       {
         cors: {
-          origin: 'http://localhost',
+          origin: ['http://localhost','http://localhost:8000'],
           credentials: true,
         },
       },

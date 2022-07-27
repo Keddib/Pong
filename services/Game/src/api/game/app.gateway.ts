@@ -24,7 +24,7 @@ interface AuthenticatedSocket extends Socket {
   pingTimeout: 7000,
   pingInterval: 1000,
   cors: {
-    origin: 'http://localhost',
+    origin: ['http://localhost', 'http://localhost:8000'],
     credentials: true,
   },
 })

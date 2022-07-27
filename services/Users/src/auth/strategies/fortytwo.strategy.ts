@@ -18,10 +18,10 @@ export class fortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     // const callbackURL = config.get<string>('callbackURL');
     super({
       clientID:
-        'dac506e7095f7f042e1e9de45db80a9706974bbc636c35a367dd88b2bfdcebbb',
+        'a57b6c08b2acdbe87240256738b7e23fc9e049afd718f6730f5d2642c246d1c3',
       clientSecret:
-        '63b7afc9ee41a50a5ae846692c5c412f58e3970e12e3dd57efb707d9a338f403',
-      callbackURL: 'http://localhost/auth42/',
+        '4d32bb5563dba87ab21742bb50ed5c10e3b82fab31f842ccd57bf0ba79532b41',
+      callbackURL: 'http://localhost:8000/auth42',
     });
   }
 

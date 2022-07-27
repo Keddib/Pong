@@ -14,11 +14,11 @@ export class User {
     @Column({nullable: true})
     avatar: string;
 
-    @Column({
-        type: 'bytea',
-        nullable: true
-    })
-    picture: Uint8Array;
+    // @Column({
+    //     //type: 'bytes',
+    //     nullable: true
+    // })
+    // picture: Uint8Array;
 
     @Column({ unique: true })
     login: string;
