@@ -30,9 +30,9 @@ const App = () => {
                 <Route
                   path="/*"
                   element={
-                    <RequireAuth>
-                      <Dashboard />
-                    </RequireAuth>
+                    // <RequireAuth>
+                    <Dashboard />
+                    // </RequireAuth>
                   }
                 />
               </Route>

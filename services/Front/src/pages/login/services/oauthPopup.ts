@@ -5,6 +5,7 @@ import { api } from "config/index";
 // redirected to our redirection callback that's it;
 
 export default function oauthPopup(callback: (message: string) => void): void {
+  console.log("auth url", api.auth42);
   const childPopup = window.open(api.auth42, "_blank", "height=800,width=600");
 
   if (!childPopup) {

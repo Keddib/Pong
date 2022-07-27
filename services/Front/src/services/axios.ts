@@ -48,7 +48,11 @@ async function checkUserSession(): Promise<User | null> {
     });
     return res.data;
   } catch (error) {
-    console.log(error);
+    if (axios.isAxiosError(error)) {
+      console.log(error.response?.status);
+    } else {
+      console.log(error);
+    }
   }
   return null;
 }
@@ -57,7 +61,11 @@ async function endSession() {
   try {
     await axiosUsers("/auth/logout", { withCredentials: true });
   } catch (error) {
-    console.log(error);
+    if (axios.isAxiosError(error)) {
+      console.log(error.response?.status);
+    } else {
+      console.log(error);
+    }
   }
 }
 
