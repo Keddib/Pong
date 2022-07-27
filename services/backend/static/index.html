@@ -7,11 +7,11 @@
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <div id="v-app">
-        <h1>  {{ chatRoomId }} </h1>
+        <h1>  You are Seeing Messages From ChatRoom : {{ joinedRoom ? joinedRoom : " No haven't Joined a Room yet " }} </h1>
         <form>
 
             <input v-model="text" type="text" />
@@ -28,8 +28,9 @@
 
             <input v-model="ChatRoomName" type="text"/>
             <button type="submit" @click.prevent="joinChatRoom()">Join Room</button>
+            <button type="submit" @click.prevent="leaveChatRoom()">Leave Current Room</button>
         </form>
-
+        
         <p>
 
             <h3> Available Rooms To Join </h3>
@@ -69,10 +70,13 @@
 
                 sendMessage() {
                     // this.messages.push(this.text);
+
                     console.log(`send message to room ${this.joinedRoom} from ${this.Rooms}`);
                     if (this.joinedRoom) {
                         this.socket.emit('msgToServer', {"room": this.joinedRoom, "message": this.text});
                         this.text = "";
+                    } else {
+                        alert('join room first');
                     }
                 },
                 receiveMessage(msg) {
@@ -94,6 +98,11 @@
                     // this.socket.join(this.ChatRoomName);
                     this.ChatRoomName = "";
                 },
+                leaveChatRoom() {
+                
+                    this.socket.emit('leaveRoomToServer', this.joinedRoom);
+                    this.joinedRoom = '';
+                },
                 Roomjoined(room) {
                     console.log(`joined room succesfully : ${this.joinedRoom}`);
                 }
@@ -110,6 +119,11 @@
                         this.receiveMessage(msg);
                 })
                 this.socket.on('RoomCreated', (room) => {
+
+            
+                    // const a = this.socket.emit('findAllRooms');
+                    // console.log(a);
+                    
                     this.RoomCreated(room);
                 });
                 this.socket.on('joinRoomToClient', (room) => {

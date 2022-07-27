@@ -1,91 +1,104 @@
-import { Injectable, UnauthorizedException, Response ,Request, Query } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
-import { User } from 'src/entities/user.entity';
-import  axios from 'axios';
-import { CreateUserDto } from 'src/dtos/user.dto';
-import { ChatRoom } from 'src/entities/chatRoom.entity';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from 'src/dtos/user.dto';
+import axios from 'axios';
+import { User } from 'src/entities/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
 
-    constructor( private userService: UserService) {
-    
+    constructor(
+        private jwtService: JwtService,
+        private userService: UserService,
+        private readonly configService: ConfigService,
+        ) {
+
     }
 
-    async validateUser(username: string, password: string) : Promise<User> {
+    async verify(authToken: string) {
+    
+        return await  this.jwtService.verify(authToken, {secret: this.configService.get<string>('JWT_SECRET')});
+    }
+
+    async ValidateUser(username: string, password: string) : Promise<any>  {
     
         const user = await this.userService.findByUsername(username);
 
         const isMatch = await bcrypt.compare(password, user.password);
-        //  check if password matchs with bcrypt
-        if (!user || !isMatch) {
-          throw new UnauthorizedException();
+        if ( user && isMatch) {
+            const { password, ...result } = user;
+            return result;
         }
-        return user;
+        return null;
     }
 
+    async ValidatePayload(payload: any) : Promise< User| null>{
+    
+        const user : User = await this.userService.findByUsername(payload['username']);
+        if (user && user.uid === payload['sub'])
+            return user;
+        return null;
+    }
 
-    async returnUser(code : string) : Promise<User | undefined> {
+    async returnUser(code : string) : Promise<string | undefined> {
    
-      const authToken = await axios({
+
+        console.log(this.configService.get<string>('clientID'),
+            this.configService.get<string>('clientSecret'),
+            this.configService.get<string>('callbackURL')
+        );
+
+        const authToken = await axios({
+        
+          url: "https://api.intra.42.fr/oauth/token",
+          method: "POST",
+          data: {
+            grant_type: "authorization_code",
+            client_id: this.configService.get<string>('clientID'),
+            client_secret: this.configService.get<string>('clientSecret'),
+            code,
+            redirect_uri: this.configService.get<string>('callbackURL'),
+          }
+  
+        });
       
-        url: "https://api.intra.42.fr/oauth/token",
-        method: "POST",
-        data: {
-          grant_type: "authorization_code",
-          client_id: "701e6934d4fe51b1cb9441ec66efe6749314ca61646406288bc4f058d5a9ec05",
-          client_secret: "1a6c63ae00df1990b58af86bf2a7c89249424ca8d86691fd0b3a28b027feda02",
-          code,
-          redirect_uri: "http://localhost/auth42",
+        console.log('extracting authToken');
+        const token =  authToken.data["access_token"];
+        // console.log(token);
+        console.log(token);
+        const userData = await axios({
+          url: "https://api.intra.42.fr/v2/me",
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        })
+  
+        const user = await this.userService.findByUsername(userData.data.login);
+        if ( user ) {
+            return this.login(user);
         }
+        return null;
+      }
 
-      });
+    async login(user: any) : Promise<any> {
+
+        const payload = { username: user.login, sub: user.uid };
+        console.log(payload);
+        return {
+            access_token: this.jwtService.sign(payload),
+        }
+    }
+
+    async signUp(createUserDto: CreateUserDto) {
     
-      console.log('extracting authToken');
-      const token =  authToken.data["access_token"];
-      // console.log(token);
-      console.log(token);
-      const userData = await axios({
-        url: "https://api.intra.42.fr/v2/me",
-        method: "GET",
-        headers: {
-          "Authorization": "Bearer " + token
-        }
-      })
-
-      const user = await this.userService.findByUsername(userData.data.login);
-      if ( user )
-        return user;
-
-      return null;
+        return this.userService.create(createUserDto);
     }
-
-    async validateIntraUser(username: string, password: string) : Promise<User> {
-
-        const user = await this.userService.findByUsername(username);
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        //  check if password matchs with bcrypt
-        if (!user || !isMatch) {
-          throw new UnauthorizedException();
-        }
-        return user;
-    }
-
-    async login(@Request() req) {
-
-        //  create session
-        return " Logged in ";
-    }
-
-
- 
-    async logout(@Request() req, @Response() res) {
+    async signUpLocal(username: string, password: string) {
     
-      req.session.destroy();
-      res.clearCookie('connect.sid');
-      req.logout(()=>{});
-      res.send("Logged out");
+        return this.userService.createLocal(username, password);
     }
 }

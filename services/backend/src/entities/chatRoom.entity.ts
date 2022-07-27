@@ -20,6 +20,6 @@ export class ChatRoom {
     @Column()
     createdAt: Date;
 
-    @Column()
+    @Column({})
     name: string;
 }

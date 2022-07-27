@@ -31,7 +31,7 @@ export class ChatService {
 
   async createRoom(createChatRoom : createChatRoomDto) : Promise<createChatRoomDto> {
 
-    await this.chatRoomRepo.create(createChatRoom);
+    this.chatRoomRepo.create(createChatRoom);
     return this.chatRoomRepo.save(createChatRoom);
   }
  
@@ -48,6 +48,11 @@ export class ChatService {
     return await this.chatMessageRepo.find();
     // return `This action returns all chat`;
   
+  }
+
+  async findAllRooms() {
+    console.log( await this.chatRoomRepo.find());
+    return await this.chatRoomRepo.find();
   }
 
   async findRoomByName(name: string) : Promise<ChatRoom> {
