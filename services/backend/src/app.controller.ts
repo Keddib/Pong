@@ -1,6 +1,7 @@
 import { Controller, Post, UseGuards, Request, Response, Body, Get, Query } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { fortyTwoGuard } from './auth/guards/fortytwo.guard';
+import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { LocalGuard } from './auth/guards/local.guard';
 
 @Controller('')
@@ -8,6 +9,13 @@ export class AppController {
 
   constructor(private readonly authService: AuthService) {
 
+  }
+
+  @Get('auth/isLogged')
+  @UseGuards(JwtAuthGuard)
+  isLogged(@Request() req) {
+  
+    return req.user;
   }
 
   @Get('auth42')

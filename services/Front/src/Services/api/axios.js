@@ -28,13 +28,14 @@ export const authAPI = async (code, setError) => {
     //   }
     // );
     console.log("checking auth status")
-    const response = await axiosAuth.get("http://localhost:3500/auth",
+    const response = await axiosAuth.get("http://localhost:3500/auth42",
     {
       headers: { 'Content-Type': 'application/json' },
       params: { 'code': code },
       withCredentials: true
     }
   );
+  console.log('cookei is ', response.cookie);
     return [response?.data, response?.status];
 
   } catch (err) {
