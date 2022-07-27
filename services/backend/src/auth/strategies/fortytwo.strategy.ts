@@ -1,16 +1,17 @@
-import { Injectable } from "@nestjs/common";
+import { Controller, Get, Injectable, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { PassportStrategy } from "@nestjs/passport";
+import { AuthGuard, PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-42";
 import { CreateUserDto } from "src/dtos/user.dto";
 import { User } from "src/entities/user.entity";
 import { AuthService } from "../auth.service";
 import * as bcrypt from 'bcrypt';
+import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class fortyTwoStrat extends PassportStrategy(Strategy, '42') {
 
-    constructor(private readonly authService: AuthService, private readonly configService: ConfigService) {
+    constructor(private readonly userService: UserService, private readonly configService: ConfigService) {
 
         super({
             clientID: configService.get<string>('clientID'),
@@ -35,7 +36,9 @@ export class fortyTwoStrat extends PassportStrategy(Strategy, '42') {
         const saltOrRounds = 10;
         const hash = await bcrypt.hash("defaultpass", saltOrRounds);
         user.password = hash;
-
+        console.log(user);
         return cb(null, await this.userService.create(user));
     }
+
+
 }

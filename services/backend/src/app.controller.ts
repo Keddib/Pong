@@ -25,8 +25,7 @@ export class AppController {
     console.log(code);
     if (code) {
       const payload = await this.authService.returnUser(code);
-      console.log(payload);
-      console.log(payload['access_token'])
+  
       res.cookie('auth-jwt', payload['access_token'], {httpOnly: true});
       return {status: 'logged in'}
     }
@@ -53,13 +52,15 @@ export class AppController {
   @Post('auth/signup')
   signUpLocal(@Body() payload: JSON) {
   
+
+    console.log(payload)
     this.authService.signUpLocal(payload['username'], payload['password']);
   }
 
   @Get('auth/42')
   @UseGuards(fortyTwoGuard)
-  signUp() {
-  
+  signUp(@Request() req) {
+    return req.user;
   }
 
 }

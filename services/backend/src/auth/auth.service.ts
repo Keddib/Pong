@@ -6,6 +6,7 @@ import { CreateUserDto } from 'src/dtos/user.dto';
 import axios from 'axios';
 import { User } from 'src/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
+import { ChatRoom } from 'src/entities/chatRoom.entity';
 
 @Injectable()
 export class AuthService {
@@ -53,11 +54,6 @@ export class AuthService {
     async returnUser(code : string) : Promise<string | undefined> {
    
 
-        console.log(this.configService.get<string>('clientID'),
-            this.configService.get<string>('clientSecret'),
-            this.configService.get<string>('callbackURL')
-        );
-
         const authToken = await axios({
         
           url: "https://api.intra.42.fr/oauth/token",
@@ -84,10 +80,26 @@ export class AuthService {
           }
         })
   
-        const user = await this.userService.findByUsername(userData.data.login);
+        let user = await this.userService.findByUsername(userData.data.login);
         if ( user ) {
             return this.login(user);
         }
+        else {
+            const user = new CreateUserDto;
+
+            user.email = userData.data.email;
+            user.displayedName = userData.data.login;
+            user.avatar = userData.data.image_url;
+            user.login = userData.data.login;
+      
+            const chatRoom = new ChatRoom;
+            user.chatRooms =  [chatRoom];
+            user.password = 'defaultpassword';
+            this.userService.create(user);
+            return this.login(user);
+        }
+  
+        // return this.login(user);
         return null;
       }
 

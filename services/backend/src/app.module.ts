@@ -8,6 +8,8 @@ import { User } from './entities/user.entity';
 import { UserModule } from './user/user.module';
 import { ChatModule } from './chat/chat.module';
 import { AuthModule } from './auth/auth.module';
+import { fortyTwoStrat } from './auth/strategies/fortytwo.strategy';
+import { JwtStart } from './auth/strategies/jwt.strategy';
 
 
 
@@ -34,6 +36,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule
     ],
   controllers: [AppController],
-  providers: [],
+  providers: [fortyTwoStrat, JwtStart],
 })
 export class AppModule {}

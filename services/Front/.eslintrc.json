@@ -5,15 +5,28 @@
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    // "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier"
   ],
   "rules": {
     "react/prop-types": 0,
-    "react/react-in-jsx-scope": 0
+    "react/react-in-jsx-scope": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "prefer-const": 0,
+    "no-var": 0
   },
-  "plugins": ["react", "import", "jsx-a11y"],
+  "plugins": [
+    "react",
+    "import",
+    "jsx-a11y",
+    "react-hooks",
+    "@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2022,
+    "project": ["./tsconfig.json"],
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
@@ -28,6 +41,14 @@
     "react": {
       "version": "detect"
     },
-    "import/resolver": "parcel"
-  }
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
+  "ignorePatterns": ["tailwind.config.js"]
 }

@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from '../dtos/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { User } from 'src/entities/user.entity';
 
 
 
@@ -19,6 +20,8 @@ export class UserController {
     console.log('wtf', req.user);
     return this.userService.findAll();
   }
+
+  
 
   @Get(':id')
   findOne(@Param('id') id: string) {

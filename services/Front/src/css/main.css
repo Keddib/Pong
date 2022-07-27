@@ -1,8 +1,8 @@
 @import "tailwindcss/base";
-@import "./_base.css";
+@import "./base.css";
 
 @import "tailwindcss/components";
-@import "./_global.css";
+@import "./global.css";
 @import "./login.css";
 @import "./dashboard.css";
 /* custom components here */

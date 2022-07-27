@@ -15,7 +15,9 @@ services:
       - '80:8000' # expose ports - HOST:CONTAINER
     volumes:
       - ./$SERVICES/Front:/usr/src/app
-
+    environment:
+      USERS: $USERS_API
+      AUTH42REDIRECT: $AUTH42REDIRECT
   game:
     build:
       context: ./$SERVICES/Game/
