@@ -1,7 +1,7 @@
 import useAuth from "hooks/useAuth";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import {checkUserSession} from "services/axios";
+import { checkUserSession } from "services/axios";
 import Loading from "components/Loading";
 
 const UserSession = () => {
@@ -11,21 +11,16 @@ const UserSession = () => {
   useEffect(() => {
     // check user session
     const verifyUserSession = async () => {
-      try {
-        const user = await checkUserSession();
-        if (user) {
-          signin(user);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
+      const user = await checkUserSession();
+      if (user) {
+        signin(user);
       }
+      setIsLoading(false);
     };
     isUserAuth() ? setIsLoading(false) : verifyUserSession();
   }, []);
 
-  return <>{isLoading ? <Loading/> : <Outlet />}</>;
+  return <>{isLoading ? <Loading /> : <Outlet />}</>;
 };
 
 export default UserSession;

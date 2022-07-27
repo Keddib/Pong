@@ -1,16 +1,12 @@
-import { axiosUsers, endSession } from "services/axios";
+import { endSession } from "services/axios";
 import useAuth from "./useAuth";
 
 function useLogout() {
   const { signout } = useAuth();
 
   async function logout() {
-    try {
-      await endSession();
-      signout();
-    } catch (error) {
-      console.log(error);
-    }
+    await endSession();
+    signout();
   }
 
   return logout;

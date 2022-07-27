@@ -2,7 +2,6 @@ import { FunctionComponent, useState } from "react";
 import AuthContext from "src/context/authentication";
 import { User } from "types/user";
 import { Context } from "types/context";
-import useLogout from "~/src/hooks/useLogout";
 
 type Props = {
   children: JSX.Element | JSX.Element[];
