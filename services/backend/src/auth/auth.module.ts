@@ -24,7 +24,8 @@ import { fortyTwoStrat } from './strategies/fortytwo.strategy';
     }),
     UserModule
   ],
-  providers: [AuthService, LocalStrat, JwtStart, fortyTwoStrat],
+  controllers:[fortyTwoStrat],
+  providers: [AuthService, LocalStrat, JwtStart],
   exports: [AuthService]
 })
 export class AuthModule {}

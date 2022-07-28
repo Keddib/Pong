@@ -18,20 +18,20 @@ export class AppController {
     return req.user;
   }
 
-  @Get('auth42')
-  async LoginfortyTwo(@Query() code, @Response({ passthrough: true}) res) : Promise<any>{
+  @Get('auth')
+  @UseGuards(fortyTwoGuard)
+  async LoginfortyTwo(@Request() req, @Response({ passthrough: true}) res) : Promise<any>{
   
-    code = code['code'];
-    console.log(code);
-    if (code) {
-      const payload = await this.authService.returnUser(code);
+    console.log(req.user);
+    if (req.user) {
+      const payload = this.login(req, res);
   
       res.cookie('auth-jwt', payload['access_token'], {httpOnly: true});
       return {status: 'logged in'}
-    }
+    } 
     return undefined;
   }
-
+ 
   @Post('auth/login')
   @UseGuards(LocalGuard)
   async login(@Request() req, @Response({ passthrough: true }) res) { 

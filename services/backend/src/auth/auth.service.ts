@@ -84,20 +84,20 @@ export class AuthService {
         if ( user ) {
             return this.login(user);
         }
-        else {
-            const user = new CreateUserDto;
+        // else {
+        //     const user = new CreateUserDto;
 
-            user.email = userData.data.email;
-            user.displayedName = userData.data.login;
-            user.avatar = userData.data.image_url;
-            user.login = userData.data.login;
+        //     user.email = userData.data.email;
+        //     user.displayedName = userData.data.login;
+        //     user.avatar = userData.data.image_url;
+        //     user.login = userData.data.login;
       
-            const chatRoom = new ChatRoom;
-            user.chatRooms =  [chatRoom];
-            user.password = 'defaultpassword';
-            this.userService.create(user);
-            return this.login(user);
-        }
+        //     const chatRoom = new ChatRoom;
+        //     user.chatRooms =  [chatRoom];
+        //     user.password = 'defaultpassword';
+        //     this.userService.create(user);
+        //     return this.login(user);
+        // }
   
         // return this.login(user);
         return null;

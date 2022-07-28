@@ -35,7 +35,7 @@ import { JwtStart } from './auth/strategies/jwt.strategy';
     ChatModule,
     AuthModule
     ],
-  controllers: [AppController],
-  providers: [fortyTwoStrat, JwtStart],
+  controllers: [fortyTwoStrat, AppController],
+  providers: [JwtStart],
 })
 export class AppModule {}

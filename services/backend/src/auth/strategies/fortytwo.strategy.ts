@@ -8,8 +8,8 @@ import { AuthService } from "../auth.service";
 import * as bcrypt from 'bcrypt';
 import { UserService } from "src/user/user.service";
 
-@Injectable()
-export class fortyTwoStrat extends PassportStrategy(Strategy, '42') {
+@Controller()
+export class fortyTwoStrat extends PassportStrategy(Strategy) {
 
     constructor(private readonly userService: UserService, private readonly configService: ConfigService) {
 
@@ -22,6 +22,10 @@ export class fortyTwoStrat extends PassportStrategy(Strategy, '42') {
 
     async validate(access_token: string, refreshToken: string, profile: any, cb: any) {
     
+        // Find Or create 
+
+        console.log('Calling validate Function throught 42 Contoller')
+
         if (!profile)
             return null;
         let userFound: User;

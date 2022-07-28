@@ -6,7 +6,7 @@ import { api } from "config/index";
 
 export default function oauthPopup(callback: (message: string) => void): void {
   console.log("auth url", api.auth42);
-  const childPopup = window.open('http://localhost:3500/auth/42', "_blank", "height=800,width=600");
+  const childPopup = window.open(api.auth42, "_blank", "height=800,width=600");
 
   if (!childPopup) {
     callback("failed to create child window");
