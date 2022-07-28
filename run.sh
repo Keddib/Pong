@@ -52,7 +52,7 @@ if [ ! -d "services/Front" ]; then
 	echo 'cloning users...';
  	git clone https://github.com/Keddib/Pong-Backend.git services/Users;
 	echo 'cloning game..';
- 	git clone https://github.com/YahyaOukharta/nest-ws-pong.git services/Game;
+ 	git clone -b deploy https://github.com/YahyaOukharta/nest-ws-pong.git services/Game;
 fi
 
 # echo "creating database volume";
