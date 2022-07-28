@@ -2,10 +2,19 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 
 export interface User {
-  id: number;
-  ftId: string;
-  avatar: string;
-  username: string;
+  uid: string;
+  displayedName: string;
+  avatar?: string;
+
+  // @Column({
+  //     // type: 'bytea',
+  //     nullable: true
+  // })
+  // picture: Uint8Array;
+  login: string;
+  email: string;
+
+  // ChatRooms: ChatRoom[];
 }
 
 @Injectable()
@@ -15,7 +24,7 @@ export class AuthService {
       const res = await axios.get('http://localhost:3500/auth/isLogged', { // http://users:3500 when docker compose
         headers: { cookie },
       });
-      return { ...res.data, ftId: res.data.uid };
+      return res.data;
     } catch (e) {
       //console.log(e);
       return false;

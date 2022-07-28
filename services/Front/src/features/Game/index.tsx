@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Play from "./components/Playing";
 import Waiting from "./components/Waiting";
 import io from "socket.io-client";
 import { User } from "types/user";
+import { Socket } from "socket.io-client";
 
 type IStatus = "online" | "offline" | "playing" | "spectating";
 
@@ -18,32 +19,39 @@ var user1 = {
   XP: 439,
   Level: 11,
 };
-
+interface LocationState {
+  mode : string
+}
+interface Loc extends Location {
+  state: LocationState
+}
 export default function Game() {
+  const location : Loc = useLocation()
+  console.log("game mode = ",location.state.mode)
   const [player, setPlayer] = useState({} as User);
   const [gameState, setGameState] = useState("waiting");
 
   // const [gameStateData, setGameStateData] = useState({})
   const gameStateData = useRef(0);
-  const socket = useRef(null);
+  const socket: React.MutableRefObject<null | Socket> = useRef(null);
 
   useEffect(() => {
     socket.current = io("ws://localhost:3001", { withCredentials: true }).on(
       "connect",
       () => {
         console.log("socket created", socket.current);
-        socket.current.on("authenticated", () => {
-          socket.current.emit("playerJoined");
+        socket.current?.on("authenticated", () => {
+          socket.current?.emit("playerJoined", {mode : location.state.mode});
         });
-        socket.current.on("gameState", (data) => {
+        socket.current?.on("gameState", (data) => {
           if (gameState == "waiting") setGameState("play");
           gameStateData.current = data;
         });
       }
     );
 
-    return () => socket.current.close();
-  });
+    return () => socket.current?.close();
+  }, []);
 
   const navigate = useNavigate();
 

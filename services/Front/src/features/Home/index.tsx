@@ -7,13 +7,13 @@ export default function Home() {
   return (
     <div className="w-full m-auto">
       <Mode
-        modeName="Test"
+        modeName="Classic"
         className="bg-mode-one mt-8 mb-5"
         player={ModeImg}
       />
       <div className="flex flex-wrap justify-between gap-y-5">
-        <Mode modeName="Test" className="bg-mode-two" player={ModeImg2} />
-        <Mode modeName="Test" className="bg-mode-three" player={ModeImg3} />
+        <Mode modeName="Goalkeeper" className="bg-mode-two" player={ModeImg2} />
+        <Mode modeName="DoublePaddle" className="bg-mode-three" player={ModeImg3} />
       </div>
     </div>
   );
