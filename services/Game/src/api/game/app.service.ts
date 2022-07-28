@@ -12,12 +12,12 @@ export interface User {
 export class AuthService {
   async isAuthenticated(cookie: string): Promise<false | User> {
     try {
-      const res = await axios.get('http://users:3500/auth/isLogged', {
+      const res = await axios.get('http://localhost:3500/auth/isLogged', { // http://users:3500 when docker compose
         headers: { cookie },
       });
       return { ...res.data, ftId: res.data.uid };
     } catch (e) {
-      console.log(e);
+      //console.log(e);
       return false;
     }
   }

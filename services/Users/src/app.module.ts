@@ -15,12 +15,13 @@ import { ChatModule } from './chat/chat.module';
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-    type: "postgres",
-    host: "db",
-    port: 5432,
-    username: "db_admin",
-    password: "db_pass",
-    database: "endpoint",
+    // type: "postgres",
+    // host: "db",
+    // port: 5432,
+    // username: "db_admin",
+    // password: "db_pass",
+    type:'sqlite',
+    database: "db.sqlite",
     logging: true,
     subscribers: [],
     migrations: [],
@@ -29,7 +30,7 @@ import { ChatModule } from './chat/chat.module';
   }),
     UserModule,
     AuthModule,
-    ChatModule
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
