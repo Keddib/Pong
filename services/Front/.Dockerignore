@@ -1,7 +1,0 @@
-src
-./parcel-cache
-dist
-node_modules
-.*
-package*
-tailwind.config.js
