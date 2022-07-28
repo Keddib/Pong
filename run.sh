@@ -18,6 +18,7 @@ then
 		exit 0;
 	elif [[ "$1" == "clear" ]]; then
 		echo "stop services and delete containers ...";
+    docker compose down && docker system prune -a;
 		exit 0;
 	elif [[ "$1" != "up" && "$1" != "build" ]]; then
 		echo "${RED}invalid option${RESET}";
@@ -43,22 +44,26 @@ ${YELLOW}ps : if you are on Imac(school) run inti_docker${RESET}";
 		echo "${BLUE}docker is running${RESET}";
 fi
 
-echo 'cloning repos';
+echo 'checking services ...';
 
-if [ ! -d "Pong" ]; then
-	echo 'cloning front end';
- 	git clone https://github.com/Keddib/example_app.git Front;
+if [ ! -d "services/Front" ]; then
+	echo 'cloning front end...';
+ 	git clone https://github.com/Keddib/Pong-Frontend.git services/Front;
+	echo 'cloning users...';
+ 	git clone https://github.com/Keddib/Pong-Backend.git services/Users;
+	echo 'cloning game..';
+ 	git clone https://github.com/YahyaOukharta/nest-ws-pong.git services/Game;
 fi
 
-echo "creating database volume";
+# echo "creating database volume";
 
-if [ ! -d "/goinfre/$USER/Data" ]; then
-	mkdir /goinfre/$USER/Data/
-fi
+# if [ ! -d "/goinfre/$USER/Data" ]; then
+# 	mkdir /goinfre/$USER/Data/
+# fi
 
 
 if [ "$1" == "up" ]; then
-	docker compose up -d;
+	docker compose up;
 elif [ "$1" == "build" ]; then
 	docker compose up --build
 fi
