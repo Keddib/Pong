@@ -44,7 +44,8 @@ export default function Game() {
           socket.current?.emit("playerJoined", {mode : location.state.mode});
         });
         socket.current?.on("gameState", (data) => {
-          if (gameState == "waiting") setGameState("play");
+
+          if (gameState == "waiting" && location.state.mode.toLowerCase() === data.mode.toLowerCase()) setGameState("play");
           gameStateData.current = data;
         });
       }

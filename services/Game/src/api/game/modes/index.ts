@@ -1,6 +1,8 @@
 import { ClassicGame } from './Classic';
-
-export { ClassicGame };
+import { DoublePaddle } from './DoublePaddle';
+import { GoalKeeper } from './GoalKeeper';
+import { Game } from './Classic';
+export { ClassicGame, DoublePaddle, GoalKeeper, Game};
 
 /**
  * 

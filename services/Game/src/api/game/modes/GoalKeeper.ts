@@ -111,10 +111,10 @@ interface GameState {
 
 }
 
-export class ClassicGame extends Game {
+export class GoalKeeper extends Game {
   constructor(server: Server) {
     super();
-    this.mode = "Classic",
+    this.mode = "GoalKeeper",
 
     this.server = server;
 
@@ -195,7 +195,7 @@ export class ClassicGame extends Game {
   }
   getGameState(): GameState {
     return {
-      mode: "Classic",
+      mode: "GoalKeeper",
       aspectRatio: this.aspectRatio,
 
       width: this.width,

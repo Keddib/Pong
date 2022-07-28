@@ -10,8 +10,8 @@ import { Socket, Server } from 'socket.io';
 import { AuthGuard } from './app.guard';
 import { AuthService, User } from './app.service';
 
-import { ClassicGame } from './modes';
-import { Game } from './modes/Classic';
+import { ClassicGame, DoublePaddle, GoalKeeper } from './modes';
+
 import { assert } from 'console';
 
 interface UserInput {
@@ -53,6 +53,7 @@ export class AppGateway
 
   //game object
   private games: Array<ClassicGame> = Array<ClassicGame>();
+  private gameModeToLatestGameIdx: Map<string, number> = new Map<string, number>();
   private userIdToGameIdx: Map<string, number> = new Map<string, number>();
   private socketToUserId: Map<string, string> = new Map<string, string>();
   private userIdToTimeout: Map<string, NodeJS.Timeout> = new Map<
@@ -144,6 +145,8 @@ export class AppGateway
         this.games[this.userIdToGameIdx.get(userId)].setState(4);
         this.userIdToGameIdx.delete(userId);
         this.socketToUserId.delete(client.id);
+        console.log("player left game mode",this.getByValue(this.gameModeToLatestGameIdx, this.userIdToGameIdx.get(userId)))
+        this.gameModeToLatestGameIdx.delete(this.getByValue(this.gameModeToLatestGameIdx, this.userIdToGameIdx.get(userId)));
       } else if (
         !(
           this.games[this.userIdToGameIdx.get(userId)].done ||
@@ -222,10 +225,10 @@ export class AppGateway
         return new ClassicGame(server);
       case "doublepaddle":
         console.log("new DoublePaddle")
-        return new ClassicGame(server);
+        return new DoublePaddle(server);
       case "goalkeeper":
         console.log("new GoalKeeper")
-        return new ClassicGame(server);
+        return new GoalKeeper(server);
       default:
         return null;
     }
@@ -237,25 +240,44 @@ export class AppGateway
 
     console.log(payload);
     if (this.userIdToGameIdx.has(userId)) {
-      return;
+      if (this.games[this.userIdToGameIdx.get(userId)].mode.toLowerCase() != payload.mode.toLowerCase()){
+        let p = this.games[this.userIdToGameIdx.get(userId)].players;
+        if(!this.games[this.userIdToGameIdx.get(userId)].winner)
+        this.games[this.userIdToGameIdx.get(userId)].winner =
+          p[(p.indexOf(socket.id) + 1) % 2];
+        console.log(
+          'winner is',
+          p[(p.indexOf(socket.id) + 1) % 2],
+          p.indexOf(socket.id),
+        );
+
+        this.games[this.userIdToGameIdx.get(userId)].setState(4);
+        this.games[this.userIdToGameIdx.get(userId)].players = ['-1', '-1']; //.push('-1');
+        this.games[this.userIdToGameIdx.get(userId)].setDone(true);
+        this.userIdToGameIdx.delete(this.socketToUserId.get(p[0]));
+        this.userIdToGameIdx.delete(this.socketToUserId.get(p[1]));
+
+        //this.socketToUserId.delete(client.id);
+        this.userIdToTimeout.delete(userId);
+      }
+      else return;
     }
     //console.log(socket.user);
 
     const roomName: string = socket.id;
     console.log(roomName);
 
-    // if (this.userIdToGameIdx.has(socket.id)) {
-    //   console.log(this.games[this.userIdToGameIdx[socket.id]].getPlayers());
-    //   if (this.games[this.userIdToGameIdx[socket.id]].getPlayers().length == 2)
-    //     this.games[this.userIdToGameIdx[socket.id]].toggleGameState();
-    //   return;
-    // }
+    const ltsIdx = this.gameModeToLatestGameIdx.get(payload.mode);
 
     if (this.games.length) {
-      if (this.games[this.games.length - 1].getPlayers().length < 2) {
-        this.games[this.games.length - 1].addPlayer(socket.id);
-        socket.join(this.games[this.games.length - 1].room);
-        console.log('Joined game idx=' + (this.games.length - 1), roomName); // not this room
+      console.log(ltsIdx)
+      if (ltsIdx != undefined && this.games[ltsIdx].getPlayers().length < 2) {
+        this.games[ltsIdx].addPlayer(socket.id);
+        socket.join(this.games[ltsIdx].room);
+        console.log('Joined game idx=' + (ltsIdx), roomName); // not this room
+        this.userIdToGameIdx.set(userId, ltsIdx);
+        this.gameModeToLatestGameIdx.delete(payload.mode);
+
       } else {
         const g = this.newGame(this.server, payload.mode)
         if(!g)return 
@@ -265,6 +287,11 @@ export class AppGateway
         this.games[this.games.length - 1].setRoomName(roomName);
         socket.join(roomName);
         console.log('Created game idx=' + (this.games.length - 1), roomName);
+
+        this.userIdToGameIdx.set(userId, this.games.length - 1);
+        this.gameModeToLatestGameIdx.set(payload.mode, this.games.length - 1);
+
+
       }
     } else {
       const g = this.newGame(this.server, payload.mode)
@@ -275,9 +302,11 @@ export class AppGateway
       this.games[0].setRoomName(roomName);
       socket.join(roomName);
       console.log('created game idx=' + 0, roomName);
+      this.gameModeToLatestGameIdx.set(payload.mode, this.games.length - 1)
+      this.userIdToGameIdx.set(userId, this.games.length - 1);
     }
 
-    this.userIdToGameIdx.set(userId, this.games.length - 1);
+    //this.userIdToGameIdx.set(userId, this.games.length - 1);
   }
 
   @SubscribeMessage('playerInput')

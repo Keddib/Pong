@@ -28,6 +28,8 @@ interface GameWindowProps {
 }
 
 interface GameState {
+  mode:string; //gamemode
+
   // Window dimensions
   aspectRatio: number;
   width: number;
@@ -53,24 +55,22 @@ interface GameState {
   state: 0 | 1 | 2 | 3 | 4;
 
   scores: Array<number>;
-  maxScore: number;
+  maxScore : number;
   players: Array<string>;
   timestamp: number;
 
   done: boolean;
 
-  winner: string;
+  winner : string;
 
-  timeout: number; // 0 for no timeout // time player left game
-  timeoutPeriodInSeconds: number;
+  timeout : number; // 0 for no timeout // time player left game 
+  timeoutPeriodInSeconds : number; 
+
 }
 
 const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
   const [P5, setP5] = useState(null);
   //let socket: any = useRef<Socket>(null);
-  const setGameStateData = (newVal) => {
-    gamestatedata.current = { ...gamestatedata.current, ...newVal };
-  };
   const getGameStateData = (): GameState => props.gameStateData.current;
 
   // console.log(props.height, props.width, "props")
