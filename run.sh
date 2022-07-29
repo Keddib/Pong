@@ -46,13 +46,31 @@ fi
 
 echo 'checking services ...';
 
-if [ ! -d "services/Front" ]; then
-	echo 'cloning front end...';
- 	git clone https://github.com/Keddib/Pong-Frontend.git services/Front;
-	echo 'cloning users...';
- 	git clone https://github.com/Keddib/Pong-Backend.git services/Users;
-	echo 'cloning game..';
- 	git clone -b deploy https://github.com/YahyaOukharta/nest-ws-pong.git services/Game;
+if [ ! -d "services/Front" ];
+	then
+		echo 'cloning front end...';
+ 		git clone https://github.com/Keddib/Pong-Frontend.git services/Front;
+	else
+		echo 'pulling from front end...';
+		cd services/Front | git pull;
+fi
+
+if [ ! -d "services/Users" ];
+	then
+		echo 'cloning users...';
+ 		git clone https://github.com/Keddib/Pong-Backend.git services/Users;
+	else
+		echo "pulling from users...";
+		cd services/Users | git pull;
+fi
+
+if [ ! -d "services/Game" ];
+	then
+		echo 'cloning game..';
+ 		git clone -b deploy https://github.com/YahyaOukharta/nest-ws-pong.git services/Game;
+	else
+		echo "pulling from Game..."
+		cd services/Game | git pull;
 fi
 
 # echo "creating database volume";
@@ -66,4 +84,10 @@ if [ "$1" == "up" ]; then
 	docker compose up;
 elif [ "$1" == "build" ]; then
 	docker compose up --build
+elif [ ! "$1" ]; then
+	echo " RUN.SH -- OPTIONS ";
+	echo "up : to run services up";
+	echo "down : to shut services down";
+	echo "build : to run services up with build";
+	echo "clear : to shut services down and clear all images";
 fi
