@@ -25,7 +25,7 @@ const App = () => {
                   <Route path="/access/*" element={<Login />} />
                 </Route>
 
-                <Route path="/auth42/" element={<AuthRedirection />} />
+                <Route path="/auth/" element={<AuthRedirection />} />
 
                 <Route
                   path="/*"

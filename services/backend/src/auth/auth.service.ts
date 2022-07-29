@@ -51,57 +51,50 @@ export class AuthService {
         return null;
     }
 
-    async returnUser(code : string) : Promise<string | undefined> {
-   
-
+    async findOrCreate(code: string) : Promise<User | null> {
+    
         const authToken = await axios({
-        
-          url: "https://api.intra.42.fr/oauth/token",
-          method: "POST",
-          data: {
-            grant_type: "authorization_code",
-            client_id: this.configService.get<string>('clientID'),
-            client_secret: this.configService.get<string>('clientSecret'),
-            code,
-            redirect_uri: this.configService.get<string>('callbackURL'),
-          }
-  
+    
+            url: "https://api.intra.42.fr/oauth/token",
+            method: "POST",
+            data: {
+                grant_type: "authorization_code",
+                client_id: this.configService.get<string>('clientID'),
+                client_secret: this.configService.get<string>('clientSecret'),
+                code,
+                redirect_uri: this.configService.get<string>('callbackURL'),
+            }
         });
-      
-        console.log('extracting authToken');
+
         const token =  authToken.data["access_token"];
-        // console.log(token);
-        console.log(token);
-        const userData = await axios({
-          url: "https://api.intra.42.fr/v2/me",
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer " + token
-          }
-        })
   
-        let user = await this.userService.findByUsername(userData.data.login);
+        const userData = await axios({
+        
+            url: "https://api.intra.42.fr/v2/me",
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+
+
+        let user  = await this.userService.findByUsername(userData.data.login);
         if ( user ) {
             return this.login(user);
         }
-        // else {
-        //     const user = new CreateUserDto;
 
-        //     user.email = userData.data.email;
-        //     user.displayedName = userData.data.login;
-        //     user.avatar = userData.data.image_url;
-        //     user.login = userData.data.login;
-      
-        //     const chatRoom = new ChatRoom;
-        //     user.chatRooms =  [chatRoom];
-        //     user.password = 'defaultpassword';
-        //     this.userService.create(user);
-        //     return this.login(user);
-        // }
-  
-        // return this.login(user);
-        return null;
-      }
+        const newUser = new CreateUserDto;
+
+        newUser.email = userData.data.email;
+        newUser.displayedName = userData.data.displayname;
+        newUser.avatar = userData.data.image_url;
+        newUser.login = userData.data.login;
+        // const chatRoom = new ChatRoom;
+        // newUser.chatRooms =  [chatRoom];
+        newUser.password = 'defaultpassword';
+        await this.userService.create(newUser);
+        return this.login(newUser);
+    }
 
     async login(user: any) : Promise<any> {
 

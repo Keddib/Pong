@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Request, Response, Body, Get, Query } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Response, Body, Get, Query, UnauthorizedException, Redirect } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { fortyTwoGuard } from './auth/guards/fortytwo.guard';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
@@ -18,18 +18,26 @@ export class AppController {
     return req.user;
   }
 
+
+
+  // @Get('auth/42')
+  // @UseGuards(fortyTwoGuard)
+  // signUp(@Request() req) {
+
+  //   return req.user;
+  // }
+
   @Get('auth')
-  @UseGuards(fortyTwoGuard)
-  async LoginfortyTwo(@Request() req, @Response({ passthrough: true}) res) : Promise<any>{
-  
-    console.log(req.user);
-    if (req.user) {
-      const payload = this.login(req, res);
-  
+  async LoginfortyTwo(@Query() code, @Request() req, @Response({ passthrough: true}) res) : Promise<any>{
+
+    code = code['code'];
+    const payload = await this.authService.findOrCreate(code);
+    if (payload) {
+
       res.cookie('auth-jwt', payload['access_token'], {httpOnly: true});
       return {status: 'logged in'}
     } 
-    return undefined;
+    return new UnauthorizedException();
   }
  
   @Post('auth/login')
@@ -52,15 +60,13 @@ export class AppController {
   @Post('auth/signup')
   signUpLocal(@Body() payload: JSON) {
   
+    const usernmae: string = payload['username'];
+    const password: string = payload['password'];
 
-    console.log(payload)
-    this.authService.signUpLocal(payload['username'], payload['password']);
+    if (usernmae && password)
+      return this.authService.signUpLocal(usernmae, password);
+    return new UnauthorizedException();
   }
 
-  @Get('auth/42')
-  @UseGuards(fortyTwoGuard)
-  signUp(@Request() req) {
-    return req.user;
-  }
 
 }

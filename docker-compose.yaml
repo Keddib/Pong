@@ -6,29 +6,29 @@ volumes:
 
 services:
 
-  # front:
-  #   build:
-  #     context: ./$SERVICES/Front/
-  #     dockerfile: Dockerfile
-  #   container_name: Pong-front
-  #   ports:
-  #     - '80:8000' # expose ports - HOST:CONTAINER
-  #   volumes:
-  #     - ./$SERVICES/Front:/usr/src/app
-  #   environment:
-  #     USERS: $USERS_API
-  #     AUTH42REDIRECT: $AUTH42REDIRECT
-  # game:
-  #   build:
-  #     context: ./$SERVICES/Game/
-  #     dockerfile: Dockerfile
-  #   container_name: Pong-game
-  #   ports:
-  #     - '3001:3001' # expose ports - HOST:CONTAINER
-  #   depends_on:
-  #     - users
-  #   volumes:
-  #     - ./$SERVICES/Game:/usr/src/app
+  front:
+    build:
+      context: ./$SERVICES/Front/
+      dockerfile: Dockerfile
+    container_name: Pong-front
+    ports:
+      - '80:8000' # expose ports - HOST:CONTAINER
+    volumes:
+      - ./$SERVICES/Front:/usr/src/app
+    environment:
+      USERS: $USERS_API
+      AUTH42REDIRECT: $AUTH42REDIRECT
+  game:
+    build:
+      context: ./$SERVICES/Game/
+      dockerfile: Dockerfile
+    container_name: Pong-game
+    ports:
+      - '3001:3001' # expose ports - HOST:CONTAINER
+    depends_on:
+      - users
+    volumes:
+      - ./$SERVICES/Game:/usr/src/app
 
   backend:
     build: ./$SERVICES/backend/

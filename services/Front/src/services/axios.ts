@@ -24,7 +24,7 @@ const authenticateUser = async (
   setError: (message: string) => void
 ) => {
   try {
-    const res = await axiosUsers.get<User>("/auth42", {
+    const res = await axiosUsers.get<User>("/auth", {
       headers: { "Content-Type": "application/json" },
       params: { code: code },
       withCredentials: true,

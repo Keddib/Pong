@@ -19,7 +19,7 @@ export class JwtWebSocketGuard implements CanActivate {
         const client = context.switchToWs().getClient();
         const authToken : string = client.handshake.headers.cookie.split('=')[1];
 
-        console.log(authToken);
+        // console.log(authToken);
         const payload =  await this.authService.verify(authToken);
 
         const user: User = await this.authService.ValidatePayload(payload);
