@@ -46,7 +46,7 @@ export default function Game() {
         socket.current?.on("gameState", (data) => {
 
           if (gameState == "waiting" && location.state.mode.toLowerCase() === data.mode.toLowerCase()) setGameState("play");
-          gameStateData.current = data;
+            gameStateData.current = data;
         });
       }
     );

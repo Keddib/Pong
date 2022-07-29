@@ -1,6 +1,7 @@
 // get all end points needed from envirement variables
 import { MediaQuery } from "types/config";
-
+//localhost "https://api.intra.42.fr/oauth/authorize?client_id=a57b6c08b2acdbe87240256738b7e23fc9e049afd718f6730f5d2642c246d1c3&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fauth42&response_type=code"
+// public   "https://api.intra.42.fr/oauth/authorize?client_id=a57b6c08b2acdbe87240256738b7e23fc9e049afd718f6730f5d2642c246d1c3&redirect_uri=http%3A%2F%2F10.11.5.12%3A8000%2Fauth42&response_type=code"
 const api = {
   auth42: "https://api.intra.42.fr/oauth/authorize?client_id=a57b6c08b2acdbe87240256738b7e23fc9e049afd718f6730f5d2642c246d1c3&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fauth42&response_type=code",//process.env.AUTH42REDIRECT,
   users: "http://localhost:3500", //process.env.USERS,
