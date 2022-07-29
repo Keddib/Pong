@@ -132,7 +132,7 @@ export class DoublePaddle extends Game {
     this.ballDirY = -1;
 
     this.paddleWidth = 30;
-    this.paddleHeight = 800;
+    this.paddleHeight = 200;
     this.paddleSpeed = 5;
     this.paddleOneX = 0;
     this.paddleOneY = 0;
