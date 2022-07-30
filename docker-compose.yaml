@@ -46,6 +46,11 @@ services:
     volumes:
       - ./$SERVICES/Users/:/usr/src/app
     environment:
+      DB_HOST : $DB_HOST
+      DB_PORT : $DB_PORT
+      DB_DATABASE : $DB_DATABASE
+      DB_USERNAME : $DB_USERNAME
+      DB_PASSWORD : $DB_PASSWORD
       clientID: $clientID
       clientSecret: $clientSecret
       callbackURL: $callbackURL
