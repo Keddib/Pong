@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, Request, Res, Response } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
@@ -19,9 +19,39 @@ export class AuthService {
 
     }
 
-    async destroyToken() {
+
+
+    async refreshToken(@Request() req, @Response({ passthrough: true }) res) : Promise< any > {
     
-        
+        const refreshToken = req?.cookies['jwt-rft'];
+
+
+        if ( !refreshToken ) throw new BadRequestException();
+
+        const payload = await this.verifyRT(refreshToken);
+
+
+        console.log( 'Payload from cookie ', payload);
+        const user = await this.userService.findByUsername(payload.username);
+
+        if (!user) throw new ForbiddenException();
+
+        console.log(user.refreshToken);
+        if (await bcrypt.compare(refreshToken, user.refreshToken)) {
+
+            console.log( 'Payload matchs rft in db  ', payload);
+            const tokens = await this.getTokens(payload.sub, payload.username);
+
+            await this.updateRtHash(payload.sub, tokens.refreshToken);
+
+            return tokens;
+        }
+        throw new BadRequestException();
+    }
+
+    async verifyRT(authToken: string) {
+    
+        return await  this.jwtService.verify(authToken, {secret: this.configService.get<string>('RFH_SECRET')});
     }
 
     async verify(authToken: string) {
@@ -80,7 +110,12 @@ export class AuthService {
 
         let user  = await this.userService.findByUsername(userData.data.login);
         if ( user ) {
-            return this.login(user);
+
+            const tokens = await this.getTokens(user.uid, user.login);
+
+            await this.updateRtHash(user.uid, tokens.refreshToken);
+
+            return tokens;
         }
 
         const newUser = new CreateUserDto;
@@ -93,22 +128,41 @@ export class AuthService {
         // newUser.chatRooms =  [chatRoom];
         newUser.password = 'defaultpassword';
         await this.userService.create(newUser);
-        return this.login(newUser);
+        const tokens = await this.getTokens(newUser.uid, newUser.login);
+        await this.updateRtHash(newUser.uid, tokens.refreshToken);
+
+        console.log('created New User and assigned RefreshToken');
+        return tokens;
     }
 
-    async login(user: any) : Promise<any> {
+    async getTokens(uid: string, login: string) : Promise<any> {
 
-        const payload = { username: user.login, sub: user.uid };
-        console.log(payload);
+        const payload = { username: login, sub: uid };
+
         return {
-            access_token: this.jwtService.sign(payload),
+            access_token: await this.jwtService.signAsync(payload, {
+                secret: this.configService.get<string>('JWT_SECRET'),
+                expiresIn:  this.configService.get<string>('JWT_EXP_H'),    
+            }),
+            refreshToken: await this.jwtService.signAsync(payload, {
+                secret: this.configService.get<string>('RFH_SECRET'),
+                expiresIn: this.configService.get<string>('RFH_EXP_D')
+            }),
         }
+
     }
 
-    async signUp(createUserDto: CreateUserDto) {
-    
-        return this.userService.create(createUserDto);
+    async updateRtHash(uid: string, rt: string) : Promise<any> {
+
+
+        const rtHash : string = await bcrypt.hash(rt, 10);
+
+        return this.userService.updateRt(uid, rtHash);
+
     }
+
+
+
     async signUpLocal(username: string, password: string) {
     
         return this.userService.createLocal(username, password);

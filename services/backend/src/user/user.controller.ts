@@ -4,7 +4,7 @@ import { CreateUserDto } from '../dtos/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { User } from 'src/entities/user.entity';
-
+import { updateUserDto } from 'src/entities/update.user';
 
 
 @Controller('user')
@@ -14,11 +14,9 @@ export class UserController {
 
 
   @Get()
-
   currentUser(@Request() req) {
 
-    console.log('wtf', req.user);
-    return this.userService.findAll();
+    return this.userService.findOne(req.user.uid);
   }
 
   
@@ -28,10 +26,11 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: updateUserDto) {
+
+    return this.userService.update(id, updateUserDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

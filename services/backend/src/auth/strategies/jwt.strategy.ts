@@ -7,22 +7,13 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 
 
 @Injectable()
-export class JwtStart extends PassportStrategy(Strategy, 'jwt' ) {
+export class JwtStartegy extends PassportStrategy(Strategy, 'jwt' ) {
 
     constructor(private readonly configService: ConfigService) {
     
+        console.log('Jsut Called JWT ');
         super({
-
-            jwtFromRequest: ExtractJwt.fromExtractors([
-                (request: Request) => {
-
-                    let data = request?.cookies['auth-jwt'];
-                    console.log(data);
-                    if (!data)
-                        return null;
-                    return data;
-                }
-            ]),
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
             secretOrKey: configService.get<string>('JWT_SECRET'),
         });

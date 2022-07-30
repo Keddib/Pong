@@ -11,4 +11,5 @@ export  class CreateUserDto {
     password: string;
     email: string;
     chatRooms: ChatRoom[]; 
+    refreshToken: string;
 }

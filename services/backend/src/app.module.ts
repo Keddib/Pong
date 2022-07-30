@@ -9,7 +9,7 @@ import { UserModule } from './user/user.module';
 import { ChatModule } from './chat/chat.module';
 import { AuthModule } from './auth/auth.module';
 import { fortyTwoStrat } from './auth/strategies/fortytwo.strategy';
-import { JwtStart } from './auth/strategies/jwt.strategy';
+import { JwtStartRefresh } from './auth/strategies/jwtRefresh.strategy';
 
 
 
@@ -36,6 +36,6 @@ import { JwtStart } from './auth/strategies/jwt.strategy';
     AuthModule
     ],
   controllers: [fortyTwoStrat, AppController],
-  providers: [JwtStart],
+  providers: [JwtStartRefresh],
 })
 export class AppModule {}

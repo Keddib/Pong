@@ -32,4 +32,7 @@ export class User {
     @OneToMany(type => ChatRoom, chatroom => chatroom.owner)
     ChatRooms: ChatRoom[];
 
+    @Column()
+    refreshToken: string;
+
 }
