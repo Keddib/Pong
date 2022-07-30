@@ -58,7 +58,7 @@ fi
 if [ ! -d "services/Users" ];
 	then
 		echo 'cloning users...';
- 		git clone https://github.com/Keddib/Pong-Backend.git services/Users;
+ 		git clone https://github.com/illusionist99/Backend.git services/Users;
 	else
 		echo "pulling from users...";
 		cd services/Users | git pull;

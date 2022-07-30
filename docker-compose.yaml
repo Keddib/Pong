@@ -43,10 +43,17 @@ services:
     volumes:
       - ./$SERVICES/Users/:/usr/src/app
     environment:
-      GAME_HOST: $GAME_HOST
-      GAME_PORT: $GAME_PORT
+      clientID: $clientID
+      clientSecret: $clientSecret
+      callbackURL: $callbackURL
+      JWT_SECRET: $JWT_SECRET
+      JWT_EXP_H: $JWT_EXP_H
+      RFH_SECRET: $RFH_SECRET
+      RFH_EXP_D: $RFH_EXP_D
     depends_on:
       - db
+
+
 
   db:
     image: postgres
