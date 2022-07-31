@@ -41,11 +41,17 @@ export class fortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     )
       return cb(null, userFound);
     const user = new CreateUserDto();
-
+    console.log(profile)
     user.displayedName = profile['displayName'];
-    user.avatar = profile['photos']['value'];
+    user.avatar = profile['photos'][0]['value'];
     user.email = profile['emails'][0]['value'];
     user.login = profile['username'];
+    user.level = 1;
+    user.xp = 0;
+    user.wins = 0;
+    user.losses = 0;
+    user.status = "offline";
+
     const saltOrRounds = 10;
     const hash = await bcrypt.hash('defaultpass', saltOrRounds);
     user.password = hash;
@@ -55,3 +61,4 @@ export class fortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     return cb(null, await this.userService.create(user));
   }
 }
+

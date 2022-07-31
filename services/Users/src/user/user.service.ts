@@ -49,14 +49,13 @@ export class UserService {
     async findAll() : Promise<User[]> {
     // 'This action returns all user`;
   
-    return await this.userRepo.find();
+    return await this.userRepo.find({relations:["friendList","friendRequests"]});
   }
 
   async findOne(id: string) : Promise<User>{
     // `This action returns a #${id} user`; 
   
-    const user = await this.userRepo.findOne({ where: { uid: id }});
-
+    const user = await this.userRepo.findOne({ where: { uid: id }, relations:["friendList","friendRequests"]});
     if (user)
       return user;
     return null;
@@ -71,6 +70,7 @@ export class UserService {
       return user;
     return null;
   }
+
 
 
   // update(id: number, updateUserDto: UpdateUserDto) {

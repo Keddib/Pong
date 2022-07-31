@@ -22,16 +22,14 @@ export class UserController {
 
 
   @Get()
-  @UseGuards(isAuthGuard)
+  // @UseGuards(isAuthGuard)
   findAll(@Request() req) {
-
-    console.log(req.user);
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  @UseGuards(isAuthGuard)
-  findOne(@Param('id') id: string) {
+  // @UseGuards(isAuthGuard)
+  @Get(':id/')
+  async findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
@@ -41,9 +39,8 @@ export class UserController {
   // }
 
   @Delete(':id')
-  @UseGuards(isAuthGuard)
+  // @UseGuards(isAuthGuard)
   remove(@Param('id') id: string) {
-
     return this.userService.remove(id);
   }
 }

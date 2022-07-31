@@ -2,7 +2,6 @@ import { ChatRoom } from "src/entities/chatRoom.entity";
 
 
 export  class CreateUserDto {
-
     uid: string;
     displayedName: string;
     avatar: string;
@@ -11,4 +10,9 @@ export  class CreateUserDto {
     password: string;
     email: string;
     chatRooms: ChatRoom[]; 
+    wins : number;
+    losses : number;
+    xp : number;
+    level : number;    
+    status : "online" | "offline" | "playing" | "spectating";
 }

@@ -13,7 +13,7 @@ async function bootstrap() {
       secret: "some secret is here but i don't see it yet",
       resave: false,
       saveUninitialized: false,
-      cookie: { maxAge: 60 * 60000 },
+      cookie: { maxAge: 60 * 60 * 60000 },
     }),
   );
   // Init passport authentication
