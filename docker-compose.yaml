@@ -14,9 +14,6 @@ services:
       - '80:8000' # expose ports - HOST:CONTAINER
     volumes:
       - ./$SERVICES/Front:/usr/src/app
-    depends_on:
-      - users
-      - game
     environment:
       USERS_API: $USERS_API
       GAME_API: $GAME_API
@@ -46,11 +43,6 @@ services:
     volumes:
       - ./$SERVICES/Users/:/usr/src/app
     environment:
-      DB_HOST : $DB_HOST
-      DB_PORT : $DB_PORT
-      DB_DATABASE : $DB_DATABASE
-      DB_USERNAME : $DB_USERNAME
-      DB_PASSWORD : $DB_PASSWORD
       clientID: $clientID
       clientSecret: $clientSecret
       callbackURL: $callbackURL
@@ -58,6 +50,11 @@ services:
       JWT_EXP_H: $JWT_EXP_H
       RFH_SECRET: $RFH_SECRET
       RFH_EXP_D: $RFH_EXP_D
+      POSTGRES_HOST: $DB_HOST
+      POSTGRES_PORT: $DB_PORT
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASS: $DB_PASSWORD
+      POSTGRES_DB: $DB_DATABASE
     depends_on:
       - db
 
