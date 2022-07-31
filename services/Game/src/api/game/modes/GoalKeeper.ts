@@ -1,4 +1,5 @@
 import { Server } from 'socket.io';
+import {Game, UserInput, GoalKeeperConfig, GameState} from "./Types"
 
 const min = (a: number, b: number) => {
   return a < b ? a : b;
@@ -6,110 +7,6 @@ const min = (a: number, b: number) => {
 const max = (a: number, b: number) => {
   return a > b ? a : b;
 };
-interface UserInput {
-  input: string;
-  userId: string;
-}
-
-export class Game {
-  server: Server;
-
-
-  mode : string; // game mode
-  //Constants
-  aspectRatio: number;
-  width: number;
-  height: number;
-
-  initBallX: number;
-  initBallY: number;
-  ballRadius: number;
-  ballSpeed: number;
-
-  paddleWidth: number;
-  paddleHeight: number;
-  paddleSpeed: number;
-
-  // Game variables
-  ballX: number;
-  ballY: number;
-  ballDirX: number;
-  ballDirY: number;
-
-  paddleOneX: number;
-  paddleOneY: number;
-
-  paddleTwoX: number;
-  paddleTwoY: number;
-
-  loop: NodeJS.Timer;
-
-  state: 0 | 1 | 2 | 3 | 4;
-  /*
-  0 // queue mode 
-  1 // waiting for player to start 
-  2   // playing 
-        // player left (timeout before forfait)
-  3   // outcome + ( next round(waiting for player to start) || ?? )
-        // player doesnt start next round (timeout before forfait)
-  4 // final outcome 
-      // play again (back to queue)
-      // ask for rematch ?? if still there 
-
-  */
-  players: Array<string>;
-  scores: Array<number>;
-  maxScore: number;
-
-  room: string;
-
-  done : boolean;
-  timeout : number; // for no timeout // time player left game 
-  timeoutPeriodInSeconds : number; 
-
-  winner : string | undefined;
-}
-
-interface GameState {
-  mode:string; //gamemode
-
-  // Window dimensions
-  aspectRatio: number;
-  width: number;
-  height: number;
-
-  //ball
-  ballX: number;
-  ballY: number;
-  ballDirX: number;
-  ballDirY: number;
-  ballSpeed: number;
-  ballRadius: number;
-
-  //paddle
-  paddleWidth: number;
-  paddleHeight: number;
-  paddleSpeed: number;
-  paddleOneX: number;
-  paddleOneY: number;
-  paddleTwoX: number;
-  paddleTwoY: number;
-
-  state: 0 | 1 | 2 | 3 | 4;
-
-  scores: Array<number>;
-  maxScore : number;
-  players: Array<string>;
-  timestamp: number;
-
-  done: boolean;
-
-  winner : string;
-
-  timeout : number; // 0 for no timeout // time player left game 
-  timeoutPeriodInSeconds : number; 
-
-}
 
 export class GoalKeeper extends Game {
   constructor(server: Server) {
@@ -151,6 +48,9 @@ export class GoalKeeper extends Game {
     this.timeoutPeriodInSeconds = 5; 
 
     this.winner = "";
+
+    this.gameModeConfig = new GoalKeeperConfig()
+
     //this.run();
   }
   init() {
@@ -226,6 +126,9 @@ export class GoalKeeper extends Game {
 
       timeout: this.timeout,
       timeoutPeriodInSeconds: this.timeoutPeriodInSeconds,
+
+      gameModeConfig: this.gameModeConfig,
+
     };
   }
   async emitState() {

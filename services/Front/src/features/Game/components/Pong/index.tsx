@@ -66,20 +66,45 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     );
   };
   const drawPaddleOne = (p5: p5Types) => {
+    let g = getGameStateData()
     p5.rect(
-      getGameStateData().paddleOneX * scalingRatio,
-      getGameStateData().paddleOneY * scalingRatio,
-      getGameStateData().paddleWidth * scalingRatio,
-      getGameStateData().paddleHeight * scalingRatio
+      g.paddleOneX * scalingRatio,
+      g.paddleOneY * scalingRatio,
+      g.paddleWidth * scalingRatio,
+      g.paddleHeight * scalingRatio
     );
+    if (g.mode.toLowerCase() === "doublepaddle" && g.gameModeConfig != null){
+      p5.rect(
+        (g.paddleOneX + g.gameModeConfig.paddleXOffset * g.width) * scalingRatio,
+        (g.paddleOneY + g.gameModeConfig.paddleYOffset * g.height)* scalingRatio,
+        g.paddleWidth * scalingRatio,
+        g.paddleHeight * scalingRatio
+      );
+    }
   };
   const drawPaddleTwo = (p5: p5Types) => {
-    p5.rect(
-      getGameStateData().paddleTwoX * scalingRatio,
-      getGameStateData().paddleTwoY * scalingRatio,
-      getGameStateData().paddleWidth * scalingRatio,
-      getGameStateData().paddleHeight * scalingRatio
-    );
+    let g = getGameStateData()
+    if(g.mode.toLowerCase() === "classic")
+      p5.rect(
+        g.paddleTwoX * scalingRatio,
+        g.paddleTwoY * scalingRatio,
+        g.paddleWidth * scalingRatio,
+        g.paddleHeight * scalingRatio
+      );
+    if (g.mode.toLowerCase() === "doublepaddle" && g.gameModeConfig != null){
+      p5.rect(
+        (g.paddleTwoX - g.gameModeConfig.paddleXOffset * g.width) * scalingRatio,
+        g.paddleTwoY * scalingRatio,
+        g.paddleWidth * scalingRatio,
+        g.paddleHeight * scalingRatio
+      );
+      p5.rect(
+        g.paddleTwoX  * scalingRatio,
+        (g.paddleTwoY + g.gameModeConfig.paddleYOffset * g.height) * scalingRatio,
+        g.paddleWidth * scalingRatio,
+        g.paddleHeight * scalingRatio
+      );
+    }
   };
   const drawBoundaries = (p5: p5Types)=>{
     p5.push();

@@ -1,116 +1,11 @@
 import { Server } from 'socket.io';
-
+import {Game, UserInput, DoublePaddleConfig, GameState} from "./Types"
 const min = (a: number, b: number) => {
   return a < b ? a : b;
 };
 const max = (a: number, b: number) => {
   return a > b ? a : b;
 };
-interface UserInput {
-  input: string;
-  userId: string;
-}
-
-export class Game {
-  server: Server;
-
-
-  mode : string; // game mode
-  //Constants
-  aspectRatio: number;
-  width: number;
-  height: number;
-
-  initBallX: number;
-  initBallY: number;
-  ballRadius: number;
-  ballSpeed: number;
-
-  paddleWidth: number;
-  paddleHeight: number;
-  paddleSpeed: number;
-
-  // Game variables
-  ballX: number;
-  ballY: number;
-  ballDirX: number;
-  ballDirY: number;
-
-  paddleOneX: number;
-  paddleOneY: number;
-
-  paddleTwoX: number;
-  paddleTwoY: number;
-
-  loop: NodeJS.Timer;
-
-  state: 0 | 1 | 2 | 3 | 4;
-  /*
-  0 // queue mode 
-  1 // waiting for player to start 
-  2   // playing 
-        // player left (timeout before forfait)
-  3   // outcome + ( next round(waiting for player to start) || ?? )
-        // player doesnt start next round (timeout before forfait)
-  4 // final outcome 
-      // play again (back to queue)
-      // ask for rematch ?? if still there 
-
-  */
-  players: Array<string>;
-  scores: Array<number>;
-  maxScore: number;
-
-  room: string;
-
-  done : boolean;
-  timeout : number; // for no timeout // time player left game 
-  timeoutPeriodInSeconds : number; 
-
-  winner : string | undefined;
-}
-
-interface GameState {
-  mode:string; //gamemode
-
-  // Window dimensions
-  aspectRatio: number;
-  width: number;
-  height: number;
-
-  //ball
-  ballX: number;
-  ballY: number;
-  ballDirX: number;
-  ballDirY: number;
-  ballSpeed: number;
-  ballRadius: number;
-
-  //paddle
-  paddleWidth: number;
-  paddleHeight: number;
-  paddleSpeed: number;
-  paddleOneX: number;
-  paddleOneY: number;
-  paddleTwoX: number;
-  paddleTwoY: number;
-
-  state: 0 | 1 | 2 | 3 | 4;
-
-  scores: Array<number>;
-  maxScore : number;
-  players: Array<string>;
-  timestamp: number;
-
-  done: boolean;
-
-  winner : string;
-
-  timeout : number; // 0 for no timeout // time player left game 
-  timeoutPeriodInSeconds : number; 
-
-}
-
 export class DoublePaddle extends Game {
   constructor(server: Server) {
     super();
@@ -131,7 +26,7 @@ export class DoublePaddle extends Game {
     this.ballDirX = -1;
     this.ballDirY = -1;
 
-    this.paddleWidth = 30;
+    this.paddleWidth = 50;
     this.paddleHeight = 200;
     this.paddleSpeed = 5;
     this.paddleOneX = 0;
@@ -151,6 +46,8 @@ export class DoublePaddle extends Game {
     this.timeoutPeriodInSeconds = 5; 
 
     this.winner = "";
+
+    this.gameModeConfig = new DoublePaddleConfig()
     //this.run();
   }
   init() {
@@ -226,6 +123,8 @@ export class DoublePaddle extends Game {
 
       timeout: this.timeout,
       timeoutPeriodInSeconds: this.timeoutPeriodInSeconds,
+
+      gameModeConfig: this.gameModeConfig,
     };
   }
   async emitState() {
@@ -289,10 +188,10 @@ export class DoublePaddle extends Game {
     )
       this.ballDirY *= -1;
   }
-  updatePaddleOne(dir: string) {
+  updatePaddleOne(dir: string) { // double paddle 
     if (dir === 'DOWN') {
       this.paddleOneY += this.paddleSpeed;
-      this.paddleOneY = min(this.paddleOneY, this.height - this.paddleHeight);
+      this.paddleOneY = min(this.paddleOneY, this.height - this.paddleHeight - this.height * this.gameModeConfig.paddleYOffset);
     } else {
       this.paddleOneY -= this.paddleSpeed;
       this.paddleOneY = max(this.paddleOneY, 0);
@@ -301,7 +200,7 @@ export class DoublePaddle extends Game {
   updatePaddleTwo(dir: string) {
     if (dir === 'DOWN') {
       this.paddleTwoY += this.paddleSpeed;
-      this.paddleTwoY = min(this.paddleTwoY, this.height - this.paddleHeight);
+      this.paddleTwoY = min(this.paddleTwoY, this.height - this.paddleHeight  - this.height * this.gameModeConfig.paddleYOffset);
     } else {
       this.paddleTwoY -= this.paddleSpeed;
       this.paddleTwoY = max(this.paddleTwoY, 0);
