@@ -164,21 +164,21 @@ export class GoalKeeper extends Game {
 
     //no overlap ?
     if (this.ballDirX > 0)
-      this.ballX = min(this.ballX, this.width - this.ballRadius / 2);
-    else this.ballX = max(this.ballX, this.ballRadius / 2);
+      this.ballX = min(this.ballX, this.width - this.ballRadius);
+    else this.ballX = max(this.ballX, this.ballRadius);
     if (this.ballDirY > 0)
-      this.ballY = min(this.ballY, this.height - this.ballRadius / 2);
-    else this.ballY = max(this.ballY, this.ballRadius / 2);
+      this.ballY = min(this.ballY, this.height - this.ballRadius);
+    else this.ballY = max(this.ballY, this.ballRadius);
 
     //collision
     if (
-      this.ballX + this.ballRadius / 2 >= this.width ||
-      this.ballX - this.ballRadius / 2 <= 0
+      this.ballX + this.ballRadius >= this.width ||
+      this.ballX - this.ballRadius <= 0
     ) {
       this.ballDirX *= -1;
 
-      if (this.ballX + this.ballRadius / 2 >= this.width) this.scores[0] += 1; // +1 playerOne
-      if (this.ballX - this.ballRadius / 2 <= 0) this.scores[1] += 1; // +1 playerTwo
+      if (this.ballX + this.ballRadius >= this.width) this.scores[0] += 1; // +1 playerOne
+      if (this.ballX - this.ballRadius <= 0) this.scores[1] += 1; // +1 playerTwo
       if (!this.gameOver()) {
         this.state = 3; // waiting for player to start the game
         this.init();
@@ -187,8 +187,8 @@ export class GoalKeeper extends Game {
       //this.cleanup(); // pause loop
     }
     if (
-      this.ballY + this.ballRadius / 2 >= this.height ||
-      this.ballY - this.ballRadius / 2 <= 0
+      this.ballY + this.ballRadius >= this.height ||
+      this.ballY - this.ballRadius <= 0
     )
       this.ballDirY *= -1;
   }
@@ -217,8 +217,8 @@ export class GoalKeeper extends Game {
       this.ballY < this.paddleOneY + this.paddleHeight // ball in front of paddle and going toward paddle
     ) {
       // console.log("in paddle one range")
-      this.ballX = max(this.ballX, this.ballRadius / 2 + this.paddleWidth);
-      if (this.ballX - this.ballRadius / 2 - this.paddleWidth <= 0)
+      this.ballX = max(this.ballX, this.ballRadius + this.paddleWidth);
+      if (this.ballX - this.ballRadius - this.paddleWidth <= 0)
         this.ballDirX *= -1;
     } else if (
       //vertical intersection, ball going down
@@ -228,8 +228,8 @@ export class GoalKeeper extends Game {
       this.ballX < this.paddleOneX + this.paddleWidth && // ball in front of paddle and going toward paddle
       this.ballY < this.paddleOneY + this.paddleHeight / 2
     ) {
-      this.ballY = min(this.ballY, this.paddleOneY - this.ballRadius / 2);
-      if (this.ballY + this.ballRadius / 2 >= this.paddleOneY)
+      this.ballY = min(this.ballY, this.paddleOneY - this.ballRadius);
+      if (this.ballY + this.ballRadius >= this.paddleOneY)
         this.ballDirY *= -1;
     } else if (
       //vertical intersection, ball going up
@@ -241,10 +241,10 @@ export class GoalKeeper extends Game {
     ) {
       this.ballY = max(
         this.ballY,
-        this.paddleOneY + this.paddleHeight + this.ballRadius / 2,
+        this.paddleOneY + this.paddleHeight + this.ballRadius,
       );
       if (
-        this.ballY - this.ballRadius / 2 <=
+        this.ballY - this.ballRadius <=
         this.paddleOneY + this.paddleHeight
       )
         this.ballDirY *= -1;
@@ -259,9 +259,9 @@ export class GoalKeeper extends Game {
     ) {
       this.ballX = min(
         this.ballX,
-        this.width - this.ballRadius / 2 - this.paddleWidth,
+        this.width - this.ballRadius - this.paddleWidth,
       );
-      if (this.ballX + this.ballRadius / 2 + this.paddleWidth >= this.width)
+      if (this.ballX + this.ballRadius + this.paddleWidth >= this.width)
         this.ballDirX *= -1;
     } else if (
       //vertical intersection, ball going down
@@ -271,8 +271,8 @@ export class GoalKeeper extends Game {
       this.ballX < this.paddleTwoX + this.paddleWidth && // ball in front of paddle and going toward paddle
       this.ballY < this.paddleTwoY + this.paddleHeight / 2
     ) {
-      this.ballY = min(this.ballY, this.paddleTwoY - this.ballRadius / 2);
-      if (this.ballY + this.ballRadius / 2 >= this.paddleTwoY)
+      this.ballY = min(this.ballY, this.paddleTwoY - this.ballRadius);
+      if (this.ballY + this.ballRadius >= this.paddleTwoY)
         this.ballDirY *= -1;
     } else if (
       //vertical intersection, ball going up
@@ -284,10 +284,10 @@ export class GoalKeeper extends Game {
     ) {
       this.ballY = max(
         this.ballY,
-        this.paddleTwoY + this.paddleHeight + this.ballRadius / 2,
+        this.paddleTwoY + this.paddleHeight + this.ballRadius,
       );
       if (
-        this.ballY - this.ballRadius / 2 <=
+        this.ballY - this.ballRadius <=
         this.paddleTwoY + this.paddleHeight
       )
         this.ballDirY *= -1;

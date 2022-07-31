@@ -61,8 +61,8 @@ const Pong: React.FC<GameWindowProps> = (props: GameWindowProps) => {
     p5.ellipse(
       getGameStateData().ballX * scalingRatio,
       getGameStateData().ballY * scalingRatio,
-      getGameStateData().ballRadius * scalingRatio,
-      getGameStateData().ballRadius * scalingRatio
+      getGameStateData().ballRadius * 2 * scalingRatio,
+      getGameStateData().ballRadius * 2 * scalingRatio
     );
   };
   const drawPaddleOne = (p5: p5Types) => {

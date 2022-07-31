@@ -19,15 +19,15 @@ export class DoublePaddle extends Game {
 
     this.initBallX = this.width / 2;
     this.initBallY = this.height / 2;
-    this.ballRadius = 50;
-    this.ballSpeed = 10;
+    this.ballRadius = 25;
+    this.ballSpeed = 5;
     this.ballX = this.initBallX;
     this.ballY = this.initBallY;
     this.ballDirX = -1;
     this.ballDirY = -1;
 
-    this.paddleWidth = 50;
-    this.paddleHeight = 200;
+    this.paddleWidth = 30;
+    this.paddleHeight = 150;
     this.paddleSpeed = 5;
     this.paddleOneX = 0;
     this.paddleOneY = 0;
@@ -160,21 +160,21 @@ export class DoublePaddle extends Game {
 
     //no overlap ?
     if (this.ballDirX > 0)
-      this.ballX = min(this.ballX, this.width - this.ballRadius / 2);
-    else this.ballX = max(this.ballX, this.ballRadius / 2);
+      this.ballX = min(this.ballX, this.width - this.ballRadius);
+    else this.ballX = max(this.ballX, this.ballRadius);
     if (this.ballDirY > 0)
-      this.ballY = min(this.ballY, this.height - this.ballRadius / 2);
-    else this.ballY = max(this.ballY, this.ballRadius / 2);
+      this.ballY = min(this.ballY, this.height - this.ballRadius);
+    else this.ballY = max(this.ballY, this.ballRadius);
 
     //collision
     if (
-      this.ballX + this.ballRadius / 2 >= this.width ||
-      this.ballX - this.ballRadius / 2 <= 0
+      this.ballX + this.ballRadius >= this.width ||
+      this.ballX - this.ballRadius <= 0
     ) {
       this.ballDirX *= -1;
 
-      if (this.ballX + this.ballRadius / 2 >= this.width) this.scores[0] += 1; // +1 playerOne
-      if (this.ballX - this.ballRadius / 2 <= 0) this.scores[1] += 1; // +1 playerTwo
+      if (this.ballX + this.ballRadius >= this.width) this.scores[0] += 1; // +1 playerOne
+      if (this.ballX - this.ballRadius <= 0) this.scores[1] += 1; // +1 playerTwo
       if (!this.gameOver()) {
         this.state = 3; // waiting for player to start the game
         this.init();
@@ -183,8 +183,8 @@ export class DoublePaddle extends Game {
       //this.cleanup(); // pause loop
     }
     if (
-      this.ballY + this.ballRadius / 2 >= this.height ||
-      this.ballY - this.ballRadius / 2 <= 0
+      this.ballY + this.ballRadius >= this.height ||
+      this.ballY - this.ballRadius <= 0
     )
       this.ballDirY *= -1;
   }
@@ -206,6 +206,11 @@ export class DoublePaddle extends Game {
       this.paddleTwoY = max(this.paddleTwoY, 0);
     }
   }
+  intersection({rx,ry}){
+    const DeltaX = this.ballX - max(rx, min(this.ballX, rx + this.paddleWidth));
+    const DeltaY = this.ballY - max(ry, min(this.ballY, ry + this.paddleHeight));
+    return (DeltaX * DeltaX + DeltaY * DeltaY) < (this.ballRadius * this.ballRadius);
+  }
   handlePaddleOneBounce() {
     if (
       this.ballDirX === -1 &&
@@ -213,8 +218,8 @@ export class DoublePaddle extends Game {
       this.ballY < this.paddleOneY + this.paddleHeight // ball in front of paddle and going toward paddle
     ) {
       // console.log("in paddle one range")
-      this.ballX = max(this.ballX, this.ballRadius / 2 + this.paddleWidth);
-      if (this.ballX - this.ballRadius / 2 - this.paddleWidth <= 0)
+      this.ballX = max(this.ballX, this.ballRadius + this.paddleWidth);
+      if (this.ballX - this.ballRadius - this.paddleWidth <= 0)
         this.ballDirX *= -1;
     } else if (
       //vertical intersection, ball going down
@@ -224,10 +229,11 @@ export class DoublePaddle extends Game {
       this.ballX < this.paddleOneX + this.paddleWidth && // ball in front of paddle and going toward paddle
       this.ballY < this.paddleOneY + this.paddleHeight / 2
     ) {
-      this.ballY = min(this.ballY, this.paddleOneY - this.ballRadius / 2);
-      if (this.ballY + this.ballRadius / 2 >= this.paddleOneY)
+      this.ballY = min(this.ballY, this.paddleOneY - this.ballRadius);
+      if (this.ballY + this.ballRadius >= this.paddleOneY)
         this.ballDirY *= -1;
-    } else if (
+    }
+    if (
       //vertical intersection, ball going up
       this.ballDirX === -1 &&
       this.ballDirY === -1 &&
@@ -237,27 +243,58 @@ export class DoublePaddle extends Game {
     ) {
       this.ballY = max(
         this.ballY,
-        this.paddleOneY + this.paddleHeight + this.ballRadius / 2,
+        this.paddleOneY + this.paddleHeight + this.ballRadius,
       );
       if (
-        this.ballY - this.ballRadius / 2 <=
+        this.ballY - this.ballRadius <=
         this.paddleOneY + this.paddleHeight
       )
         this.ballDirY *= -1;
+    }
+    //
+    const rx = this.paddleOneX + this.width * this.gameModeConfig.paddleXOffset
+    const ry = this.paddleOneY + this.height * this.gameModeConfig.paddleYOffset
+    if(this.intersection({
+      rx,
+      ry
+    })){
+      
+      const DeltaX = max(rx, min(this.ballX, rx + this.paddleWidth));
+      const DeltaY = max(ry, min(this.ballY, ry + this.paddleHeight));
+      if (DeltaY > ry && DeltaY < ry + this.paddleHeight){
+        if(DeltaX === rx){
+          this.ballX = min(this.ballX, rx-this.ballRadius);
+          this.ballDirX *= -1;
+        }
+        else{
+          this.ballX = max(this.ballX, rx + this.paddleWidth + this.ballRadius);
+          this.ballDirX *= -1;
+        }
+      }
+      else if (DeltaX > rx && DeltaX < rx + this.paddleWidth){
+        if(DeltaY === ry){
+          this.ballY = min(this.ballY, ry-this.ballRadius);
+          this.ballDirY *= -1;
+        }
+        else{
+          this.ballY = max(this.ballY, ry + this.paddleHeight + this.ballRadius);
+          this.ballDirY *= -1;
+        }
+      }
     }
   }
   handlePaddleTwoBounce() {
     if (
       //horizontal intersection
       this.ballDirX === 1 &&
-      this.ballY > this.paddleTwoY &&
-      this.ballY < this.paddleTwoY + this.paddleHeight // ball in front of paddle and going toward paddle
+      this.ballY > (this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset) &&
+      this.ballY < (this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset) + this.paddleHeight // ball in front of paddle and going toward paddle
     ) {
       this.ballX = min(
         this.ballX,
-        this.width - this.ballRadius / 2 - this.paddleWidth,
+        this.width - this.ballRadius - this.paddleWidth,
       );
-      if (this.ballX + this.ballRadius / 2 + this.paddleWidth >= this.width)
+      if (this.ballX + this.ballRadius + this.paddleWidth >= this.width)
         this.ballDirX *= -1;
     } else if (
       //vertical intersection, ball going down
@@ -265,10 +302,10 @@ export class DoublePaddle extends Game {
       this.ballDirY === 1 &&
       this.ballX > this.paddleTwoX &&
       this.ballX < this.paddleTwoX + this.paddleWidth && // ball in front of paddle and going toward paddle
-      this.ballY < this.paddleTwoY + this.paddleHeight / 2
+      this.ballY < (this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset) + this.paddleHeight / 2
     ) {
-      this.ballY = min(this.ballY, this.paddleTwoY - this.ballRadius / 2);
-      if (this.ballY + this.ballRadius / 2 >= this.paddleTwoY)
+      this.ballY = min(this.ballY, (this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset) - this.ballRadius);
+      if (this.ballY + this.ballRadius >= (this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset))
         this.ballDirY *= -1;
     } else if (
       //vertical intersection, ball going up
@@ -276,17 +313,48 @@ export class DoublePaddle extends Game {
       this.ballDirY === -1 &&
       this.ballX > this.paddleTwoX &&
       this.ballX < this.paddleTwoX + this.paddleWidth &&
-      this.ballY > this.paddleTwoY + this.paddleHeight / 2
+      this.ballY > (this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset) + this.paddleHeight / 2
     ) {
       this.ballY = max(
         this.ballY,
-        this.paddleTwoY + this.paddleHeight + this.ballRadius / 2,
+        (this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset) + this.paddleHeight + this.ballRadius,
       );
       if (
-        this.ballY - this.ballRadius / 2 <=
-        this.paddleTwoY + this.paddleHeight
+        this.ballY - this.ballRadius <=
+        (this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset) + this.paddleHeight
       )
         this.ballDirY *= -1;
+    }
+
+    const rx = this.paddleTwoX  - this.width * this.gameModeConfig.paddleXOffset
+    const ry = this.paddleTwoY
+    if(this.intersection({
+      rx,
+      ry
+    })){
+      
+      const DeltaX = max(rx, min(this.ballX, rx + this.paddleWidth));
+      const DeltaY = max(ry, min(this.ballY, ry + this.paddleHeight));
+      if (DeltaY > ry && DeltaY < ry + this.paddleHeight){
+        if(DeltaX === rx){
+          this.ballX = min(this.ballX, rx-this.ballRadius);
+          this.ballDirX *= -1;
+        }
+        else{
+          this.ballX = max(this.ballX, rx + this.paddleWidth + this.ballRadius);
+          this.ballDirX *= -1;
+        }
+      }
+      else if (DeltaX > rx && DeltaX < rx + this.paddleWidth){
+        if(DeltaY === ry){
+          this.ballY = min(this.ballY, ry-this.ballRadius);
+          this.ballDirY *= -1;
+        }
+        else{
+          this.ballY = max(this.ballY, ry + this.paddleHeight + this.ballRadius);
+          this.ballDirY *= -1;
+        }
+      }
     }
   }
   handleInput(payload: UserInput) {
