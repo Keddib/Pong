@@ -11,8 +11,8 @@ interface DoublePaddleConfig {
     
 }
 interface GoalKeeperConfig {
-    paddleYOffset: number; // 30% of height
-    paddleXOffset: number; // 30% of width
+    borderSize: number; // % of height
+    goalSize: number;
 }
 interface GameState {
     mode: string; //gamemode
@@ -55,4 +55,4 @@ interface GameState {
 
     gameModeConfig: null | DoublePaddleConfig | GoalKeeperConfig
 }
-export { GameState, GameWindowProps}
+export { GameState, GameWindowProps, GoalKeeperConfig, DoublePaddleConfig}

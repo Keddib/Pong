@@ -191,7 +191,7 @@ export class DoublePaddle extends Game {
   updatePaddleOne(dir: string) { // double paddle 
     if (dir === 'DOWN') {
       this.paddleOneY += this.paddleSpeed;
-      this.paddleOneY = min(this.paddleOneY, this.height - this.paddleHeight - this.height * this.gameModeConfig.paddleYOffset);
+      this.paddleOneY = min(this.paddleOneY, this.height - this.paddleHeight - this.height * (<DoublePaddleConfig>this.gameModeConfig).paddleYOffset);
     } else {
       this.paddleOneY -= this.paddleSpeed;
       this.paddleOneY = max(this.paddleOneY, 0);
@@ -200,7 +200,7 @@ export class DoublePaddle extends Game {
   updatePaddleTwo(dir: string) {
     if (dir === 'DOWN') {
       this.paddleTwoY += this.paddleSpeed;
-      this.paddleTwoY = min(this.paddleTwoY, this.height - this.paddleHeight  - this.height * this.gameModeConfig.paddleYOffset);
+      this.paddleTwoY = min(this.paddleTwoY, this.height - this.paddleHeight  - this.height * (<DoublePaddleConfig>this.gameModeConfig).paddleYOffset);
     } else {
       this.paddleTwoY -= this.paddleSpeed;
       this.paddleTwoY = max(this.paddleTwoY, 0);
@@ -212,6 +212,7 @@ export class DoublePaddle extends Game {
     return (DeltaX * DeltaX + DeltaY * DeltaY) < (this.ballRadius * this.ballRadius);
   }
   handlePaddleOneBounce() {
+
     let rx = this.paddleOneX
     let ry = this.paddleOneY
     if(this.intersection({
@@ -244,8 +245,8 @@ export class DoublePaddle extends Game {
       
     }
     //
-    rx = this.paddleOneX + this.width * this.gameModeConfig.paddleXOffset
-    ry = this.paddleOneY + this.height * this.gameModeConfig.paddleYOffset
+    rx = this.paddleOneX + this.width * (<DoublePaddleConfig>this.gameModeConfig).paddleXOffset
+    ry = this.paddleOneY + this.height * (<DoublePaddleConfig>this.gameModeConfig).paddleYOffset
     if(this.intersection({
       rx,
       ry
@@ -277,7 +278,7 @@ export class DoublePaddle extends Game {
   }
   handlePaddleTwoBounce() {
     let rx = this.paddleTwoX
-    let ry = this.paddleTwoY + this.height * this.gameModeConfig.paddleYOffset
+    let ry = this.paddleTwoY + this.height * (<DoublePaddleConfig>this.gameModeConfig).paddleYOffset
     if(this.intersection({
       rx,
       ry
@@ -307,7 +308,7 @@ export class DoublePaddle extends Game {
       }
     }
 
-    rx = this.paddleTwoX  - this.width * this.gameModeConfig.paddleXOffset
+    rx = this.paddleTwoX  - this.width * (<DoublePaddleConfig>this.gameModeConfig).paddleXOffset
     ry = this.paddleTwoY
     if(this.intersection({
       rx,

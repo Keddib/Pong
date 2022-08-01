@@ -67,13 +67,13 @@ export class Game {
 }
 
 export class DoublePaddleConfig {
-    paddleYOffset = 0.3; // 30% of height
-    paddleXOffset =  0.3; // 30% of width
-
+    paddleYOffset = 0.3; // % of height // height * paddleYOffset + paddleHeight should be less than height so paddle can move
+    paddleXOffset =  0.3; // % of width
 }
+
 export class GoalKeeperConfig {
-    paddleYOffset: 0.3; // 30% of height
-    paddleXOffset: 0.3; // 30% of width
+    borderSize = 0.1; // % of height
+    goalSize = 0.3;
 }
 export interface GameState {
     mode: string; //gamemode
