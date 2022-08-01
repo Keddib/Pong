@@ -1,12 +1,12 @@
 export interface User {
   id: number;
-  Username: string;
-  Nickname: string;
-  Avatar: string;
-  Status: "online" | "offline" | "playing" | "spectating";
-  Wins: number;
-  Losses: number;
-  XP: number;
-  Level: number;
+  login: string;
+  displayedName: string;
+  avatar: string;
+  status: "online" | "offline" | "playing" | "spectating";
+  wins: number;
+  losses: number;
+  xp: number;
+  level: number;
   isNew?: boolean;
 }

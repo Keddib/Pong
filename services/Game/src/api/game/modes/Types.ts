@@ -64,6 +64,8 @@ export class Game {
     winner: string | undefined;
 
     gameModeConfig: null | DoublePaddleConfig | GoalKeeperConfig
+
+    playerData : Array<any>;
 }
 
 export class DoublePaddleConfig {
@@ -115,4 +117,6 @@ export interface GameState {
     timeoutPeriodInSeconds: number;
 
     gameModeConfig: null | DoublePaddleConfig | GoalKeeperConfig
+
+    playerData: string
 }

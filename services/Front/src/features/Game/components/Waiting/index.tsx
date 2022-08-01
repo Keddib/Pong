@@ -39,17 +39,18 @@ function LoadingPlayer() {
 }
 
 type Props = {
-  opponent: User;
+  user : User
+  opponent: User | null;
   setGameState: (state: string) => void;
 };
 
-const Waiting: FunctionComponent<Props> = ({ opponent, setGameState }) => {
+const Waiting: FunctionComponent<Props> = ({ opponent, user, setGameState }) => {
   return (
     <div className="m-auto w-full pt-8 flex flex-col items-center gap-10">
       <Logo className="animate-bounce" />
       <p className="text-xl font-poppins">wating for opponent...</p>
       <div className="players flex flex-col gap-10 sm:flex-row items-center">
-        <UserCard user={user1} />
+        <UserCard user={user} />
         <h3 className="text-crayola font-light">VS</h3>
         {opponent ? <UserCard user={opponent} /> : <LoadingPlayer />}
       </div>

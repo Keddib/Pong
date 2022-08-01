@@ -48,6 +48,8 @@ export class DoublePaddle extends Game {
     this.winner = "";
 
     this.gameModeConfig = new DoublePaddleConfig()
+
+    this.playerData = []
     //this.run();
   }
   init() {
@@ -63,6 +65,8 @@ export class DoublePaddle extends Game {
 
     this.paddleTwoX = this.width - this.paddleWidth;
     this.paddleTwoY = 0;
+
+    this.playerData = []
   }
   cleanup(): void {
     this.emitState();
@@ -77,8 +81,11 @@ export class DoublePaddle extends Game {
   getPlayers(): Array<string> {
     return this.players;
   }
-  addPlayer(id: string): void {
-    if (this.players.length < 2) this.players.push(id);
+  addPlayer(id: string, user: any): void {
+    if (this.players.length < 2){
+      this.players.push(id);
+      this.playerData.push(user);
+    }
     if (this.players.length === 2) {
       this.state = 3; // state between rounds
       this.run();
@@ -125,7 +132,8 @@ export class DoublePaddle extends Game {
       timeoutPeriodInSeconds: this.timeoutPeriodInSeconds,
 
       gameModeConfig: this.gameModeConfig,
-    };
+
+      playerData: JSON.stringify(this.playerData),    };
   }
   async emitState() {
     this.server.to(this.room).emit('gameState', this.getGameState());

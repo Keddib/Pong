@@ -5,6 +5,7 @@ import Waiting from "./components/Waiting";
 import io from "socket.io-client";
 import { User } from "types/user";
 import { Socket } from "socket.io-client";
+import useAuth from "~/src/hooks/useAuth";
 
 type IStatus = "online" | "offline" | "playing" | "spectating";
 
@@ -28,13 +29,15 @@ interface Loc extends Location {
 export default function Game() {
   const location : Loc = useLocation()
   console.log("game mode = ",location.state.mode)
-  const [player, setPlayer] = useState({} as User);
+  const {user} =  useAuth()
+  const [opponent, setOpponent] = useState(null as null|User);
+  
   const [gameState, setGameState] = useState("waiting");
 
   // const [gameStateData, setGameStateData] = useState({})
   const gameStateData = useRef(0);
   const socket: React.MutableRefObject<null | Socket> = useRef(null);
-
+  let once = false;
   useEffect(() => {
     socket.current = io("ws://localhost:3001", { withCredentials: true }).on(
       "connect",
@@ -45,8 +48,19 @@ export default function Game() {
         });
         socket.current?.on("gameState", (data) => {
 
-          if (gameState == "waiting" && location.state.mode.toLowerCase() === data.mode.toLowerCase()) setGameState("play");
-            gameStateData.current = data;
+          if (gameState == "waiting" 
+          && location.state.mode.toLowerCase() === data.mode.toLowerCase() 
+          && !opponent && !once)
+          {
+            //console.log(data)
+            setOpponent(JSON.parse(data.playerData)[(data.players.indexOf(socket.current.id) + 1) % 2])
+            once=true;
+            setTimeout(()=>{
+
+              setGameState("play");
+            },2500)
+          }
+          gameStateData.current = data;
         });
       }
     );
@@ -56,12 +70,12 @@ export default function Game() {
 
   const navigate = useNavigate();
 
-  let page = <Waiting opponent={player} setGameState={setGameState} />;
+  let page = <Waiting user={user} opponent={opponent} setGameState={setGameState} />;
 
   if (gameState == "play")
     page = (
       <Play
-        players={[user1, user1]}
+        players={[user, (opponent as User)]}
         gameStateData={gameStateData}
         socket={socket}
       />

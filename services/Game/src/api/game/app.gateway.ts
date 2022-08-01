@@ -272,7 +272,7 @@ export class AppGateway
     if (this.games.length) {
       console.log(ltsIdx)
       if (ltsIdx != undefined && this.games[ltsIdx].getPlayers().length < 2) {
-        this.games[ltsIdx].addPlayer(socket.id);
+        this.games[ltsIdx].addPlayer(socket.id,(socket.request as any).user);
         socket.join(this.games[ltsIdx].room);
         console.log('Joined game idx=' + (ltsIdx), roomName); // not this room
         this.userIdToGameIdx.set(userId, ltsIdx);
@@ -283,7 +283,7 @@ export class AppGateway
         if(!g)return 
 
         this.games.push(g);
-        this.games[this.games.length - 1].addPlayer(socket.id);
+        this.games[this.games.length - 1].addPlayer(socket.id,(socket.request as any).user);
         this.games[this.games.length - 1].setRoomName(roomName);
         socket.join(roomName);
         console.log('Created game idx=' + (this.games.length - 1), roomName);
@@ -298,7 +298,7 @@ export class AppGateway
       if(!g)return
 
       this.games.push(g);
-      this.games[0].addPlayer(socket.id);
+      this.games[0].addPlayer(socket.id,(socket.request as any).user);
       this.games[0].setRoomName(roomName);
       socket.join(roomName);
       console.log('created game idx=' + 0, roomName);
@@ -313,6 +313,7 @@ export class AppGateway
   handlePlayerInput(client: Socket, payload: UserInput): void {
     const userId = this.socketToUserId.get(client.id);
     const g: ClassicGame = this.games[this.userIdToGameIdx.get(userId)];
+    if (!g.state) return;
     if (g.state === 3) {
       const totalGoals = g.scores[0] + g.scores[1];
       if (client.id === g.players[totalGoals % 2])

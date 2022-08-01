@@ -52,7 +52,10 @@ interface GameState {
 
     timeout: number; // 0 for no timeout // time player left game 
     timeoutPeriodInSeconds: number;
-
+    
     gameModeConfig: null | DoublePaddleConfig | GoalKeeperConfig
+
+    playerData: string
 }
+
 export { GameState, GameWindowProps, GoalKeeperConfig, DoublePaddleConfig}

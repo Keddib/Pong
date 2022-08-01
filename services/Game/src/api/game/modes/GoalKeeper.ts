@@ -51,6 +51,7 @@ export class GoalKeeper extends Game {
 
     this.winner = "";
 
+    this.playerData = []
 
 
     //this.run();
@@ -84,8 +85,11 @@ export class GoalKeeper extends Game {
   getPlayers(): Array<string> {
     return this.players;
   }
-  addPlayer(id: string): void {
-    if (this.players.length < 2) this.players.push(id);
+  addPlayer(id: string, user: any): void {
+    if (this.players.length < 2){
+      this.players.push(id);
+      this.playerData.push(user);
+    }
     if (this.players.length === 2) {
       this.state = 3; // state between rounds
       this.run();
@@ -132,7 +136,7 @@ export class GoalKeeper extends Game {
       timeoutPeriodInSeconds: this.timeoutPeriodInSeconds,
 
       gameModeConfig: this.gameModeConfig,
-
+      playerData: JSON.stringify(this.playerData),
     };
   }
   async emitState() {
