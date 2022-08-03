@@ -24,4 +24,6 @@ export  class UpdateGameDto {
     scoreTwo? : number;
     
     status? : 0 | 1;
+
+    winner? :string;
 }

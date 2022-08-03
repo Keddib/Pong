@@ -28,6 +28,9 @@ export class Game {
     @Column({nullable:false, default:0})
     status : 0 | 1;
 
+    @Column({nullable:true})
+    winner : string;
+
 }
 // - 42 ID
 // - Username
