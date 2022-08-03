@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import { User } from "types/user";
 import { Socket } from "socket.io-client";
 import useAuth from "~/src/hooks/useAuth";
+import { GameState } from "./components/Pong/utils/Types";
 
 type IStatus = "online" | "offline" | "playing" | "spectating";
 
@@ -46,19 +47,18 @@ export default function Game() {
         socket.current?.on("authenticated", () => {
           socket.current?.emit("playerJoined", {mode : location.state.mode});
         });
-        socket.current?.on("gameState", (data) => {
+        socket.current?.on("gameState", (data : GameState) => {
 
           if (gameState == "waiting" 
           && location.state.mode.toLowerCase() === data.mode.toLowerCase() 
           && !opponent && !once)
           {
-            //console.log(data)
+            console.log("oponent",JSON.parse(data.playerData)[(data.players.indexOf(socket.current.id) + 1) % 2])
             setOpponent(JSON.parse(data.playerData)[(data.players.indexOf(socket.current.id) + 1) % 2])
             once=true;
             setTimeout(()=>{
-
               setGameState("play");
-            },2500)
+            },2000)
           }
           gameStateData.current = data;
         });

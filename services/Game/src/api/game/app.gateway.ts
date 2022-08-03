@@ -119,9 +119,12 @@ export class AppGateway
         ) {
           this.userIdToGameIdx.delete(user.uid);
         } else {
-          this.games[this.userIdToGameIdx.get(user.uid)].setTimeout(0);
-          this.games[this.userIdToGameIdx.get(user.uid)].setState(3);
-          this.games[this.userIdToGameIdx.get(user.uid)].init();
+          console.log("rejoin timeout")
+          this.userIdToTimeout.set(user.uid, setTimeout(()=>{
+            this.games[this.userIdToGameIdx.get(user.uid)].setTimeout(0);
+            this.games[this.userIdToGameIdx.get(user.uid)].setState(3);
+            this.games[this.userIdToGameIdx.get(user.uid)].init();
+          },2000))
         }
       }
     }
@@ -164,6 +167,13 @@ export class AppGateway
         //setting timeout
         this.games[this.userIdToGameIdx.get(userId)].setTimeout(Date.now());
         const timeoutPeriod = g.timeoutPeriodInSeconds * 1e3;
+        console.log("quit again timeout")
+
+        if(this.userIdToTimeout.has(userId)){
+           clearTimeout(this.userIdToTimeout.get(userId));
+           console.log("quit again timeout")
+        }
+
         this.userIdToTimeout.set(
           userId,
           setTimeout(() => {
