@@ -9,6 +9,8 @@ import { User } from './entities/user.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
+import { Game } from './entities/game.entity';
+import { GameModule } from './game/game.module';
 
 
 @Module({
@@ -25,12 +27,13 @@ import { ChatModule } from './chat/chat.module';
     logging: true,
     subscribers: [],
     migrations: [],
-    entities: [User, ChatMessage, ChatRoom],
+    entities: [User, ChatMessage, ChatRoom, Game],
     synchronize: true, // to remove when finished 
   }),
     UserModule,
     AuthModule,
     ChatModule,
+    GameModule
   ],
   controllers: [AppController],
   providers: [AppService],
