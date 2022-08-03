@@ -8,11 +8,12 @@ import {
 import { Inject, Logger, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { AuthGuard } from './app.guard';
-import { AuthService, User } from './app.service';
+import { AuthService, User } from './auth.service';
 
 import { ClassicGame, DoublePaddle, GoalKeeper } from './modes';
 
 import { assert } from 'console';
+import { GameService } from './game.service';
 
 interface UserInput {
   input: string;
@@ -47,6 +48,7 @@ export class AppGateway
 {
   constructor(
     @Inject('AUTH_SERVICE') private readonly authService: AuthService,
+    @Inject('GAME_SERVICE') private readonly gameService: GameService,
   ) {}
   private server: Server;
   private logger: Logger = new Logger('AppGateway');
@@ -244,7 +246,7 @@ export class AppGateway
     }
   }
   @SubscribeMessage('playerJoined')
-  onPlayerJoined(socket: AuthenticatedSocket, payload : PlayerJoinedPayload): void {
+  async onPlayerJoined(socket: AuthenticatedSocket, payload : PlayerJoinedPayload): Promise<void> {
     // console.log("playerJoined", this.authenticatedSockets, socket.id, this.authenticatedSockets.includes(socket.id));
     const userId = this.socketToUserId.get(socket.id);
 
@@ -287,6 +289,19 @@ export class AppGateway
         console.log('Joined game idx=' + (ltsIdx), roomName); // not this room
         this.userIdToGameIdx.set(userId, ltsIdx);
         this.gameModeToLatestGameIdx.delete(payload.mode);
+        const g = this.games[ltsIdx];
+
+        //creating game on db
+        await this.gameService.newGame(socket.request.headers.cookie, 
+          {
+            gameId:g.room,
+            mode:(g.mode as "classic" | "doublepaddle" | "goalkeeper"),
+            playerOne:g.playerData[0].uid,
+            playerTwo:g.playerData[1].uid,
+            scoreOne:0,
+            scoreTwo:0,
+            status:0,
+          });
 
       } else {
         const g = this.newGame(this.server, payload.mode)

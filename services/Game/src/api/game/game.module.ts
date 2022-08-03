@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppGateway } from './app.gateway'; //ws
-import { AuthService } from './app.service';
+import { AppGateway } from './game.gateway'; //ws
+import { AuthService } from './auth.service';
+import { GameService } from './game.service';
 
 @Module({
   imports: [],
@@ -10,6 +11,10 @@ import { AuthService } from './app.service';
     {
       provide: 'AUTH_SERVICE',
       useClass: AuthService,
+    },
+    {
+      provide: 'GAME_SERVICE',
+      useClass: GameService,
     },
   ],
 })
