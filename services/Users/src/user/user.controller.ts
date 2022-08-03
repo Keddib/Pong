@@ -6,6 +6,7 @@ import { fortyTwoGuard } from 'src/auth/guards/fortytwo.guard';
 
 @Controller('user')
 export class UserController {
+
   constructor(private readonly userService: UserService) {}
 
   @Post()
@@ -19,11 +20,9 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-
-
   @Get()
   // @UseGuards(isAuthGuard)
-  findAll(@Request() req) {
+  findAll() {
     return this.userService.findAll();
   }
 
@@ -43,4 +42,5 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }
+
 }

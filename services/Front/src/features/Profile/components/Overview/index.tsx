@@ -49,7 +49,7 @@ function OverView() {
 
       <div className="rounded-2xl bg-spaceCadet p-2 md:p-4 flex flex-col gap-2">
         <h2 className="capitalize mb-2 text-xl md:text-3xl">top game</h2>
-        <GameResult />
+        {/* <GameResult game=/> */}
       </div>
     </>
   );

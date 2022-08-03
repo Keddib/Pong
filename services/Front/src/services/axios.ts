@@ -7,9 +7,18 @@ const axiosUsers = axios.create({
 
 import { User } from "types/user";
 
+async function getUser(uid: string): Promise<User> {
+  // send response to update user
+  const res = await axiosUsers.get<User>("/user/"+uid, {
+    withCredentials: true,
+  });
+  var user: User = res.data;
+  return user;
+}
+
 async function updateUser(data: FormData): Promise<User> {
   // send response to update user
-  const res = await axiosUsers.put<User>(`/users/`, data, {
+  const res = await axiosUsers.put<User>(`/user/`, data, {
     withCredentials: true,
   });
   var user: User = res.data;
@@ -69,4 +78,4 @@ async function endSession() {
   }
 }
 
-export { updateUser, authenticateUser, checkUserSession, endSession };
+export { updateUser, authenticateUser, checkUserSession, endSession, getUser };

@@ -24,8 +24,20 @@ export class GameController {
 
   @Get()
   // @UseGuards(isAuthGuard)
-  findAll() {
+  getAllGames() {
     return this.gameService.getAllGames();
+  }
+
+  @Get("/history/:id")
+  // @UseGuards(isAuthGuard)
+  getUserGameHistory(@Param("id") id: string) {
+    return this.gameService.getUserGameHistory(id);
+  }
+
+  @Get("/current/:id")
+  // @UseGuards(isAuthGuard)
+  getUserCurrentGame(@Param("id") id: string) {
+    return this.gameService.getUserCurrentGame(id);
   }
 
   // // @UseGuards(isAuthGuard)

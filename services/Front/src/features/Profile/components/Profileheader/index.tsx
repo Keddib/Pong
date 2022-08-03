@@ -24,7 +24,7 @@ const ProfileHeader = () => {
           <ExStar className="absolute  -right-2 bottom-0" />
           <div className="w-20 h-20 md:w-40 md:h-40 rounded-full overflow-hidden">
             <Image
-              imageUrl={user.Avatar}
+              imageUrl={user.avatar}
               alt="user profile"
               className="rounded-full"
             />

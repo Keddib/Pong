@@ -17,18 +17,28 @@ export class GameService {
     private gameRepo: Repository<Game>
     ) {}
 
+
     async createGame(dto: CreateGameDto): Promise<Game>{
       return this.gameRepo.save(dto);
     }
-    async getAllGames(): Promise<Game[]>{
-      return this.gameRepo.find();
-    }
-
     async updateGame(gameId: string,dto: UpdateGameDto): Promise<Game>{
       let game = await this.gameRepo.findOne({where:{gameId}});
       game = {...game, ...dto}
       return this.gameRepo.save(game);
     }
+
+    async getAllGames(): Promise<Game[]>{
+      return this.gameRepo.find();
+    }
+    async getUserGameHistory(userId: string,): Promise<Game[]>{
+      return this.gameRepo.find({where:[{playerOne: userId , status:1},{playerTwo: userId , status:1}]});
+    }
+    async getUserCurrentGame(userId: string,): Promise<Game[]>{
+      return this.gameRepo.find({where:[{playerOne: userId , status:0},{playerTwo: userId , status:0}]});
+    }
+
+
+
 
   //   async create(createUserDto: CreateUserDto) : Promise<User> {
       
