@@ -24,7 +24,7 @@ then
 		echo "${RED}invalid option${RESET}";
 		exit 1;
 	fi
-elif (( $# > 1 ))
+elif (( $# > 2 ))
 then
 	echo "${RED}Error : too many arguments${RESET}";
 	exit 1;
@@ -50,27 +50,18 @@ if [ ! -d "services/Front" ];
 	then
 		echo 'cloning front end...';
  		git clone https://github.com/Keddib/Pong-Frontend.git services/Front;
-	else
-		echo 'pulling from front end...';
-		cd services/Front | git pull;
 fi
 
 if [ ! -d "services/Users" ];
 	then
 		echo 'cloning users...';
  		git clone https://github.com/illusionist99/Backend.git services/Users;
-	else
-		echo "pulling from users...";
-		cd services/Users | git pull;
 fi
 
 if [ ! -d "services/Game" ];
 	then
 		echo 'cloning game..';
  		git clone -b deploy https://github.com/YahyaOukharta/nest-ws-pong.git services/Game;
-	else
-		echo "pulling from Game..."
-		cd services/Game | git pull;
 fi
 
 # echo "creating database volume";
@@ -80,6 +71,16 @@ fi
 # fi
 
 
+if [[ "$1" == "up" && "$2" == "-p" ]]; then
+    echo "puling services"
+		echo 'pulling from front end...';
+		cd services/Front ; git pull ;  cd $OLDPWD;
+		echo "pulling from users...";
+		cd services/Users ; git pull ;  cd $OLDPWD;
+		echo "pulling from Game..."
+		cd services/Game ; git pull ;  cd $OLDPWD;
+fi
+
 if [ "$1" == "up" ]; then
 	docker compose up;
 elif [ "$1" == "build" ]; then
@@ -87,6 +88,7 @@ elif [ "$1" == "build" ]; then
 elif [ ! "$1" ]; then
 	echo " RUN.SH -- OPTIONS ";
 	echo "up : to run services up";
+	echo "up -p : to pull services before running services up";
 	echo "down : to shut services down";
 	echo "build : to run services up with build";
 	echo "clear : to shut services down and clear all images";
