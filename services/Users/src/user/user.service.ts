@@ -1,8 +1,7 @@
 import { Injectable, Request } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from '../dtos/user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { User } from 'src/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -62,20 +61,43 @@ export class UserService {
   }
 
   async findByUsername(username: string) : Promise<User>{
-    // `This action returns a #${id} user`; 
-  
     const user = await this.userRepo.findOne({ where: { login: username }});
-
     if (user)
       return user;
     return null;
   }
 
+  async update(id: string, updateUserDto: UpdateUserDto) {
+      let user = await this.userRepo.findOne({where:{uid:id}});
+      user = {...user, ...updateUserDto}
+      return this.userRepo.save(user);
+  }
 
-
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async setStatus(id: string, userStatus: "online" | "offline" | "playing" | "spectating") {
+    let user = await this.userRepo.findOne({where:{uid:id}});
+    user = {...user, status: userStatus}
+    return this.userRepo.save(user);
+  } 
+  async incrementWins(id: string) {
+    let user = await this.userRepo.findOne({where:{uid:id}});
+    user = {...user, wins: user.wins + 1}
+    return this.userRepo.save(user);
+  } 
+  async incrementLosses(id: string) {
+    let user = await this.userRepo.findOne({where:{uid:id}});
+    user = {...user, losses: user.losses + 1}
+    return this.userRepo.save(user);
+  }
+  async incrementXp(id: string, amount: number) {
+    let user = await this.userRepo.findOne({where:{uid:id}});
+    user = {...user, xp:user.xp + amount}
+    return this.userRepo.save(user);
+  }
+  async incrementLevel(id: string) {
+    let user = await this.userRepo.findOne({where:{uid:id}});
+    user = {...user, level: user.level}
+    return this.userRepo.save(user);
+  }
 
   async remove(id: string) : Promise<User> {
     // `This action removes a #${id} user`;

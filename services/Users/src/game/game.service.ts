@@ -5,6 +5,7 @@ import { CreateUserDto } from '../dtos/user.dto';
 import { User } from 'src/entities/user.entity';
 import { Game } from 'src/entities/game.entity';
 import { CreateGameDto, UpdateGameDto } from 'src/dtos/game.dto';
+import { UserService } from 'src/user/user.service';
 
 
 
@@ -14,16 +15,19 @@ export class GameService {
 
   constructor(
     @InjectRepository(Game)
-    private gameRepo: Repository<Game>
+    private gameRepo: Repository<Game>,
+    private userService: UserService
     ) {}
 
 
     async createGame(dto: CreateGameDto): Promise<Game>{
       return this.gameRepo.save(dto);
+      // set users as ingame here
     }
     async updateGame(gameId: string,dto: UpdateGameDto): Promise<Game>{
       let game = await this.gameRepo.findOne({where:{gameId}});
       game = {...game, ...dto}
+      // here update users 
       return this.gameRepo.save(game);
     }
 
