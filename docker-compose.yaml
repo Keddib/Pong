@@ -50,6 +50,11 @@ services:
       JWT_EXP_H: $JWT_EXP_H
       RFH_SECRET: $RFH_SECRET
       RFH_EXP_D: $RFH_EXP_D
+      POSTGRES_HOST: $DB_HOST
+      POSTGRES_PORT: $DB_PORT
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASS: $DB_PASSWORD
+      POSTGRES_DB: $DB_DATABASE
     depends_on:
       - db
 
