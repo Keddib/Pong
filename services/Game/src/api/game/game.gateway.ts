@@ -207,7 +207,7 @@ export class AppGateway
                 scoreOne:g.scores[0],
                 scoreTwo:g.scores[1],
                 status:1, // done
-                winner:g.winner,
+                winner: (g.winner ? this.socketToUserId.get(g.winner) : null),
               });
             //this.socketToUserId.delete(client.id);
             this.userIdToTimeout.delete(userId);
@@ -234,7 +234,7 @@ export class AppGateway
             scoreOne:this.games[idx].scores[0],
             scoreTwo:this.games[idx].scores[1],
             status:1, // done
-            winner:this.games[idx].winner,
+            winner:(this.games[idx].winner ? this.socketToUserId.get(this.games[idx].winner) : null),
           });
       }
     }
@@ -293,7 +293,7 @@ export class AppGateway
             scoreOne:g.scores[0],
             scoreTwo:g.scores[1],
             status:1, // done
-            winner:g.winner,
+            winner: (g.winner ? this.socketToUserId.get(g.winner) : null),
 
           });
         //this.socketToUserId.delete(client.id);

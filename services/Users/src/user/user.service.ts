@@ -1,7 +1,7 @@
 import { Injectable, Request } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
+import { CreateUserDto } from '../dtos/user.dto';
 import { User } from 'src/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -67,7 +67,7 @@ export class UserService {
     return null;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: User) {
       let user = await this.userRepo.findOne({where:{uid:id}});
       user = {...user, ...updateUserDto}
       return this.userRepo.save(user);
@@ -81,22 +81,30 @@ export class UserService {
   async incrementWins(id: string) {
     let user = await this.userRepo.findOne({where:{uid:id}});
     user = {...user, wins: user.wins + 1}
+    console.log("incrementing wins")
     return this.userRepo.save(user);
   } 
   async incrementLosses(id: string) {
     let user = await this.userRepo.findOne({where:{uid:id}});
     user = {...user, losses: user.losses + 1}
+    console.log("incrementing losses")
+
     return this.userRepo.save(user);
   }
   async incrementXp(id: string, amount: number) {
     let user = await this.userRepo.findOne({where:{uid:id}});
     user = {...user, xp:user.xp + amount}
+    console.log("incrementing xp")
+
     return this.userRepo.save(user);
   }
   async incrementLevel(id: string) {
     let user = await this.userRepo.findOne({where:{uid:id}});
     user = {...user, level: user.level}
+    console.log("incrementing level")
+
     return this.userRepo.save(user);
+
   }
 
   async remove(id: string) : Promise<User> {

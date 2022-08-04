@@ -27,7 +27,18 @@ export class GameService {
     async updateGame(gameId: string,dto: UpdateGameDto): Promise<Game>{
       let game = await this.gameRepo.findOne({where:{gameId}});
       game = {...game, ...dto}
+
+      if (dto.status === 1){ //game is done
       // here update users 
+        let winner = game.winner ? game.winner : (game.scoreOne > game.scoreTwo ? game.playerOne : game.playerTwo)
+        let loser = (game.playerOne === winner ? game.playerTwo : game.playerOne)
+        
+        await this.userService.incrementWins(winner);
+        await this.userService.incrementXp(winner, 20);
+        // await this.userService.incrementLevel(winner);
+        await this.userService.incrementLosses(loser);
+
+      }
       return this.gameRepo.save(game);
     }
 
