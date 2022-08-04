@@ -13,10 +13,9 @@ function MatchHistory() {
   useEffect(()=> {
     getPlayerHistory(user.uid).then(
       (raw)=>{
-        console.log(raw)
         let g: JSX.Element[] = []
         for (let i = 0; i < raw.length; i++) {
-          g.push(<GameResult game={raw[i]} key={i * 100} />);
+          g.unshift(<GameResult game={raw[i]} key={i * 100} />);
         }
         setGames(g);
       }
