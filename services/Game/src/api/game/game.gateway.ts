@@ -122,11 +122,14 @@ export class AppGateway
           this.userIdToGameIdx.delete(user.uid);
         } else {
           console.log("rejoin timeout")
-          this.userIdToTimeout.set(user.uid, setTimeout(()=>{
-            this.games[this.userIdToGameIdx.get(user.uid)].setTimeout(0);
-            this.games[this.userIdToGameIdx.get(user.uid)].setState(3);
-            this.games[this.userIdToGameIdx.get(user.uid)].init();
-          },2000))
+            this.userIdToTimeout.set(user.uid, setTimeout(()=>{
+              if(this.userIdToGameIdx.has(user.uid) && this.games[this.userIdToGameIdx.get(user.uid)] != undefined)
+              {
+                this.games[this.userIdToGameIdx.get(user.uid)].setTimeout(0);
+                this.games[this.userIdToGameIdx.get(user.uid)].setState(3);
+                this.games[this.userIdToGameIdx.get(user.uid)].init();
+              }
+            },2000))
         }
       }
     }
@@ -310,7 +313,7 @@ export class AppGateway
 
     if (this.games.length) {
       console.log(ltsIdx)
-      if (ltsIdx != undefined && this.games[ltsIdx].getPlayers().length < 2) {
+      if (ltsIdx != undefined && this.games[ltsIdx] != undefined && this.games[ltsIdx].getPlayers().length < 2) {
         this.games[ltsIdx].addPlayer(socket.id,(socket.request as any).user);
         socket.join(this.games[ltsIdx].room);
         console.log('Joined game idx=' + (ltsIdx), roomName); // not this room

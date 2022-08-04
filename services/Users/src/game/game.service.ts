@@ -21,22 +21,29 @@ export class GameService {
 
 
     async createGame(dto: CreateGameDto): Promise<Game>{
+
+      // await this.userService.incrementLevel(winner);
+      await this.userService.setStatus( dto.playerOne, "playing");
+      await this.userService.setStatus( dto.playerTwo, "playing");
       return this.gameRepo.save(dto);
       // set users as ingame here
     }
     async updateGame(gameId: string,dto: UpdateGameDto): Promise<Game>{
       let game = await this.gameRepo.findOne({where:{gameId}});
+      if (game.status === 1) return game;
       game = {...game, ...dto}
 
       if (dto.status === 1){ //game is done
       // here update users 
         let winner = game.winner ? game.winner : (game.scoreOne > game.scoreTwo ? game.playerOne : game.playerTwo)
         let loser = (game.playerOne === winner ? game.playerTwo : game.playerOne)
-        
+
         await this.userService.incrementWins(winner);
         await this.userService.incrementXp(winner, 20);
         // await this.userService.incrementLevel(winner);
         await this.userService.incrementLosses(loser);
+        await this.userService.setStatus( game.playerOne, "online");
+        await this.userService.setStatus( game.playerTwo, "online");
 
       }
       return this.gameRepo.save(game);

@@ -14,6 +14,7 @@ import { User } from 'src/entities/user.entity';
 import { isAuthGuard } from './guards/session.guard';
 import { fortyTwoGuard } from './guards/fortytwo.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
@@ -43,7 +44,7 @@ export class AuthController {
   @UseGuards(isAuthGuard)
   async loggedIn(@Request() req): Promise<User | null> {
     // console.log(req.user, " user is connected ");
-    if (req.user) return req.user;
+    if (req.user) return this.authService.getUser(req.user.uid);
     return null;
   }
 

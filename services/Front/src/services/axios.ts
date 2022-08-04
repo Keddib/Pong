@@ -1,7 +1,7 @@
 import axios from "axios";
 import { api } from "config/index";
 
-const axiosUsers = axios.create({
+export const axiosUsers = axios.create({
   baseURL: api.users,
 });
 
@@ -52,7 +52,7 @@ const authenticateUser = async (
 
 async function checkUserSession(): Promise<User | null> {
   try {
-    const res = await axiosUsers.get<User>("/auth/isLogged", {
+    const res = await axiosUsers.get<User>("/auth/isLogged"+"?timestamp="+new Date().getTime(), {
       withCredentials: true,
     });
     return res.data;
@@ -65,6 +65,8 @@ async function checkUserSession(): Promise<User | null> {
   }
   return null;
 }
+
+
 
 async function endSession() {
   try {

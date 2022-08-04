@@ -7,6 +7,7 @@ import { User } from "types/user";
 import { Socket } from "socket.io-client";
 import useAuth from "~/src/hooks/useAuth";
 import { GameState } from "./components/Pong/utils/Types";
+import { axiosUsers, checkUserSession } from "~/src/services/axios";
 
 type IStatus = "online" | "offline" | "playing" | "spectating";
 
@@ -29,15 +30,16 @@ interface Loc extends Location {
 }
 export default function Game() {
   const location : Loc = useLocation()
-  console.log("game mode = ",location.state.mode)
+  const {signin} = useAuth()
+  console.log("game mode = ",location?.state?.mode)
   const {user} =  useAuth()
   const [opponent, setOpponent] = useState(null as null|User);
   
   const [gameState, setGameState] = useState("waiting");
 
   // const [gameStateData, setGameStateData] = useState({})
-  const gameStateData = useRef(0);
-  const socket: React.MutableRefObject<null | Socket> = useRef(null);
+  const gameStateData = useRef(null as null | GameState);
+  const socket = useRef(null as null | Socket);
   let once = false;
   useEffect(() => {
     socket.current = io("ws://localhost:3001", { withCredentials: true }).on(
@@ -60,12 +62,13 @@ export default function Game() {
               setGameState("play");
             },2000)
           }
+
           gameStateData.current = data;
         });
       }
     );
 
-    return () => socket.current?.close();
+    return () => {socket.current?.close()};
   }, []);
 
   const navigate = useNavigate();

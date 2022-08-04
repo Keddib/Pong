@@ -60,6 +60,9 @@ export class AuthService {
 
       return null;
     }
+    async getUser(uid : string) : Promise<User | undefined> {
+      return this.userService.findOne(uid);
+    }
 
     async validateIntraUser(username: string, password: string) : Promise<User> {
 
