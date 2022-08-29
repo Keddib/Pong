@@ -75,21 +75,21 @@ services:
 
   phpmyadmin:
     container_name: phpmyadmin
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - "8080:80"
-    # image: neimheadh/phppgadmin:latest
+    # image: dpage/pgadmin4
     # restart: always
-    # ports:
-    #   - 8080:80
     # environment:
-    #   POSTGRES_HOST: $DB_HOST
-    #   POSTGRES_PORT: $DB_PORT
-    #   POSTGRES_USER: $DB_USERNAME
-    #   POSTGRES_PASS: $DB_PASSWORD
+    #   PGADMIN_DEFAULT_EMAIL: admin@admin.com
+    #   PGADMIN_DEFAULT_PASSWORD: root
+    # ports:
+    #   - "8080:80"
+    image: neimheadh/phppgadmin:latest
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      POSTGRES_HOST: $DB_HOST
+      POSTGRES_PORT: $DB_PORT
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASS: $DB_PASSWORD
     depends_on:
       - db
