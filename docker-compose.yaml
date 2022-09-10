@@ -55,10 +55,11 @@ services:
       POSTGRES_USER: $DB_USERNAME
       POSTGRES_PASS: $DB_PASSWORD
       POSTGRES_DB: $DB_DATABASE
+      USERS_API: $USERS_API
+      GAME_API: $GAME_API
+      CHAT_API: $CHAT_API
     depends_on:
       - db
-
-
 
   db:
     image: postgres
