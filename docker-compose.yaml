@@ -58,6 +58,7 @@ services:
       USERS_API: $USERS_API
       GAME_API: $GAME_API
       CHAT_API: $CHAT_API
+      USERS_AVATAR_API: $USERS_AVATAR_API
     depends_on:
       - db
 
