@@ -11,10 +11,11 @@ services:
     container_name: Pong-front
     restart: always
     ports:
-      - '80:8000' # expose ports - HOST:CONTAINER
+      - '80:80' # expose ports - HOST:CONTAINER
     volumes:
       - ./$SERVICES/Front:/usr/src/app
     environment:
+      FRONT_PORT: $FRONT_PORT
       USERS_API: $USERS_API
       GAME_API: $GAME_API
       CHAT_API: $CHAT_API
