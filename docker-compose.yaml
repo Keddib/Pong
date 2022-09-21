@@ -13,7 +13,7 @@ services:
     ports:
       - '80:80' # expose ports - HOST:CONTAINER
     volumes:
-      - ./$SERVICES/Front:/usr/src/app
+      - ./$SERVICES/Front/src/:/usr/src/app/src/
     environment:
       FRONT_PORT: $FRONT_PORT
       USERS_API: $USERS_API
@@ -30,7 +30,7 @@ services:
     depends_on:
       - users
     volumes:
-      - ./$SERVICES/Game:/usr/src/app
+      - ./$SERVICES/Game/src/:/usr/src/app/src/
     environment:
       GAME_PORT: $GAME_PORT
       ENVIRONMENT: $ENVIRONMENT
@@ -43,7 +43,7 @@ services:
     ports:
       - '3500:3500' # expose ports - HOST:CONTAINER
     volumes:
-      - ./$SERVICES/Users/:/usr/src/app
+      - ./$SERVICES/Users/src/:/usr/src/app/src/
     environment:
       clientID: $clientID
       clientSecret: $clientSecret
