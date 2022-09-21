@@ -18,8 +18,8 @@ services:
       FRONT_PORT: $FRONT_PORT
       USERS_API: $USERS_API
       GAME_API: $GAME_API
-      CHAT_API: $CHAT_API
       AUTH42REDIRECT: $AUTH42REDIRECT
+      ENVIRONMENT: $ENVIRONMENT
 
   game:
     build: ./$SERVICES/Game/
@@ -32,8 +32,9 @@ services:
     volumes:
       - ./$SERVICES/Game:/usr/src/app
     environment:
-      USERS_HOST: $USERS_HOST
-      USERS_PORT: $USERS_PORT
+      GAME_PORT: $GAME_PORT
+      ENVIRONMENT: $ENVIRONMENT
+      CORS: $CORS
 
   users:
     build: ./$SERVICES/Users/
@@ -58,8 +59,11 @@ services:
       POSTGRES_DB: $DB_DATABASE
       USERS_API: $USERS_API
       GAME_API: $GAME_API
-      CHAT_API: $CHAT_API
       USERS_AVATAR_API: $USERS_AVATAR_API
+      USERS_PORT: $USERS_PORT
+      GAME_PORT: $GAME_PORT
+      ENVIRONMENT: $ENVIRONMENT
+      CORS: $CORS
     depends_on:
       - db
 
